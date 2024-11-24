@@ -16,7 +16,7 @@ public class DialogueUI : MonoBehaviour
 
     private List<Dialogue> dialogues = new List<Dialogue>();
     private Dialogue dialogue;
-
+    private DialogueLoad dialogueLoad;
 
 
     private void Awake()
@@ -74,21 +74,51 @@ public class DialogueUI : MonoBehaviour
         if (dialogue != null)
         {
             dialogueBox.SetActive(true);
-            dialogueBox.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>().text = dialogue.texts[dialogue.index];
+            dialogueLoad = DialogueLoad.Loading;
+            StartCoroutine(LoadOneByOne());
         }
+    }
+    public IEnumerator LoadOneByOne()
+    {
+        int i = 0;
+        while (i++ < dialogue.texts[dialogue.index].Length && dialogueLoad == DialogueLoad.Loading)
+        {
+            if (dialogue.texts[dialogue.index][i - 1] == ' ')
+                i++;
+            else
+            {
+                dialogueBox.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>().text = dialogue.texts[dialogue.index].Substring(0, i);
+                yield return new WaitForSeconds(0.05f);
+            }
+        }
+        dialogueLoad = DialogueLoad.Loaded;
     }
     public void OnContinueBottonClicked()
     {
-        if (dialogue.index < dialogue.texts.Length - 1)
+        switch (dialogueLoad)
         {
-            if (dialogue.index == dialogue.texts.Length - 1)
-                continueButton.transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = "End";
-            dialogue.index++;
-            dialogueBox.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>().text = dialogue.texts[dialogue.index];
-        }
-        else
-        {
-            transform.Find("UI").gameObject.SetActive(false);
+            case DialogueLoad.Loading:
+                dialogueLoad = DialogueLoad.Loaded;
+                StopCoroutine(LoadOneByOne());
+                dialogueBox.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>().text = dialogue.texts[dialogue.index];
+                break;
+            case DialogueLoad.Loaded:
+                dialogueLoad = DialogueLoad.Loading;
+                if (dialogue.index < dialogue.texts.Length - 1)
+                {
+
+                    if (dialogue.index == dialogue.texts.Length - 1)
+                        continueButton.transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = "End";
+                    dialogue.index++;
+                    StartCoroutine(LoadOneByOne());
+                }
+                else
+                {
+                    transform.Find("UI").gameObject.SetActive(false);
+                }
+                break;
+            default:
+                break;
         }
     }
 }
@@ -97,4 +127,9 @@ public class Dialogue
     public string name;
     public string[] texts;
     public int index;
+}
+public enum DialogueLoad
+{
+    Loading,
+    Loaded
 }

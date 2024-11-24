@@ -1,7 +1,8 @@
 fileFormatVersion: 2
-guid: 2cda990e2423bbf4892e6590ba056729
-DefaultImporter:
+guid: f4a4b2be855001e40b7252776f278119
+NativeFormatImporter:
   externalObjects: {}
+  mainObjectFileID: 7400000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
@@ -9,6 +10,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 159577
   packageName: Medieval Warrior Pack
-  packageVersion: 
-  assetPath: Assets/Scenes/SampleScene.unity
-  uploadId: 0
+  packageVersion: 1.0
+  assetPath: Assets/Medieval Warrior Pack/Animations/Run.anim
+  uploadId: 343852

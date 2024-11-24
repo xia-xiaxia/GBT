@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
             moveX--;
         if (Input.GetKeyDown(KeyCode.D))
             moveX++;
-        Vector2 moveDirection = new Vector2(moveX, moveY).normalized;
+        Vector2 moveDirection = new Vector2(moveX, moveY);
 
         transform.position += new Vector3(moveX,moveY,0f);
     }

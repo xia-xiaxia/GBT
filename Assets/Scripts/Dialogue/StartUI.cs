@@ -23,7 +23,7 @@ public class StartUI : MonoBehaviour
 
     private void OnStartButtonClicked()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("XHY");
     }
     private void OnEndButtonClicked()
     {

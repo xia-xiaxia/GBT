@@ -5,47 +5,71 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
-    public Vector2 moveDirection; // 玩家移动方向
     private Vector2 targetPosition; // 目标位置
-    public float moveSpeed = 5f; // 移动速度
+    public float moveSpeed; // 移动速度
     public float gridSize = 1f; // 每格的大小
+    public bool isMoving = false; // 是否正在移动
+    public Vector2 direction; // 玩家当前的移动方向
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        targetPosition = transform.position; // 初始位置就是目标位置
+        targetPosition = transform.position; // 初始目标位置就是玩家当前位置
     }
 
     void Update()
     {
+        // 如果玩家正在移动，就不接受新的输入
+        if (isMoving)
+            return;
+
         // 获取玩家的移动输入
-        float moveX = 0;
-        float moveY = 0;
-
-        if (Input.GetKey(KeyCode.W))
-            moveY++;
-        if (Input.GetKey(KeyCode.S))
-            moveY--;
-        if (Input.GetKey(KeyCode.A))
-            moveX--;
-        if (Input.GetKey(KeyCode.D))
-            moveX++;
-
-        // 设置移动方向
-        moveDirection = new Vector2(moveX, moveY).normalized; // 保证每帧的移动方向是单位向量
-
-        // 计算目标位置（下一格的坐标）
-        if (moveDirection != Vector2.zero)
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            // 计算目标位置，将玩家移动到当前格子的下一格
-            targetPosition = new Vector2(Mathf.Round(transform.position.x / gridSize) * gridSize + moveDirection.x * gridSize,
-                                         Mathf.Round(transform.position.y / gridSize) * gridSize + moveDirection.y * gridSize);
+            direction = Vector2.up; // 向上
+            StartMove();
+        }
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            direction = Vector2.down; // 向下
+            StartMove();
+        }
+        else if (Input.GetKeyDown(KeyCode.A))
+        {
+            direction = Vector2.left; // 向左
+            StartMove();
+        }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            direction = Vector2.right; // 向右
+            StartMove();
         }
     }
 
     void FixedUpdate()
     {
-        // 使用插值平滑移动到目标位置
-        transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
+        // 如果正在移动，使用插值平滑过渡到目标位置
+        if (isMoving)
+        {
+            // 使用 Lerp 来平滑过渡到目标位置
+            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
+
+            // 判断是否到达目标位置，若到达，停止移动
+            if (Vector2.Distance(transform.position, targetPosition) < 0.05f)
+            {
+                transform.position = targetPosition; // 精确到目标位置
+                isMoving = false; // 停止移动
+            }
+        }
+    }
+
+    // 启动移动过程
+    private void StartMove()
+    {
+        // 计算目标位置（玩家要到达的格子中心，即 (n + 0.5, m + 0.5)）
+        targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize + direction.x * gridSize,
+                                     Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize + direction.y * gridSize);
+
+        isMoving = true; // 标记为正在移动
     }
 }

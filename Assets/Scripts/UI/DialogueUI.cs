@@ -10,9 +10,9 @@ public class DialogueUI : MonoBehaviour
 {
     public static DialogueUI Instance { get; private set; }
 
-    private GameObject dialogueBox;
-    private GameObject dialogistBox;
-    private GameObject continueButton;
+    public GameObject dialogueBox;
+    public GameObject dialogistBox;
+    public GameObject continueButton;
 
 
 
@@ -24,13 +24,13 @@ public class DialogueUI : MonoBehaviour
         }
         Instance = this;
 
-        dialogueBox = transform.Find("UI/DialogueBox").gameObject;
         dialogistBox = transform.Find("UI/DialogistBox").gameObject;
+        dialogueBox = transform.Find("UI/DialogueBox").gameObject;
         continueButton = transform.Find("UI/ContinueButton").gameObject;
     }
     private void Start()
     {
-        LoadDialogue("Sam", true);
+        LoadDialogue("Jack", true);
     }
     /// <summary>
     /// 传入对话者名字，如果对话者是人物，则true，否则为false，用以控制是否显示对话者名字
@@ -53,8 +53,8 @@ public class DialogueUI : MonoBehaviour
     }
     private void OnTextLoaded()
     {
-        transform.Find("UI").gameObject.SetActive(false);
         LoadTextManager.Instance.OnTextLoaded.RemoveListener(OnTextLoaded);
+        transform.Find("UI").gameObject.SetActive(false);
     }
 }
 //    public IEnumerator LoadOneByOne()

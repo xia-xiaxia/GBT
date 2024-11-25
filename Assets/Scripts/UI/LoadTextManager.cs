@@ -28,9 +28,7 @@ public class LoadTextManager : MonoBehaviour
             Destroy(gameObject);
         }
         Instance = this;
-    }
-    private void Start()//读取文本
-    {
+
         string[] allText = textFile.text.Split("\r\n\r\n");
         foreach (string eachText in allText)
         {
@@ -52,15 +50,16 @@ public class LoadTextManager : MonoBehaviour
     }
     public void LoadText(TextMeshProUGUI textBox, string name, Button continueButton)
     {
-        //包含：根据name找到文本，在传入的对话框中逐字载入文本，用continueButton控制载入速度
+        print("222");
         this.textBox = textBox;
         this.continueButton = continueButton;
         continueButton.onClick.AddListener(OnContinueBottonClicked);
         continueButton.transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = "Continue";
         text = Texts.Find(t => t.name == name);
+        text.index = 0;
         StartCoroutine(LoadOneByOne());
     }
-    private IEnumerator LoadOneByOne()
+    public IEnumerator LoadOneByOne()
     {
         int i = 0;
         while (i++ < text.content[text.index].Length && textLoad == TextLoad.Loading)
@@ -75,7 +74,7 @@ public class LoadTextManager : MonoBehaviour
         }
         textLoad = TextLoad.Loaded;
     }
-    private void OnContinueBottonClicked()
+    public void OnContinueBottonClicked()
     {
         switch (textLoad)
         {
@@ -88,7 +87,6 @@ public class LoadTextManager : MonoBehaviour
                 textLoad = TextLoad.Loading;
                 if (text.index < text.content.Length - 1)
                 {
-
                     if (text.index == text.content.Length - 2)
                         continueButton.transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = "End";
                     text.index++;

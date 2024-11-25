@@ -2,23 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimComtrol : MonoBehaviour
+public class AnimController : MonoBehaviour
 {
-    public GameObject Player;
-    public PlayerMovement playerMove;
-    private Vector2 playerDir;
+    private PlayerMovement playerMovement;
     private SpriteRenderer spriteRenderer;
+    private Animator animator;
+    private string animation;
 
     void Start()
     {
-        playerDir = playerMove.moveDirection;
-        spriteRenderer = GetComponent<SpriteRenderer>();    
+        playerMovement = GetComponent<PlayerMovement>(); 
+        spriteRenderer = GetComponent<SpriteRenderer>();  
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        if(playerDir.x > 0) 
+        Flip();
+        AnimChange();
+    }
+
+    private void Flip()
+    {
+        // 判断玩家的移动方向
+        if (playerMovement.direction.x > 0)
+        {
+            // 向右移动，确保玩家朝右
+            spriteRenderer.flipX = false;
+        }
+        else if (playerMovement.direction.x < 0)
+        {
+            // 向左移动，翻转玩家精灵
             spriteRenderer.flipX = true;
-        else spriteRenderer.flipX = false;
+        }
+    }
+
+    private void AnimChange()
+    {
+        animator.SetBool("isMoving", playerMovement.isMoving);
+
     }
 }
+

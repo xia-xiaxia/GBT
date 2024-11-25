@@ -11,10 +11,15 @@ public class PlayerMovement : MonoBehaviour
     public bool isMoving = false; // 是否正在移动
     public Vector2 direction; // 玩家当前的移动方向
 
+    private Vector3 lastPosition;
+    private bool isTrans;
+    private Vector3[] TargetPositions ;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         targetPosition = transform.position; // 初始目标位置就是玩家当前位置
+        TargetPositions = new Vector3[2];
     }
 
     void Update()
@@ -28,22 +33,27 @@ public class PlayerMovement : MonoBehaviour
         {
             direction = Vector2.up; // 向上
             StartMove();
+            ifBug();
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
             direction = Vector2.down; // 向下
             StartMove();
+            ifBug();
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
             direction = Vector2.left; // 向左
             StartMove();
+            ifBug();
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
             direction = Vector2.right; // 向右
             StartMove();
+            ifBug();
         }
+
     }
 
     void FixedUpdate()
@@ -66,10 +76,40 @@ public class PlayerMovement : MonoBehaviour
     // 启动移动过程
     private void StartMove()
     {
+        TargetPositions[0] = targetPosition;
         // 计算目标位置（玩家要到达的格子中心，即 (n + 0.5, m + 0.5)）
         targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize + direction.x * gridSize,
                                      Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize + direction.y * gridSize);
-
+        TargetPositions[1] = targetPosition;
         isMoving = true; // 标记为正在移动
+    }
+
+    void ifBug()
+    {
+        isMovingorNot();
+        if (isMoving)
+        {
+            if(!isTrans)
+            {
+                isMoving = false;
+                transform.position = TargetPositions[0];
+            }
+        }
+    }
+
+    void isMovingorNot()
+    {
+        // 每帧检查物体是否移动
+        if (transform.position != lastPosition)
+        {
+            isTrans = true;  // 如果位置发生变化，认为物体正在移动
+        }
+        else
+        {
+            isTrans = false; // 如果位置没有变化，认为物体没有移动
+        }
+
+        // 更新上一帧的位置
+        lastPosition = transform.position;
     }
 }

@@ -158,8 +158,7 @@ MonoBehaviour:
   moveSpeed: 4
   gridSize: 1
   isMoving: 0
-  direction: {x: 0, y: 0, z: 0}
-  transform: {fileID: 224448234}
+  direction: {x: 0, y: 0}
 --- !u!95 &224448231
 Animator:
   serializedVersion: 7
@@ -316,7 +315,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: da7265d7c390e78448346c86a5080862, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -350,7 +349,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
 --- !u!1 &773563488
 GameObject:
@@ -465,7 +464,7 @@ GameObject:
   - component: {fileID: 1684856577}
   m_Layer: 0
   m_Name: Box
-  m_TagString: Untagged
+  m_TagString: Box
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -531,7 +530,7 @@ Transform:
   m_GameObject: {fileID: 1684856573}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0.5, z: 0}
+  m_LocalPosition: {x: 2.5, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -547,7 +546,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: da7265d7c390e78448346c86a5080862, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -596,6 +595,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PM: {fileID: 224448230}
+  currentSpeed: 0
+  slowSpeed: 2
+  normalSpeed: 4
+  quickSpeed: 6
+  isMoving: 0
 --- !u!1 &2082135576
 GameObject:
   m_ObjectHideFlags: 0

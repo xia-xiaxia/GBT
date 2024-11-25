@@ -7,7 +7,8 @@ public class TransitionManager : MonoBehaviour
 {
     public static TransitionManager Instance { get; private set; }
 
-    public Image image;
+    private Image blackScreen;
+    //private GameObject fieldOfView;
     private Color color = new Color(0, 0, 0, 0.01f);
 
 
@@ -22,16 +23,22 @@ public class TransitionManager : MonoBehaviour
     }
     private void Start()
     {
-        image.color = color;
-        image.enabled = true;
+        blackScreen = transform.Find("BlackScreen").GetComponent<Image>();
+        //fieldOfView = transform.Find("FieldOfView").gameObject;
+        //Transition();
+    }
+    private void Transition()
+    {
+        blackScreen.color = color;
+        blackScreen.enabled = true;
         StartCoroutine(TransitionIn());
     }
     public IEnumerator TransitionIn()
     {
-        image.raycastTarget = true;
-        while (image.color.a < 1)
+        blackScreen.raycastTarget = true;
+        while (blackScreen.color.a < 1)
         {
-            image.color += color;
+            blackScreen.color += color;
             yield return new WaitForSeconds(0.02f);
         }
         yield return new WaitForSeconds(1f);
@@ -39,12 +46,12 @@ public class TransitionManager : MonoBehaviour
     }
     public IEnumerator TransitionOut()
     {
-        while (image.color.a > 0)
+        while (blackScreen.color.a > 0)
         {
-            image.color -= color;
+            blackScreen.color -= color;
             yield return new WaitForSeconds(0.02f);
         }
-        image.raycastTarget = false;
-        image.enabled = false;
+        blackScreen.raycastTarget = false;
+        blackScreen.enabled = false;
     }
 }

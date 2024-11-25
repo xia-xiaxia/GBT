@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class TODO : MonoBehaviour
 {
-    //对话框大小适配不同屏幕大小
+    //UI大小适配不同屏幕大小
+    //多界面配置
 }

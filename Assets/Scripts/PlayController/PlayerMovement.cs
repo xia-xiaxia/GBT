@@ -13,13 +13,13 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 lastPosition;
     private bool isTrans;
-    private Vector3[] TargetPositions ;
+
+    public bool isHit = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         targetPosition = transform.position; // 初始目标位置就是玩家当前位置
-        TargetPositions = new Vector3[2];
     }
 
     void Update()
@@ -27,33 +27,27 @@ public class PlayerMovement : MonoBehaviour
         // 如果玩家正在移动，就不接受新的输入
         if (isMoving)
             return;
-
         // 获取玩家的移动输入
         if (Input.GetKeyDown(KeyCode.W))
         {
             direction = Vector2.up; // 向上
             StartMove();
-            ifBug();
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
             direction = Vector2.down; // 向下
             StartMove();
-            ifBug();
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
             direction = Vector2.left; // 向左
             StartMove();
-            ifBug();
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
             direction = Vector2.right; // 向右
             StartMove();
-            ifBug();
         }
-
     }
 
     void FixedUpdate()
@@ -76,26 +70,12 @@ public class PlayerMovement : MonoBehaviour
     // 启动移动过程
     private void StartMove()
     {
-        TargetPositions[0] = targetPosition;
         // 计算目标位置（玩家要到达的格子中心，即 (n + 0.5, m + 0.5)）
         targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize + direction.x * gridSize,
                                      Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize + direction.y * gridSize);
-        TargetPositions[1] = targetPosition;
         isMoving = true; // 标记为正在移动
     }
 
-    void ifBug()
-    {
-        isMovingorNot();
-        if (isMoving)
-        {
-            if(!isTrans)
-            {
-                isMoving = false;
-                transform.position = TargetPositions[0];
-            }
-        }
-    }
 
     void isMovingorNot()
     {
@@ -111,5 +91,19 @@ public class PlayerMovement : MonoBehaviour
 
         // 更新上一帧的位置
         lastPosition = transform.position;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Wall")
+        {
+            isMoving = false;
+            isHit = true;
+        }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Wall")
+            isHit = false;
     }
 }

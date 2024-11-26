@@ -27,7 +27,8 @@ public class EnemyFlowController : MonoBehaviour
     private bool isGameFailed = false; // 游戏是否失败
     public bool isHit=false;   
     private int currentWaypointIndex = 0; // 当前路径点索引
-
+    public LayerMask playerLayer;   // 用于指定玩家所在的层
+    public LayerMask obstacleLayer; // 用于指定障碍物所在的层
     private Vector2 moveDirection; // 当前移动方向
    // private EnemyAnimationController animationController;
     // 用于存储检测到的多个 Box 的位置
@@ -49,7 +50,7 @@ public class EnemyFlowController : MonoBehaviour
         // 如果游戏失败，停止敌人移动
         if (isGameFailed) return;
         //CheckForObstruction();
-
+        CheckForPlayerInSightRange();
         // 移动到下一个路径点并更新方向
         MoveToNextWaypoint();
         //animationController.UpdateAnimation(moveDirection);
@@ -69,7 +70,7 @@ public class EnemyFlowController : MonoBehaviour
         }
         else
         {
-            Debug.Log("所有流程完成！");
+            Debug.Log("所有流程完成,，没有阻止坏结局，bekilled");
         }
     }
 
@@ -131,9 +132,8 @@ public class EnemyFlowController : MonoBehaviour
 
         // 移动敌人
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-
         // 如果到达路径点，更新索引
-        if (Vector3.Distance(transform.position, targetPosition) <= 0.01f)
+        if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
         {
             currentWaypointIndex++;
         }
@@ -179,14 +179,54 @@ public class EnemyFlowController : MonoBehaviour
             }
         }
     }
+    private void CheckForPlayerInSightRange()
+    {
+        // 获取视野范围内的所有物体
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, fieldOfViewDistance);
+
+        foreach (Collider2D hitCollider in hitColliders)
+        {
+            // 如果物体是玩家
+            if (hitCollider.CompareTag("Player"))
+            {
+                Vector3 directionToPlayer = hitCollider.transform.position - transform.position;
+
+                // 计算玩家与敌人之间的夹角
+                float angleToPlayer = Vector3.Angle(moveDirection, directionToPlayer);
+
+                // 判断玩家是否在视野角度范围内
+                if (angleToPlayer < fieldOfViewAngle / 2f)
+                {
+                    // 使用射线检测来确认视线是否被遮挡
+                    if (IsPlayerVisible(hitCollider.transform))
+                    {
+                        Debug.Log("玩家被发现，游戏失败！");
+                        GameFailed();  // 触发游戏失败
+                        return;  // 一旦触发游戏失败，退出函数
+                    }
+                }
+            }
+        }
+    }
+
+    private bool IsPlayerVisible(Transform playerTransform)
+    {
+        Vector3 directionToPlayer = playerTransform.position - transform.position;
+
+        // 使用射线检测来判断敌人与玩家之间的视线是否被阻挡
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer.normalized, fieldOfViewDistance, obstacleLayer);
+
+        // 如果射线没有碰到任何障碍物，并且射线的目标是玩家
+        return hit.collider == null || hit.collider.CompareTag("Player");
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
        
         // 如果敌人与障碍物发生碰撞
         if (collision.collider.CompareTag("Box"))
         {
-            Debug.Log("敌人与障碍物发生碰撞，游戏失败！");
-            GameFailed(); // 触发游戏失败
+            Debug.Log("成功阻止了bekilled的结局，游戏胜利");
+            GameVictory(); // 触发游戏失败
         }
     }
     private void GameVictory()

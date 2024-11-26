@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // 如果玩家正在移动，就不接受新的输入
-        if (isMoving)
+        if (isMoving || isHit)
             return;
         // 获取玩家的移动输入
         if (Input.GetKeyDown(KeyCode.W))
@@ -101,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
             isHit = true;
         }
     }
+
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.collider.tag == "Wall")

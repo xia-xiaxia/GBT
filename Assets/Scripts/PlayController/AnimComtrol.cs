@@ -42,7 +42,10 @@ public class AnimController : MonoBehaviour
         animator.SetBool("isMoving", playerMovement.isMoving);
         if (playerMovement.isHit)
         {
+            if(spriteRenderer.flipX == false)
             animator.Play("Fall");
+            else
+                animator.Play("Fall1");
         }
     }
 }

@@ -34,7 +34,7 @@ public class GridDrawerWithMesh : MonoBehaviour
         int vIndex = 0;
 
         // 绘制水平线
-        for (int i = -rows / 2; i <= rows / 2; i++)
+        for (int i = -rows / 2; i <= rows / 2; i++) 
         {
             // 左到右
             vertices[vIndex++] = new Vector3(-columns / 2 * cellSize, i * cellSize, 0);
@@ -42,7 +42,7 @@ public class GridDrawerWithMesh : MonoBehaviour
         }
 
         // 绘制垂直线
-        for (int i = -columns / 2; i <= columns / 2; i++)
+        for (int i = -columns / 2; i <= columns / 2; i++) 
         {
             // 上到下
             vertices[vIndex++] = new Vector3(i * cellSize, -rows / 2 * cellSize, 0);
@@ -61,4 +61,26 @@ public class GridDrawerWithMesh : MonoBehaviour
         // 设置网格的索引，使用 MeshTopology.Lines 来创建线段
         mesh.SetIndices(indices, MeshTopology.Lines, 0);
     }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white; 
+
+        // 绘制水平线
+        for (int i = -rows / 2; i <= rows / 2; i++)
+        {
+            Vector3 start = new Vector3(-columns / 2 * cellSize, i * cellSize, 0);
+            Vector3 end = new Vector3(columns / 2 * cellSize, i * cellSize, 0);
+            Gizmos.DrawLine(start, end);
+        }
+
+        // 绘制垂直线
+        for (int i = -columns / 2; i <= columns / 2; i++)
+        {
+            Vector3 start = new Vector3(i * cellSize, -rows / 2 * cellSize, 0);
+            Vector3 end = new Vector3(i * cellSize, rows / 2 * cellSize, 0);
+            Gizmos.DrawLine(start, end);
+        }
+    }
 }
+

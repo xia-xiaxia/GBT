@@ -21,17 +21,21 @@ public class EnemyFlowController : MonoBehaviour
 
     public float fieldOfViewDistance = 5f; // 视野范围
     public float fieldOfViewAngle = 110f; // 视野角度
-
+    public float hearingRange = 5f;
     private Vector2 lastBoxPosition = Vector2.zero; // 记录上次检测到的 Box 位置
     private bool hasDetectedBox = false; // 标记是否已经检测到 Box
     private bool isGameFailed = false; // 游戏是否失败
-
+    public bool isHit=false;   
     private int currentWaypointIndex = 0; // 当前路径点索引
 
     private Vector2 moveDirection; // 当前移动方向
+   // private EnemyAnimationController animationController;
+    // 用于存储检测到的多个 Box 的位置
+    private Dictionary<int, Vector2> detectedBoxes = new Dictionary<int, Vector2>();
 
     void Start()
     {
+       // animationController = GetComponent<EnemyAnimationController>();
         // 加载流程到队列
         foreach (FlowPath flow in flows)
         {
@@ -42,15 +46,16 @@ public class EnemyFlowController : MonoBehaviour
 
     void Update()
     {
-        // 如果游戏失败，停止一切
+        // 如果游戏失败，停止敌人移动
         if (isGameFailed) return;
+        //CheckForObstruction();
 
         // 移动到下一个路径点并更新方向
         MoveToNextWaypoint();
-
+        //animationController.UpdateAnimation(moveDirection);
         // 每次移动后检查视野范围内的物体
         CheckForBoxInView();
-
+        CheckForWallInHearingRange();
         // 平滑转向，更新朝向
         SmoothTurnTowardsTarget();
     }
@@ -92,17 +97,17 @@ public class EnemyFlowController : MonoBehaviour
 
         isExecuting = false;
         Debug.Log($"完成流程：{flow.flowName}");
-
+        GameFailed();
         StartNextTask();
     }
 
     private IEnumerator MoveToWaypoint(Vector3 target)
     {
-        // 计算当前移动方向（从当前位置指向目标点）
+        // 计算当前移动方向
         moveDirection = (target - transform.position).normalized;
 
         // 逐步移动到目标点
-        while (Vector3.Distance(transform.position, target) > 0.1f)
+        while (Vector3.Distance(transform.position, target) > 0.005f) // 使用更小的误差
         {
             transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
             yield return null;
@@ -110,6 +115,7 @@ public class EnemyFlowController : MonoBehaviour
 
         // 确保到达目标点时方向保持一致
         moveDirection = Vector2.zero;
+        transform.position = target; // 确保到达目标点
     }
 
     private void MoveToNextWaypoint()
@@ -127,7 +133,7 @@ public class EnemyFlowController : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
 
         // 如果到达路径点，更新索引
-        if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
+        if (Vector3.Distance(transform.position, targetPosition) <= 0.01f)
         {
             currentWaypointIndex++;
         }
@@ -152,19 +158,20 @@ public class EnemyFlowController : MonoBehaviour
 
                 if (angleToBox < fieldOfViewAngle / 2f)
                 {
-                    // 第一次检测
-                    if (!hasDetectedBox)
+                    int boxID = hitCollider.GetInstanceID(); // 获取物体的唯一 ID
+
+                    if (!detectedBoxes.ContainsKey(boxID))
                     {
-                        lastBoxPosition = boxPosition;
-                        hasDetectedBox = true;
-                        Debug.Log("Detected Box at position: " + lastBoxPosition);
+                        // 第一次检测到这个 Box
+                        detectedBoxes[boxID] = boxPosition;
+                        Debug.Log("第一次检测到物体的位置 " + boxPosition);
                     }
                     else
                     {
-                        // 检查位置变化
-                        if (lastBoxPosition != boxPosition)
+                        // 检查物体位置是否发生变化
+                        if (detectedBoxes[boxID] != boxPosition)
                         {
-                            Debug.Log("Box position changed! Game Failed!");
+                            Debug.Log($"箱子{boxID}被移动! Game Over.");
                             GameFailed();
                         }
                     }
@@ -172,11 +179,42 @@ public class EnemyFlowController : MonoBehaviour
             }
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+       
+        // 如果敌人与障碍物发生碰撞
+        if (collision.collider.CompareTag("Box"))
+        {
+            Debug.Log("敌人与障碍物发生碰撞，游戏失败！");
+            GameFailed(); // 触发游戏失败
+        }
+    }
+    private void GameVictory()
+    {
+        isGameFailed = false;
+        Debug.Log("阻止了坏结局，游戏胜利！");
+        // 停止敌人的运动
+        StopAllCoroutines();
+    }
+    private void CheckForWallInHearingRange()
+    {
+        // 检查敌人听觉范围内是否有墙壁并且敌人发生了撞击
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, hearingRange);
 
+        foreach (Collider2D hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("Wall") && isHit)
+            {
+                Debug.Log("听觉范围内有墙壁并发生撞击，游戏失败！");
+                GameFailed();
+            }
+        }
+    }
     private void GameFailed()
     {
         isGameFailed = true;
         Debug.Log("Game Over!");
+        StopAllCoroutines();
     }
 
     private void SmoothTurnTowardsTarget()
@@ -209,5 +247,8 @@ public class EnemyFlowController : MonoBehaviour
             Vector3 direction = Quaternion.Euler(0, 0, angle) * forward;
             Gizmos.DrawLine(origin, origin + direction * fieldOfViewDistance);
         }
+        // 绘制听觉范围
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, hearingRange);
     }
 }

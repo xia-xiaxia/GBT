@@ -107,10 +107,12 @@ public class EnemyFlowController : MonoBehaviour
         // 计算当前移动方向
         moveDirection = (target - transform.position).normalized;
 
-        // 逐步移动到目标点
-        while (Vector3.Distance(transform.position, target) > 0.005f) // 使用更小的误差
+        // 逐步移动到目标点,增加一个小的误差值来避免卡住
+        float distanceToTarget = Vector3.Distance(transform.position, target);
+        while (distanceToTarget > 0.005f) 
         {
             transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
+            distanceToTarget = Vector3.Distance(transform.position, target);
             yield return null;
         }
 
@@ -118,7 +120,6 @@ public class EnemyFlowController : MonoBehaviour
         moveDirection = Vector2.zero;
         transform.position = target; // 确保到达目标点
     }
-
     private void MoveToNextWaypoint()
     {
         if (isGameFailed || currentWaypointIndex >= flows[0].waypoints.Length) return;
@@ -131,11 +132,12 @@ public class EnemyFlowController : MonoBehaviour
         moveDirection = (targetPosition - transform.position).normalized;
 
         // 移动敌人
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-        // 如果到达路径点，更新索引
-        if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed);
+
+        if (Vector3.Distance(transform.position, targetPosition) <= 0.1f) 
         {
             currentWaypointIndex++;
+            Debug.Log(currentWaypointIndex);
         }
     }
 

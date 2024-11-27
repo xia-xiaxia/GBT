@@ -57,10 +57,10 @@ public class InteractableObjectManager : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
-            GameObject go = IsMouseOverUIObjectWithTag(Tag.DETAILSUI);
-            if (go == null)
+            if (IsMouseOverUIObjectWithTag(Tag.DETAILSUI) == null)
             {
-                DetailsManager.Instance.CloseDetailsUI();
+                if (IsMouseOverUIObjectWithTag(Tag.INTERACTABLE) == null)
+                    DetailsManager.Instance.CloseDetailsUI();
             }
         }
     }

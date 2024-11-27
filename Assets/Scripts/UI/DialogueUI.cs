@@ -10,9 +10,9 @@ public class DialogueUI : MonoBehaviour
 {
     public static DialogueUI Instance { get; private set; }
 
-    public GameObject dialogueBox;
-    public GameObject dialogistBox;
-    public GameObject continueButton;
+    private GameObject dialogueBox;
+    private GameObject dialogistBox;
+    private GameObject continueButton;
 
 
 
@@ -30,7 +30,7 @@ public class DialogueUI : MonoBehaviour
     }
     private void Start()
     {
-        LoadDialogue("Jack", true);
+        LoadDialogue("Sam", true);
     }
     /// <summary>
     /// 传入对话者名字，如果对话者是人物，则true，否则为false，用以控制是否显示对话者名字

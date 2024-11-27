@@ -13,6 +13,7 @@ public class InteractableObject : MonoBehaviour
 
     private void Start()
     {
+        DialogueUI.Instance.LoadDialogue("Jack", false);
         name = gameObject.name;
         selectButton = GetComponent<Button>();
         selectButton.onClick.AddListener(() => InteractableObjectManager.Instance.OnSelect(gameObject, Select.CompletelySelected));

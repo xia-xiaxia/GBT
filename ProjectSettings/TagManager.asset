@@ -8,6 +8,9 @@ TagManager:
   - Interactable
   - Disinteractable
   - DetailsUI
+  - Wall
+  - dreamer
+  - killer
   layers:
   - Default
   - TransparentFX
@@ -16,8 +19,8 @@ TagManager:
   - Water
   - UI
   - IsMove
-  - 
-  - 
+  - Player
+  - obstacle
   - 
   - 
   - 

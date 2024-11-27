@@ -9,4 +9,5 @@ public class TODO : MonoBehaviour
     //加载不下的字可以滚动显示
     //文本注意中文还是英文冒号
     //物品堆叠
+    //字典代替AText
 }

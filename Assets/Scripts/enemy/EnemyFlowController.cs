@@ -30,13 +30,13 @@ public class EnemyFlowController : MonoBehaviour
     public LayerMask playerLayer;   // 用于指定玩家所在的层
     public LayerMask obstacleLayer; // 用于指定障碍物所在的层
     private Vector2 moveDirection; // 当前移动方向
-   // private EnemyAnimationController animationController;
+   private EnemyAnimationController animationController;
     // 用于存储检测到的多个 Box 的位置
     private Dictionary<int, Vector2> detectedBoxes = new Dictionary<int, Vector2>();
 
     void Start()
     {
-       // animationController = GetComponent<EnemyAnimationController>();
+       animationController = GetComponent<EnemyAnimationController>();
         // 加载流程到队列
         foreach (FlowPath flow in flows)
         {
@@ -53,12 +53,12 @@ public class EnemyFlowController : MonoBehaviour
         CheckForPlayerInSightRange();
         // 移动到下一个路径点并更新方向
         MoveToNextWaypoint();
-        //animationController.UpdateAnimation(moveDirection);
-        // 每次移动后检查视野范围内的物体
+        float currentAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;  // 计算当前角度
+        animationController.UpdateAnimation(moveDirection, currentAngle);
         CheckForBoxInView();
         CheckForWallInHearingRange();
         // 平滑转向，更新朝向
-        SmoothTurnTowardsTarget();
+      //  SmoothTurnTowardsTarget();
     }
 
     private void StartNextTask()
@@ -268,20 +268,25 @@ public class EnemyFlowController : MonoBehaviour
         Debug.Log("Game Over!");
         StopAllCoroutines();
     }
-
-    private void SmoothTurnTowardsTarget()
+   /* private void SmoothTurnTowardsTarget()
     {
         if (currentWaypointIndex >= flows[0].waypoints.Length || isGameFailed) return;
 
-        // 平滑转向的目标角度
+        // 计算目标角度
         float targetAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
 
-        // 平滑旋转
+        // 使用 LerpAngle 进行平滑转向，避免急剧变化
         float angle = Mathf.LerpAngle(transform.eulerAngles.z, targetAngle, turnSpeed * Time.deltaTime);
 
         // 应用旋转
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
+        // 更新动画
+        // 通过计算平滑后的角度来更新动画
+        animationController.UpdateAnimation(moveDirection, angle);
     }
+
+    */
 
     private void OnDrawGizmos()
     {

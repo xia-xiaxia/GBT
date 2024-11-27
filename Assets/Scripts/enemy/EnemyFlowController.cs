@@ -158,21 +158,25 @@ public class EnemyFlowController : MonoBehaviour
 
                 if (angleToBox < fieldOfViewAngle / 2f)
                 {
-                    int boxID = hitCollider.GetInstanceID(); // 获取物体的唯一 ID
+                    // 检查是否被遮挡
+                    if (!IsTargetObstructed(hitCollider.transform))
+                    {
+                        int boxID = hitCollider.GetInstanceID(); // 获取物体的唯一 ID
 
-                    if (!detectedBoxes.ContainsKey(boxID))
-                    {
-                        // 第一次检测到这个 Box
-                        detectedBoxes[boxID] = boxPosition;
-                        Debug.Log("第一次检测到物体的位置 " + boxPosition);
-                    }
-                    else
-                    {
-                        // 检查物体位置是否发生变化
-                        if (detectedBoxes[boxID] != boxPosition)
+                        if (!detectedBoxes.ContainsKey(boxID))
                         {
-                            Debug.Log($"箱子{boxID}被移动! Game Over.");
-                            GameFailed();
+                            // 第一次检测到这个 Box
+                            detectedBoxes[boxID] = boxPosition;
+                            Debug.Log("第一次检测到物体的位置 " + boxPosition);
+                        }
+                        else
+                        {
+                            // 检查物体位置是否发生变化
+                            if (detectedBoxes[boxID] != boxPosition)
+                            {
+                                Debug.Log($"箱子{boxID}被移动! Game Over.");
+                                GameFailed();
+                            }
                         }
                     }
                 }
@@ -182,11 +186,10 @@ public class EnemyFlowController : MonoBehaviour
     private void CheckForPlayerInSightRange()
     {
         // 获取视野范围内的所有物体
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, fieldOfViewDistance);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, fieldOfViewDistance, playerLayer);
 
         foreach (Collider2D hitCollider in hitColliders)
         {
-            // 如果物体是玩家
             if (hitCollider.CompareTag("Player"))
             {
                 Vector3 directionToPlayer = hitCollider.transform.position - transform.position;
@@ -194,31 +197,38 @@ public class EnemyFlowController : MonoBehaviour
                 // 计算玩家与敌人之间的夹角
                 float angleToPlayer = Vector3.Angle(moveDirection, directionToPlayer);
 
-                // 判断玩家是否在视野角度范围内
+                // 如果玩家在视野角度范围内
                 if (angleToPlayer < fieldOfViewAngle / 2f)
                 {
-                    // 使用射线检测来确认视线是否被遮挡
-                    if (IsPlayerVisible(hitCollider.transform))
+                    // 检查是否被遮挡
+                    if (!IsTargetObstructed(hitCollider.transform))
                     {
                         Debug.Log("玩家被发现，游戏失败！");
-                        GameFailed();  // 触发游戏失败
-                        return;  // 一旦触发游戏失败，退出函数
+                        GameFailed(); // 触发游戏失败
+                        return;
                     }
                 }
             }
         }
     }
-
-    private bool IsPlayerVisible(Transform playerTransform)
+    private bool IsTargetObstructed(Transform targetTransform)
     {
-        Vector3 directionToPlayer = playerTransform.position - transform.position;
+        Vector3 directionToTarget = targetTransform.position - transform.position;
 
-        // 使用射线检测来判断敌人与玩家之间的视线是否被阻挡
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer.normalized, fieldOfViewDistance, obstacleLayer);
+        // 使用射线检测目标是否被障碍物遮挡
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToTarget.normalized, fieldOfViewDistance, obstacleLayer);
 
-        // 如果射线没有碰到任何障碍物，并且射线的目标是玩家
-        return hit.collider == null || hit.collider.CompareTag("Player");
+        // 如果射线命中，并且命中的物体不是目标本身，则目标被遮挡
+        if (hit.collider != null && hit.collider.transform != targetTransform)
+        {
+            Debug.Log($"目标 {targetTransform.name} 被 {hit.collider.name} 遮挡，检测失败。");
+            return true; // 被遮挡
+        }
+
+        return false; // 没有被遮挡
     }
+
+   
     private void OnCollisionEnter2D(Collision2D collision)
     {
        
@@ -290,5 +300,14 @@ public class EnemyFlowController : MonoBehaviour
         // 绘制听觉范围
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, hearingRange);
+
+        //if (Application.isPlaying)
+        //{
+          //  foreach (var box in detectedBoxes.Values)
+           // {
+          //      Gizmos.color = Color.yellow;
+            //    Gizmos.DrawLine(transform.position, box);
+            //}
+       // }
     }
 }

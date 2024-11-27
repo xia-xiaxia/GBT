@@ -15,11 +15,15 @@ public class Box : MonoBehaviour
     public float normalSpeed;
     public float quickSpeed;
     private float gridSize = 1f;
-    private Vector3 targetPosition;
+    public Vector3 targetPosition;
     private Vector2 boxDir;
+    private bool canPush;
+    public Wall wallconl;
+
 
     void Start()
     {
+        targetPosition = transform.position;
         box = GetComponent<Transform>();
         col = GetComponent<Collider2D>();
         currentSpeed = normalSpeed;
@@ -29,6 +33,7 @@ public class Box : MonoBehaviour
     {
         PM.moveSpeed = currentSpeed;
         DirJudge();  // 判断玩家是否朝向 Box 移动
+        canPush = wallconl.canTrans;
     }
 
     // 判断玩家是否朝向 Box 移动
@@ -51,10 +56,11 @@ public class Box : MonoBehaviour
     {
         if (collision.collider.name == "Player")
         {
-            isCollision = true; // 标记开始碰撞，开始对齐
-            boxDir = PM.direction;
-            boxMove();
+                isCollision = true; // 标记开始碰撞，开始对齐
+                boxDir = PM.direction;
+                boxMove();
         }
+        
     }
 
     void OnCollisionStay2D(Collision2D collision)
@@ -68,13 +74,13 @@ public class Box : MonoBehaviour
     // 碰撞退出
     void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.collider.name == "Player")
-        {
-            // 恢复玩家的移动速度，并清除碰撞状态
-            PM.moveSpeed = normalSpeed;
-            isCollision = false;
-            isMoving = false;
-        }
+            if (collision.collider.name == "Player")
+            {
+                // 恢复玩家的移动速度，并清除碰撞状态
+                PM.moveSpeed = normalSpeed;
+                isCollision = false;
+                isMoving = false;
+            }
     }
 
     void FixedUpdate()

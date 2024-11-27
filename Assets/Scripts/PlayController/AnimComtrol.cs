@@ -43,9 +43,9 @@ public class AnimController : MonoBehaviour
         if (playerMovement.isHit)
         {
             if(spriteRenderer.flipX == false)
-            animator.Play("Fall");
+            animator.Play("FallRight");
             else
-                animator.Play("Fall1");
+                animator.Play("FallLeft");
         }
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerFlip : MonoBehaviour
+public class AnimController : MonoBehaviour
 {
     private PlayerMovement playerMovement;
     private SpriteRenderer spriteRenderer;
@@ -11,8 +11,9 @@ public class PlayerFlip : MonoBehaviour
 
     void Start()
     {
-        playerMovement = GetComponent<PlayerMovement>(); // 获取 PlayerMovement 脚本
-        spriteRenderer = GetComponent<SpriteRenderer>();  // 获取 SpriteRenderer 组件
+        playerMovement = GetComponent<PlayerMovement>(); 
+        spriteRenderer = GetComponent<SpriteRenderer>();  
+        animator = GetComponent<Animator>();
     }
 
     void Update()

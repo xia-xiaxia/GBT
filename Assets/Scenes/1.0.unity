@@ -1689,23 +1689,23 @@ MonoBehaviour:
   - flowName: go
     waypoints:
     - {fileID: 2012788931}
-    - {fileID: 2012788931}
-    - {fileID: 1736029422}
-    - {fileID: 1736029422}
-    - {fileID: 2046549598}
-    - {fileID: 2046549598}
-    - {fileID: 2057441197}
-    - {fileID: 2057441197}
-    - {fileID: 1055262981}
-    - {fileID: 0}
-    - {fileID: 1805012903}
-    - {fileID: 0}
     - {fileID: 442858271}
-    - {fileID: 0}
+    - {fileID: 1736029422}
+    - {fileID: 2012788931}
+    - {fileID: 2046549598}
+    - {fileID: 1055262981}
+    - {fileID: 2057441197}
+    - {fileID: 2012788931}
+    - {fileID: 1055262981}
+    - {fileID: 1805012903}
     - {fileID: 1054042637}
-    - {fileID: 0}
+    - {fileID: 1055262981}
+    - {fileID: 442858271}
+    - {fileID: 1055262981}
+    - {fileID: 1054042637}
+    - {fileID: 1736029422}
     waitTimeAtPoint: 0
-  moveSpeed: 5
+  moveSpeed: 0.02
   turnSpeed: 10
   fieldOfViewDistance: 4
   fieldOfViewAngle: 90

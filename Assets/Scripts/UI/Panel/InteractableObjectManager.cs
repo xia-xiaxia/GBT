@@ -52,7 +52,7 @@ public class InteractableObjectManager : MonoBehaviour
                     selectedObject.transform.Find("Halo").gameObject.SetActive(false);
                     selectedObject = null;
                 }
-                DetailsManager.Instance.transform.Find("UI").gameObject.SetActive(false);
+                DetailsUI.Instance.transform.Find("UI").gameObject.SetActive(false);
             }
         }
         if (Input.GetMouseButtonDown(0))
@@ -60,7 +60,7 @@ public class InteractableObjectManager : MonoBehaviour
             if (IsMouseOverUIObjectWithTag(Tag.DETAILSUI) == null)
             {
                 if (IsMouseOverUIObjectWithTag(Tag.INTERACTABLE) == null)
-                    DetailsManager.Instance.CloseDetailsUI();
+                    DetailsUI.Instance.CloseDetailsUI();
             }
         }
     }

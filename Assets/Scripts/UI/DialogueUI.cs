@@ -30,7 +30,7 @@ public class DialogueUI : MonoBehaviour
     }
     private void Start()
     {
-        LoadDialogue("Sam", true);
+        //DialogueUI.Instance.LoadDialogue("Jack", true);
     }
     /// <summary>
     /// 传入对话者名字，如果对话者是人物，则true，否则为false，用以控制是否显示对话者名字

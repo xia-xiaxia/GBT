@@ -131,7 +131,7 @@ public class EnemyFlowController : MonoBehaviour
         moveDirection = (targetPosition - transform.position).normalized;
 
         // 移动敌人
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed);
 
         // 如果到达路径点，更新索引
         if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)

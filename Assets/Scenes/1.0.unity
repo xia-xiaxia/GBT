@@ -361,7 +361,7 @@ Transform:
   m_GameObject: {fileID: 262831461}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.85, y: -2, z: -0.09601394}
+  m_LocalPosition: {x: -5.91, y: -2.42, z: -0.09601394}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1036,7 +1036,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 7021924981731582356, guid: e0dd8645e7d97e54cad13e95758b8cdb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1056,8 +1056,8 @@ Transform:
   m_GameObject: {fileID: 943371683}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.76, y: 6.02, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 3.454, y: 2.516, z: 0}
+  m_LocalScale: {x: 0.54641306, y: 0.35916814, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1100,7 +1100,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 1.75, y: 2.81}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -1456,7 +1456,7 @@ Transform:
   m_GameObject: {fileID: 1736029421}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0.85, z: 0}
+  m_LocalPosition: {x: -7.62, y: 0.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1819,7 +1819,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474f983709a45504d95d310ba9e714cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnSpeed: 5
 --- !u!1001 &4866937440587991336
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1998,8 +1997,8 @@ SceneRoots:
   - {fileID: 101423325}
   - {fileID: 449515404}
   - {fileID: 308244440}
-  - {fileID: 2070002477}
   - {fileID: 943371685}
+  - {fileID: 2070002477}
   - {fileID: 820522322}
   - {fileID: 1376352125}
   - {fileID: 331764032}

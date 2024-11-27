@@ -301,13 +301,13 @@ public class EnemyFlowController : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, hearingRange);
 
-        //if (Application.isPlaying)
-        //{
-          //  foreach (var box in detectedBoxes.Values)
-           // {
-          //      Gizmos.color = Color.yellow;
-            //    Gizmos.DrawLine(transform.position, box);
-            //}
-       // }
+        if (Application.isPlaying)
+        {
+            foreach (var box in detectedBoxes.Values)
+            {
+                Gizmos.color = Color.yellow;
+              Gizmos.DrawLine(transform.position, box);
+            }
+        }
     }
 }

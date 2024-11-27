@@ -13,7 +13,7 @@ public class LoadTextManager : MonoBehaviour
 
     public TextAsset textFile;
 
-    private List<AText> Texts = new List<AText>();
+    public List<AText> Texts = new List<AText>();
     private AText text;
     private TextLoad textLoad;
     private TextMeshProUGUI textBox;
@@ -28,16 +28,15 @@ public class LoadTextManager : MonoBehaviour
             Destroy(gameObject);
         }
         Instance = this;
-
-        string[] allText = textFile.text.Split("\r\n\r\n");
+        string[] allText = textFile.text.Split(new string[] { "\r\n\r\n" }, System.StringSplitOptions.None);
         foreach (string eachText in allText)
         {
             if (!string.IsNullOrEmpty(eachText))
             {
-                string[] nameAndTexts = eachText.Split(":\r\n");
+                string[] nameAndTexts = eachText.Split(new string[] { ":\r\n" }, System.StringSplitOptions.None);
                 string name = nameAndTexts[0].Trim();
                 List<string> texts = new List<string>();
-                foreach (string text in nameAndTexts[1].Split("\r\n"))
+                foreach (string text in nameAndTexts[1].Split(new string[] { "\r\n" }, System.StringSplitOptions.None))
                 {
                     if (!string.IsNullOrEmpty(text))
                     {
@@ -50,12 +49,11 @@ public class LoadTextManager : MonoBehaviour
     }
     public void LoadText(TextMeshProUGUI textBox, string name, Button continueButton)
     {
-        print("222");
         this.textBox = textBox;
         this.continueButton = continueButton;
         continueButton.onClick.AddListener(OnContinueBottonClicked);
         continueButton.transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = "Continue";
-        text = Texts.Find(t => t.name == name);
+        text = Texts.Find(t => t.name == name.Trim());
         text.index = 0;
         StartCoroutine(LoadOneByOne());
     }
@@ -102,7 +100,6 @@ public class LoadTextManager : MonoBehaviour
         }
     }
 }
-
 public class AText
 {
     public string name;

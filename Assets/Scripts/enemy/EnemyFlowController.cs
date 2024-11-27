@@ -57,7 +57,7 @@ public class EnemyFlowController : MonoBehaviour
         animationController.UpdateAnimation(moveDirection, currentAngle);
         CheckForBoxInView();
         CheckForWallInHearingRange();
-        // 平滑转向，更新朝向
+        // 平滑转向，更新朝向，如果要做到动画切换，就不能用平滑转向了捏
       //  SmoothTurnTowardsTarget();
     }
 
@@ -266,6 +266,10 @@ public class EnemyFlowController : MonoBehaviour
     {
         isGameFailed = true;
         Debug.Log("Game Over!");
+        if (animationController != null)
+        {
+            animationController.SetIdleAnimation(); // 让动画转为静止状态
+        }
         StopAllCoroutines();
     }
    /* private void SmoothTurnTowardsTarget()
@@ -275,7 +279,7 @@ public class EnemyFlowController : MonoBehaviour
         // 计算目标角度
         float targetAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
 
-        // 使用 LerpAngle 进行平滑转向，避免急剧变化
+        // 使用 LerpAngle 进行平滑转
         float angle = Mathf.LerpAngle(transform.eulerAngles.z, targetAngle, turnSpeed * Time.deltaTime);
 
         // 应用旋转

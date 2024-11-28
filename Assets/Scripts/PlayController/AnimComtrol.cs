@@ -40,6 +40,7 @@ public class AnimController : MonoBehaviour
     private void AnimChange()
     {
         animator.SetBool("isMoving", playerMovement.isMoving);
+        animator.SetBool("isHit",playerMovement.isHit);
     }
 }
 

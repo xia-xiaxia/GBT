@@ -125,6 +125,7 @@ public class Box : MonoBehaviour
             PM.isHit = true;
             PM.isMoving = false;
             isMoving = false;
+            StartCoroutine(recovery());
         }
         else
         {
@@ -132,6 +133,13 @@ public class Box : MonoBehaviour
             // 如果没有碰撞，可视化射线
             Debug.DrawRay(origin, direction * distance, Color.white);
         }
+    }
+
+    IEnumerator recovery()
+    {
+        yield return new WaitForSeconds(1f);
+        boxDir = Vector3.zero;
+        PM.isHit = false;   
     }
 
 }

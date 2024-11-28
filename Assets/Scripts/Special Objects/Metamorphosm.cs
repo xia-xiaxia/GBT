@@ -63,6 +63,7 @@ public class Metamorphosm : MonoBehaviour
                 temp = PM.transform.position;
                 PM.transform.position = transform.position;
                 transform.position = temp;
+                isMark = false;
             }
         }
     }

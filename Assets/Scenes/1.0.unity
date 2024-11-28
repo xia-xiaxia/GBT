@@ -1695,6 +1695,10 @@ MonoBehaviour:
     - {fileID: 1736029422}
     - {fileID: 2046549598}
     - {fileID: 2057441197}
+    - {fileID: 1055262981}
+    - {fileID: 1805012903}
+    - {fileID: 442858271}
+    - {fileID: 1054042637}
     waitTimeAtPoint: 0
   - flowName: higi
     waypoints:

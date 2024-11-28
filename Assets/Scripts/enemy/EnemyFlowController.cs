@@ -37,8 +37,6 @@ public class EnemyFlowController : MonoBehaviour
 
     public static EnemyFlowController Instance { get; private set; }
 
-
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -46,15 +44,16 @@ public class EnemyFlowController : MonoBehaviour
             Destroy(gameObject);
         }
         Instance = this;
+      
     }
     void Start()
     {
         animationController = GetComponent<EnemyAnimationController>();
-        // 加载流程到队列
         foreach (FlowPath flow in flows)
         {
             taskQueue.Enqueue(flow);
         }
+
         StartNextTask();
     }
 
@@ -62,7 +61,7 @@ public class EnemyFlowController : MonoBehaviour
     {
         // 如果游戏失败，停止敌人移动
         if (isGameFailed)
-        {StopAllCoroutines(); return; }
+        return; 
         // 移动到下一个路径点并更新方向
         MoveToNextWaypoint();
         float currentAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;  // 计算当前角度
@@ -74,15 +73,13 @@ public class EnemyFlowController : MonoBehaviour
 
     private IEnumerator ExecuteFlow(FlowPath flow)
     {
-        Debug.Log($"开始流程：{flow.flowName}");
         isExecuting = true;
+        Debug.Log($"开始流程：{flow.flowName}");
 
-        // 初始化路径点索引
-        currentWaypointIndex = 0;
-
-        while (currentWaypointIndex < flow.waypoints.Length)
+        // 执行流程中的所有路径点
+        for (int i = 0; i < flow.waypoints.Length; i++)
         {
-            Transform waypoint = flow.waypoints[currentWaypointIndex];
+            Transform waypoint = flow.waypoints[i];
 
             // 移动到当前路径点
             yield return MoveToWaypoint(waypoint.position);
@@ -90,60 +87,61 @@ public class EnemyFlowController : MonoBehaviour
             // 等待指定时间
             yield return new WaitForSeconds(flow.waitTimeAtPoint);
 
-            currentWaypointIndex++;
+            // 如果到了指定的点，切换动画（例如：第6个点）
+           /*f (i == 5) // 可以通过public变量来控制
+            {
+                // 在第6个点执行特殊动画，比如蹲下
+                animationController.SetCrouchAnimation();
+            }*/
         }
 
-    
         isExecuting = false;
         Debug.Log($"完成流程：{flow.flowName}");
 
-        //继续下一个任务
+        // 游戏失败或任务完成后，切换到下一个流程
         StartNextTask();
+    }
+    private IEnumerator MoveToWaypoint(Vector3 target)
+    {
+        moveDirection = (target - transform.position).normalized;
+
+        // 逐步移动到目标点
+        while (Vector3.Distance(transform.position, target) > 0.1f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        // 到达目标点
+        transform.position = target;
     }
 
     private void StartNextTask()
     {
-        // 只有在没有失败时，才继续执行下一个流程
-        if (taskQueue.Count > 0 && !isGameFailed)
+        // 如果任务队列中有流程，执行下一个流程
+        if (taskQueue.Count > 0)
         {
-            FlowPath currentFlow = taskQueue.Dequeue();
-            StartCoroutine(ExecuteFlow(currentFlow)); // 开始下一个流程
+            FlowPath currentFlow = taskQueue.Dequeue(); // 获取队列中的第一个流程
+            StartCoroutine(ExecuteFlow(currentFlow)); // 启动当前流程
         }
         else
         {
-            // 如果任务队列为空或者游戏失败，触发 GameOver
-            if (!isGameFailed)
-            {
-                Debug.Log("所有流程完成，游戏失败！");
-                GameFailed(); // 触发游戏失败
-            }
+            // 如果任务队列为空，表示所有流程完成
+            Debug.Log("所有流程完成，游戏结束！");
+            GameFailed(); // 触发游戏结束
         }
     }
 
-    
-   
-    private IEnumerator MoveToWaypoint(Vector3 target)
-    {
-        // 计算当前移动方向
-        moveDirection = (target - transform.position).normalized;
-
-        // 逐步移动到目标点,增加一个小的误差值来避免卡住
-        float distanceToTarget = Vector3.Distance(transform.position, target);
-        while (distanceToTarget > 0.005f)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
-            distanceToTarget = Vector3.Distance(transform.position, target);
-            yield return null;
-        }
-
-        // 确保到达目标点时方向保持一致
-        moveDirection = Vector2.zero;
-        transform.position = target; // 确保到达目标点
-    }
 
     private void MoveToNextWaypoint()
     {
-        if (isGameFailed || currentWaypointIndex >= flows[0].waypoints.Length) return;
+        if (isExecuting) return;
+
+        if (currentWaypointIndex >= flows[0].waypoints.Length)
+        {
+            // 如果走完了当前流程，直接停止或者完成某些操作
+            return;
+        }
 
         // 获取当前目标路径点
         Transform targetWaypoint = flows[0].waypoints[currentWaypointIndex];
@@ -153,7 +151,7 @@ public class EnemyFlowController : MonoBehaviour
         moveDirection = (targetPosition - transform.position).normalized;
 
         // 移动敌人
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
 
         if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
         {

@@ -1374,7 +1374,7 @@ Transform:
   m_GameObject: {fileID: 1228335661}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.3645048, y: -0.5588449, z: -0.044876277}
+  m_LocalPosition: {x: -2.3645048, y: -1.01, z: -0.044876277}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1695,17 +1695,13 @@ MonoBehaviour:
     - {fileID: 1736029422}
     - {fileID: 2046549598}
     - {fileID: 2057441197}
-    - {fileID: 1055262981}
-    - {fileID: 1805012903}
-    - {fileID: 442858271}
-    - {fileID: 1054042637}
     waitTimeAtPoint: 0
   - flowName: higi
     waypoints:
     - {fileID: 1146957214}
     - {fileID: 1054042637}
     waitTimeAtPoint: 0
-  moveSpeed: 0.006
+  moveSpeed: 2
   isExecuting: 0
   fieldOfViewDistance: 4
   fieldOfViewAngle: 110

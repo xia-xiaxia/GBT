@@ -10,6 +10,7 @@ public class PossessedMove : MonoBehaviour
     public bool isMoving = false; // 是否正在移动
     public Vector2 direction; // 玩家当前的移动方向
     public bool isHit = false;
+    public PlayerMovement PM;
 
 
     void Start()
@@ -20,8 +21,15 @@ public class PossessedMove : MonoBehaviour
     void Update()
     {
         // 如果正在移动，就忽略输入
-        if (isMoving)
-            return;
+        if (PM != null)
+        {
+            if (PM.isMoving) return;
+        }
+        else
+        {
+            if (isMoving)
+                return;
+        }
 
         // 获取玩家的移动输入
         if (Input.GetKeyDown(KeyCode.W))

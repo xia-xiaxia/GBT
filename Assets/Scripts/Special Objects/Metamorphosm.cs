@@ -10,17 +10,23 @@ public class Metamorphosm : MonoBehaviour
     public LayerMask playerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
     private bool isPlayerInRange = false; // 玩家是否在检测范围内
     private bool isMark;
+    private int count;
+    public int maxCount;
 
 
     void Start()
     {
         isMark = false;
+        count = 0;
     }
 
     void Update()
     {
         CheckPlayerInRange();
-        swap();
+        if (count < maxCount)
+        {
+            swap();
+        }
     }
 
     void CheckPlayerInRange()
@@ -64,6 +70,7 @@ public class Metamorphosm : MonoBehaviour
                 PM.transform.position = transform.position;
                 transform.position = temp;
                 isMark = false;
+                count++;
             }
         }
     }

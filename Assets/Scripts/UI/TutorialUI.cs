@@ -36,6 +36,7 @@ public class TutorialUI : MonoBehaviour
         AText text = LoadTextManager.Instance.Texts.Find(t => t.name == name);
         Sprite sprite = trickExampleImage.sprites.Find(s => s.name == name+"_0");
         trickName.text = name;
+        tutorialContent.text = "";
         foreach (string content in text.content)
         {
             tutorialContent.text += content;

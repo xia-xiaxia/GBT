@@ -57,7 +57,7 @@ public class LoadTextManager : MonoBehaviour
         text.index = 0;
         StartCoroutine(LoadOneByOne());
     }
-    public IEnumerator LoadOneByOne()
+    private IEnumerator LoadOneByOne()
     {
         int i = 0;
         while (i++ < text.content[text.index].Length && textLoad == TextLoad.Loading)
@@ -72,7 +72,7 @@ public class LoadTextManager : MonoBehaviour
         }
         textLoad = TextLoad.Loaded;
     }
-    public void OnContinueBottonClicked()
+    private void OnContinueBottonClicked()
     {
         switch (textLoad)
         {

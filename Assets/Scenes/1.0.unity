@@ -520,7 +520,7 @@ GameObject:
   - component: {fileID: 371597143}
   - component: {fileID: 371597145}
   - component: {fileID: 371597146}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Box1
   m_TagString: Box
   m_Icon: {fileID: 0}
@@ -742,7 +742,7 @@ GameObject:
   - component: {fileID: 791400610}
   - component: {fileID: 791400609}
   - component: {fileID: 791400608}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: wall
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -910,7 +910,7 @@ GameObject:
   - component: {fileID: 943371685}
   - component: {fileID: 943371684}
   - component: {fileID: 943371686}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1713,10 +1713,10 @@ MonoBehaviour:
   isHit: 0
   playerLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 256
 --- !u!61 &2070002479
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1836,6 +1836,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: killerside
       objectReference: {fileID: 0}
+    - target: {fileID: 3398530770012842646, guid: 29c0d9a1129351b4cb78e4532f99f630, type: 3}
+      propertyPath: m_TagString
+      value: killer
+      objectReference: {fileID: 0}
     - target: {fileID: 4461041964822712852, guid: 29c0d9a1129351b4cb78e4532f99f630, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.7
@@ -1892,6 +1896,10 @@ PrefabInstance:
     - target: {fileID: 5040692946982726518, guid: 7ea77cd50ce8c42498f014ff9e8b671d, type: 3}
       propertyPath: m_Name
       value: killerback
+      objectReference: {fileID: 0}
+    - target: {fileID: 5040692946982726518, guid: 7ea77cd50ce8c42498f014ff9e8b671d, type: 3}
+      propertyPath: m_TagString
+      value: killer
       objectReference: {fileID: 0}
     - target: {fileID: 8284132712489440840, guid: 7ea77cd50ce8c42498f014ff9e8b671d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1989,6 +1997,10 @@ PrefabInstance:
     - target: {fileID: 5825162242021907148, guid: 1c4786b305a54924abd238c636bc94b1, type: 3}
       propertyPath: m_Name
       value: killerforward
+      objectReference: {fileID: 0}
+    - target: {fileID: 5825162242021907148, guid: 1c4786b305a54924abd238c636bc94b1, type: 3}
+      propertyPath: m_TagString
+      value: killer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

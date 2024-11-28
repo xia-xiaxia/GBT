@@ -35,6 +35,18 @@ public class EnemyFlowController : MonoBehaviour
     // 存储多个 Box 的位置
     private Dictionary<int, Vector2> detectedBoxes = new Dictionary<int, Vector2>();
 
+    public static EnemyFlowController Instance { get; private set; }
+
+
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        Instance = this;
+    }
     void Start()
     {
         animationController = GetComponent<EnemyAnimationController>();

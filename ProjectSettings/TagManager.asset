@@ -5,9 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Box
+  - Interactable
+  - Disinteractable
+  - DetailsUI
   - Wall
-  - killer
   - dreamer
+  - killer
   layers:
   - Default
   - TransparentFX
@@ -15,9 +18,9 @@ TagManager:
   - Player
   - Water
   - UI
+  - IsMove
   - Player
   - obstacle
-  - 
   - 
   - 
   - 

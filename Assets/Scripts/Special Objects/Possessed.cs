@@ -14,7 +14,7 @@ public class Possessed : MonoBehaviour
     private Renderer characterRenderer;
     private Collider2D characterCollider;
 
-    private bool IsPossessed;
+    public bool IsPossessed;
 
 
     void Start()

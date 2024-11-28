@@ -11,7 +11,7 @@ public class PossessedMove : MonoBehaviour
     public Vector2 direction; // 玩家当前的移动方向
     public bool isHit = false;
     public PlayerMovement PM;
-
+    public LayerMask layer;
 
     void Start()
     {
@@ -82,7 +82,8 @@ public class PossessedMove : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.tag == "Wall")
+        int layer = collision.collider.gameObject.layer;
+        if (layer == LayerMask.NameToLayer("Hinder"))
         {
             isMoving = false;
             isHit = true;
@@ -92,7 +93,8 @@ public class PossessedMove : MonoBehaviour
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.collider.tag == "Wall")
+        int layer = collision.collider.gameObject.layer;
+        if (layer == LayerMask.NameToLayer("Hinder"))
         {
             calculate();
             transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
@@ -101,7 +103,8 @@ public class PossessedMove : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.collider.tag == "Wall")
+        int layer = collision.collider.gameObject.layer;
+        if (layer == LayerMask.NameToLayer("Hinder"))
         {
             isHit = false;
             calculate();

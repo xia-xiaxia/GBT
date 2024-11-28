@@ -8,8 +8,8 @@ public class Metamorphosm : MonoBehaviour
     public PlayerMovement PM;
     public float detectionRadius = 5f;  // 圆形检测范围的半径
     public LayerMask playerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
-    private bool isPlayerInRange = false; // 玩家是否在检测范围内
-    private bool isMark;
+    public bool isPlayerInRange = false; // 玩家是否在检测范围内
+    public bool isMark;
     private int count;
     public int maxCount;
 
@@ -25,7 +25,8 @@ public class Metamorphosm : MonoBehaviour
         CheckPlayerInRange();
         if (count < maxCount)
         {
-            swap();
+            if(!PM.isMoving)
+                swap();
         }
     }
 
@@ -56,7 +57,7 @@ public class Metamorphosm : MonoBehaviour
     {
         if (isPlayerInRange)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyUp(KeyCode.F))
             {
                 isMark = true;
             }

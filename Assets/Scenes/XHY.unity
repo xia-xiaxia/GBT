@@ -479,6 +479,8 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  isPlayerInRange: 0
+  isMark: 0
   maxCount: 1
 --- !u!1001 &387084306
 PrefabInstance:
@@ -669,7 +671,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 419489f9711f8b74fb6dc3de329d0561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WaitTime: 5
+  idleTimeLimit: 5
+  Metamorphosm: {fileID: 230886585}
+  Possessed: {fileID: 1329566758}
   isGameOver: 0
 --- !u!4 &1324832483
 Transform:
@@ -855,6 +859,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  isPlayerInRange: 0
   Player: {fileID: 224448229}
   targetAlpha: 0.5
 --- !u!50 &1329566759

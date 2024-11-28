@@ -8,7 +8,7 @@ public class Possessed : MonoBehaviour
     private PossessedMove PossessedMove;
     public float detectionRadius = 5f;  // 圆形检测范围的半径
     public LayerMask playerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
-    private bool isPlayerInRange = false; // 玩家是否在检测范围内
+    public bool isPlayerInRange = false; // 玩家是否在检测范围内
     public GameObject Player;
     public float targetAlpha = 0.5f; // 目标透明度
     private Renderer characterRenderer;
@@ -29,7 +29,8 @@ public class Possessed : MonoBehaviour
     void Update()
     {
         CheckPlayerInRange();
-        posssessed();
+        if(!PM.isMoving)
+            posssessed();
         PM.isPossessed = IsPossessed;
         canThroughtheWall();
     }
@@ -73,7 +74,7 @@ public class Possessed : MonoBehaviour
         }
         if (PM.enabled == false)
         {
-            if (Input.GetKeyDown(KeyCode.Tab))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 IsPossessed = false;
                 PossessedMove.enabled = false;

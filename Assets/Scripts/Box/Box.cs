@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Box : MonoBehaviour
 {
-    public PlayerMovement PM;
+    public PossessedMove PM;
     private Transform box;
     private Collider2D col;    // Box 的 Collider
     private bool isCollision = false;  // 判断是否可以碰撞
@@ -53,7 +53,7 @@ public class Box : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.name == "Player")
+        if (collision.collider.name == "object(possessed)")
         {
                 isCollision = true; // 标记开始碰撞，开始对齐
                 boxDir = PM.direction;
@@ -64,7 +64,7 @@ public class Box : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D collision)
     {
-        if (isCollision && collision.collider.name == "Player")
+        if (isCollision && collision.collider.name == "object(possessed)")
         {
             PM.moveSpeed = slowSpeed; // 玩家移动速度减慢
         }
@@ -73,7 +73,7 @@ public class Box : MonoBehaviour
     // 碰撞退出
     void OnCollisionExit2D(Collision2D collision)
     {
-            if (collision.collider.name == "Player")
+            if (collision.collider.name == "object(possessed)")
             {
                 // 恢复玩家的移动速度，并清除碰撞状态
                 PM.moveSpeed = normalSpeed;

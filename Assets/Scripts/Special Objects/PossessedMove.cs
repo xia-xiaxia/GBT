@@ -9,6 +9,8 @@ public class PossessedMove : MonoBehaviour
     public float gridSize = 1f; // 每格的大小
     public bool isMoving = false; // 是否正在移动
     public Vector2 direction; // 玩家当前的移动方向
+    public bool isHit = false;
+
 
     void Start()
     {
@@ -69,4 +71,44 @@ public class PossessedMove : MonoBehaviour
         isMoving = true; // 标记为正在移动
     }
 
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Wall")
+        {
+            isMoving = false;
+            isHit = true;
+            calculate();
+            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
+        }
+    }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Wall")
+        {
+            calculate();
+            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Wall")
+        {
+            isHit = false;
+            calculate();
+            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
+        }
+    }
+
+    private void calculate()
+    {
+        targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize,
+                                     Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize);
+    }
+    IEnumerator recovery()
+    {
+        yield return new WaitForSeconds(0.2f);
+        isHit = false;
+    }
 }

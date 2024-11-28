@@ -15,7 +15,9 @@ public class PlayerMovement : MonoBehaviour
     private bool isTrans;
 
     public bool isPush = false;
-    public bool isHit = false;
+
+    public bool isPossessed = false;
+
 
     void Start()
     {
@@ -26,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // 如果玩家正在移动，就不接受新的输入
-        if (isMoving || isHit)
+        if (isMoving)
             return;
         // 获取玩家的移动输入
         if (Input.GetKeyDown(KeyCode.W))
@@ -77,11 +79,7 @@ public class PlayerMovement : MonoBehaviour
         isMoving = true; // 标记为正在移动
     }
 
-    private void calculate()
-    {
-        targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize,
-                                     Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize);
-    }
+    
 
 
     void isMovingorNot()
@@ -100,34 +98,5 @@ public class PlayerMovement : MonoBehaviour
         lastPosition = transform.position;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.tag == "Wall")
-        {
-            isMoving = false;
-            isHit = true;
-            calculate();
-            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
-        }
-    }
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.collider.tag == "Wall")
-        {
-            calculate();
-            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.collider.tag == "Wall")
-        {
-            isHit = false;
-            calculate();
-            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
-        }
-    }
-
-
+    
 }

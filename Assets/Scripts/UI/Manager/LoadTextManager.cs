@@ -51,10 +51,22 @@ public class LoadTextManager : MonoBehaviour
     {
         this.textBox = textBox;
         this.continueButton = continueButton;
-        continueButton.onClick.AddListener(OnContinueBottonClicked);
-        continueButton.transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = "Continue";
+        this.continueButton.onClick.AddListener(OnContinueBottonClicked);
+        this.continueButton.transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = "Continue";
         text = Texts.Find(t => t.name == name.Trim());
         text.index = 0;
+        StartCoroutine(LoadOneByOne());
+    }
+    public void LoadText(TextMeshProUGUI textBox, string name, Button continueButton, bool isMouseButton)
+    {
+        this.textBox = textBox;
+        this.continueButton = continueButton;
+        this.continueButton.onClick.AddListener(OnMouseButtonClicked);
+        AText temp = Texts.Find(t => t.name == name.Trim());
+        temp.index = 0;
+        string tempContent = string.Join("\n", temp.content);
+        text = new AText { name = temp.name, content = new string[] { tempContent }, index = temp.index };
+        
         StartCoroutine(LoadOneByOne());
     }
     private IEnumerator LoadOneByOne()
@@ -71,6 +83,22 @@ public class LoadTextManager : MonoBehaviour
             }
         }
         textLoad = TextLoad.Loaded;
+    }
+    private void OnMouseButtonClicked()
+    {
+        switch (textLoad)
+        {
+            case TextLoad.Loading:
+                textLoad = TextLoad.Loaded;
+                StopCoroutine(LoadOneByOne());
+                textBox.text = text.content[text.index];
+                break;
+            case TextLoad.Loaded:
+                OnTextLoaded.Invoke();
+                break;
+            default:
+                break;
+        }
     }
     private void OnContinueBottonClicked()
     {

@@ -14,7 +14,6 @@ public class TODO : MonoBehaviour
     //UI动画
 
     //幕中：剧情播放间的转场
-    //幕后：关卡目的
     //Help键：显示操作说明
     //氧气条
     //剧情与睁闭眼

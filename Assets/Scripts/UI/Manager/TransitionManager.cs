@@ -26,7 +26,7 @@ public class TransitionManager : MonoBehaviour
     {
         blackScreen = transform.Find("BlackScreen").GetComponent<Image>();
         //fieldOfView = transform.Find("FieldOfView").gameObject;
-        StartCoroutine(Transition(1f, DefaultWaitor()));
+        //StartCoroutine(Transition(1f, DefaultWaitor()));
     }
     /// <summary>
     /// 传入透明度和等待方法，透明度为1时全黑，等待方法默认为等待1秒

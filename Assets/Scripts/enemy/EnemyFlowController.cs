@@ -17,7 +17,7 @@ public class EnemyFlowController : MonoBehaviour
     public float turnSpeed = 5f; // 转向平滑速度
 
     private Queue<FlowPath> taskQueue = new Queue<FlowPath>(); // 任务队列
-    private bool isExecuting = false;
+    public bool isExecuting = false;
 
     public float fieldOfViewDistance = 5f; // 视野范围
     public float fieldOfViewAngle = 110f; // 视野角度
@@ -25,18 +25,30 @@ public class EnemyFlowController : MonoBehaviour
     private Vector2 lastBoxPosition = Vector2.zero; // 记录上次检测到的 Box 位置
     private bool hasDetectedBox = false; // 标记是否已经检测到 Box
     private bool isGameFailed = false; // 游戏是否失败
-    public bool isHit=false;   
+    public bool isHit = false;
     private int currentWaypointIndex = 0; // 当前路径点索引
     public LayerMask playerLayer;   // 用于指定玩家所在的层
     public LayerMask obstacleLayer; // 用于指定障碍物所在的层
     private Vector2 moveDirection; // 当前移动方向
-   private EnemyAnimationController animationController;
+    private EnemyAnimationController animationController;
     // 用于存储检测到的多个 Box 的位置
     private Dictionary<int, Vector2> detectedBoxes = new Dictionary<int, Vector2>();
 
+    public static EnemyFlowController Instance { get; private set; }
+
+
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        Instance = this;
+    }
     void Start()
     {
-       animationController = GetComponent<EnemyAnimationController>();
+        animationController = GetComponent<EnemyAnimationController>();
         // 加载流程到队列
         foreach (FlowPath flow in flows)
         {
@@ -47,18 +59,22 @@ public class EnemyFlowController : MonoBehaviour
 
     void Update()
     {
-        // 如果游戏失败，停止敌人移动
-        if (isGameFailed) return;
-        //CheckForObstruction();
-        CheckForPlayerInSightRange();
-        // 移动到下一个路径点并更新方向
-        MoveToNextWaypoint();
-        float currentAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;  // 计算当前角度
-        animationController.UpdateAnimation(moveDirection, currentAngle);
-        CheckForBoxInView();
-        CheckForWallInHearingRange();
-        // 平滑转向，更新朝向，如果要做到动画切换，就不能用平滑转向了捏
-      //  SmoothTurnTowardsTarget();
+        if (IntroductionBeforeGameManager.Instance.isStart)
+        {
+            // 如果游戏失败，停止敌人移动
+            if (isGameFailed) return;
+            //CheckForObstruction();
+            CheckForPlayerInSightRange();
+            // 移动到下一个路径点并更新方向
+            MoveToNextWaypoint();
+            float currentAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;  // 计算当前角度
+            animationController.UpdateAnimation(moveDirection, currentAngle);
+            CheckForBoxInView();
+            CheckForWallInHearingRange();
+            // 平滑转向，更新朝向，如果要做到动画切换，就不能用平滑转向了捏
+            //  SmoothTurnTowardsTarget();
+        }
+
     }
 
     private void StartNextTask()
@@ -109,7 +125,7 @@ public class EnemyFlowController : MonoBehaviour
 
         // 逐步移动到目标点,增加一个小的误差值来避免卡住
         float distanceToTarget = Vector3.Distance(transform.position, target);
-        while (distanceToTarget > 0.005f) 
+        while (distanceToTarget > 0.005f)
         {
             transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
             distanceToTarget = Vector3.Distance(transform.position, target);
@@ -134,10 +150,10 @@ public class EnemyFlowController : MonoBehaviour
         // 移动敌人
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed);
 
-        if (Vector3.Distance(transform.position, targetPosition) <= 0.1f) 
+        if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
         {
             currentWaypointIndex++;
-            //Debug.Log(currentWaypointIndex);
+            Debug.Log(currentWaypointIndex);
         }
     }
 
@@ -230,10 +246,10 @@ public class EnemyFlowController : MonoBehaviour
         return false; // 没有被遮挡
     }
 
-   
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-       
+
         // 如果敌人与障碍物发生碰撞
         if (collision.collider.CompareTag("Box"))
         {
@@ -272,25 +288,25 @@ public class EnemyFlowController : MonoBehaviour
         }
         StopAllCoroutines();
     }
-   /* private void SmoothTurnTowardsTarget()
-    {
-        if (currentWaypointIndex >= flows[0].waypoints.Length || isGameFailed) return;
+    /* private void SmoothTurnTowardsTarget()
+     {
+         if (currentWaypointIndex >= flows[0].waypoints.Length || isGameFailed) return;
 
-        // 计算目标角度
-        float targetAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+         // 计算目标角度
+         float targetAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
 
-        // 使用 LerpAngle 进行平滑转
-        float angle = Mathf.LerpAngle(transform.eulerAngles.z, targetAngle, turnSpeed * Time.deltaTime);
+         // 使用 LerpAngle 进行平滑转
+         float angle = Mathf.LerpAngle(transform.eulerAngles.z, targetAngle, turnSpeed * Time.deltaTime);
 
-        // 应用旋转
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+         // 应用旋转
+         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
-        // 更新动画
-        // 通过计算平滑后的角度来更新动画
-        animationController.UpdateAnimation(moveDirection, angle);
-    }
+         // 更新动画
+         // 通过计算平滑后的角度来更新动画
+         animationController.UpdateAnimation(moveDirection, angle);
+     }
 
-    */
+     */
 
     private void OnDrawGizmos()
     {
@@ -317,7 +333,7 @@ public class EnemyFlowController : MonoBehaviour
             foreach (var box in detectedBoxes.Values)
             {
                 Gizmos.color = Color.yellow;
-              Gizmos.DrawLine(transform.position, box);
+                Gizmos.DrawLine(transform.position, box);
             }
         }
     }

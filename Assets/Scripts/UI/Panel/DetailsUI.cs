@@ -9,7 +9,6 @@ public class DetailsUI : MonoBehaviour
     public static DetailsUI Instance {  get; private set; }
 
     private Button closeButton;
-
     private new TextMeshProUGUI name;
     private TextMeshProUGUI description;
 

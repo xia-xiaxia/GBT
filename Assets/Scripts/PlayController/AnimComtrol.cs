@@ -40,7 +40,13 @@ public class AnimController : MonoBehaviour
     private void AnimChange()
     {
         animator.SetBool("isMoving", playerMovement.isMoving);
-
+        if (playerMovement.isHit)
+        {
+            if(spriteRenderer.flipX == false)
+            animator.Play("FallRight");
+            else
+                animator.Play("FallLeft");
+        }
     }
 }
 

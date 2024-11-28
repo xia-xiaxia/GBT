@@ -129,4 +129,6 @@ public class PlayerMovement : MonoBehaviour
             transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
         }
     }
+
+
 }

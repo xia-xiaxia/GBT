@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Box : MonoBehaviour
@@ -10,15 +11,14 @@ public class Box : MonoBehaviour
     private Collider2D col;    // Box 的 Collider
     private bool isCollision = false;  // 判断是否可以碰撞
     private bool isMoving = false;
-    [SerializeField] private float currentSpeed;
     public float slowSpeed;
     public float normalSpeed;
-    public float quickSpeed;
     private float gridSize = 1f;
     public Vector3 targetPosition;
     private Vector2 boxDir;
     private bool canPush;
     public Wall wallconl;
+    public float distance;
 
 
     void Start()
@@ -26,14 +26,13 @@ public class Box : MonoBehaviour
         targetPosition = transform.position;
         box = GetComponent<Transform>();
         col = GetComponent<Collider2D>();
-        currentSpeed = normalSpeed;
     }
 
     void Update()
     {
-        PM.moveSpeed = currentSpeed;
         DirJudge();  // 判断玩家是否朝向 Box 移动
         canPush = wallconl.canTrans;
+        isWall();
     }
 
     // 判断玩家是否朝向 Box 移动
@@ -67,7 +66,7 @@ public class Box : MonoBehaviour
     {
         if (isCollision && collision.collider.name == "Player")
         {
-            currentSpeed = slowSpeed; // 玩家移动速度减慢
+            PM.moveSpeed = slowSpeed; // 玩家移动速度减慢
         }
     }
 
@@ -80,6 +79,7 @@ public class Box : MonoBehaviour
                 PM.moveSpeed = normalSpeed;
                 isCollision = false;
                 isMoving = false;
+                boxDir = Vector2.zero;
             }
     }
 
@@ -89,7 +89,7 @@ public class Box : MonoBehaviour
         if (isMoving)
         {
             // 使用 Lerp 来平滑过渡到目标位置
-            transform.position = Vector2.Lerp(transform.position, targetPosition, currentSpeed * Time.fixedDeltaTime);
+            transform.position = Vector2.Lerp(transform.position, targetPosition, PM.moveSpeed* Time.fixedDeltaTime);
 
             // 判断是否到达目标位置，若到达，停止移动
             if (Vector2.Distance(transform.position, targetPosition) < 0.05f)
@@ -109,5 +109,29 @@ public class Box : MonoBehaviour
         isMoving = true; // 标记为正在移动
     }
 
-    
+    void isWall()
+    {
+        Vector3 origin = transform.position;
+        Vector3 direction = transform.TransformDirection(boxDir);
+        int layerMask = 1 << LayerMask.NameToLayer("Hinder");
+        RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, layerMask);
+
+
+        if (hit.collider != null)  // 如果射线碰到了物体
+        {
+            // 输出碰撞物体的信息
+            Debug.Log("碰撞到的物体: " + hit.collider.name);
+            Debug.DrawLine(origin, hit.point, Color.yellow);  // 可视化射线
+            PM.isHit = true;
+            PM.isMoving = false;
+            isMoving = false;
+        }
+        else
+        {
+            PM.isHit = false;
+            // 如果没有碰撞，可视化射线
+            Debug.DrawRay(origin, direction * distance, Color.white);
+        }
+    }
+
 }

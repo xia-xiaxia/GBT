@@ -12,6 +12,7 @@ public class Metamorphosm : MonoBehaviour
     public bool isMark;
     private int count;
     public int maxCount;
+    public int n;
 
 
     void Start()
@@ -22,11 +23,14 @@ public class Metamorphosm : MonoBehaviour
 
     void Update()
     {
-        CheckPlayerInRange();
-        if (count < maxCount)
+        if (!PM.isPossessed)
         {
-            if(!PM.isMoving)
-                swap();
+            CheckPlayerInRange();
+            if (count < maxCount)
+            {
+                if (!PM.isMoving)
+                    swap();
+            }
         }
     }
 
@@ -63,16 +67,17 @@ public class Metamorphosm : MonoBehaviour
             }
         }
 
-        if (isMark)
-        {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (isMark)
             {
-                temp = PM.transform.position;
-                PM.transform.position = transform.position;
-                transform.position = temp;
-                isMark = false;
-                count++;
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    temp = PM.transform.position;
+                    PM.transform.position = transform.position;
+                    transform.position = temp;
+                    isMark = false;
+                    count++;
+                }
             }
-        }
     }
+
 }

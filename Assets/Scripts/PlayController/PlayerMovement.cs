@@ -16,17 +16,23 @@ public class PlayerMovement : MonoBehaviour
 
     public bool isPush = false;
 
-    public bool isPossessed = false;
+    public bool isPossessed ;
 
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         targetPosition = transform.position; // 初始目标位置就是玩家当前位置
+        isPossessed = false;
     }
 
     void Update()
     {
+        if (isPossessed)
+        {
+            Debug.Log("cnmlgb");
+            return;
+        }
         // 如果玩家正在移动，就不接受新的输入
         if (isMoving)
             return;

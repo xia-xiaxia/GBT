@@ -5,7 +5,7 @@ using UnityEngine;
 public class Possessed : MonoBehaviour
 {
     public PlayerMovement PM;
-    private PossessedMove PossessedMove;
+    private PossessedMove possessedMove;
     public float detectionRadius = 5f;  // 圆形检测范围的半径
     public LayerMask playerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
     public bool isPlayerInRange = false; // 玩家是否在检测范围内
@@ -13,15 +13,17 @@ public class Possessed : MonoBehaviour
     public float targetAlpha = 0.5f; // 目标透明度
     private Renderer characterRenderer;
     private Collider2D characterCollider;
+    public Transform transform;
 
-    public bool IsPossessed;
+    private bool IsPossessed;
+
 
 
     void Start()
     {
         IsPossessed = false;
-        PossessedMove = GetComponent<PossessedMove>();
-        PossessedMove.enabled = false;
+        possessedMove = GetComponent<PossessedMove>();
+        possessedMove.enabled = false;
         characterRenderer = Player.GetComponent<Renderer>();
         characterCollider = Player.GetComponent<Collider2D>();
     }
@@ -29,10 +31,13 @@ public class Possessed : MonoBehaviour
     void Update()
     {
         CheckPlayerInRange();
-        if(!PM.isMoving)
+        if (!PM.isMoving)
             posssessed();
-        PM.isPossessed = IsPossessed;
         canThroughtheWall();
+        if (Player.transform.parent == null)
+            Debug.Log("cnm");
+        else
+            Debug.Log(Player.transform.parent.name);
     }
 
     void CheckPlayerInRange()
@@ -64,23 +69,24 @@ public class Possessed : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                PossessedMove.enabled = true;
-                PM.enabled = false;
+                possessedMove.enabled = true;
                 IsPossessed = true;
+                PM.isPossessed = true;
                 SetTransparency(characterRenderer, targetAlpha);
                 Player.transform.position = transform.position;
-                Player.transform.SetParent(transform, true);
+                Player.transform.SetParent(transform);
             }
         }
-        if (PM.enabled == false)
+        if (IsPossessed)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
+                possessedMove.enabled = false;
                 IsPossessed = false;
-                PossessedMove.enabled = false;
                 PM.enabled = true;
+                PM.isPossessed = false;
                 SetTransparency(characterRenderer, 1f);
-                Player.transform.SetParent(transform, false);
+                Player.transform.SetParent(null);
             }
         }
     }
@@ -111,7 +117,7 @@ public class Possessed : MonoBehaviour
         {
             if (characterCollider != null)
             {
-                characterCollider.isTrigger = false; 
+                characterCollider.isTrigger = false;
             }
         }
         else characterCollider.isTrigger = true;

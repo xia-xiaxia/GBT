@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PossessedMove : MonoBehaviour
@@ -12,6 +13,9 @@ public class PossessedMove : MonoBehaviour
     public bool isHit = false;
     public PlayerMovement PM;
     public LayerMask layer;
+    public float distance;
+    private bool isRecovering = false;
+
 
     void Start()
     {
@@ -20,17 +24,9 @@ public class PossessedMove : MonoBehaviour
 
     void Update()
     {
-        // 如果正在移动，就忽略输入
-        if (PM != null)
-        {
-            if (PM.isMoving) return;
-        }
-        else
-        {
-            if (isMoving)
-                return;
-        }
+        PM.isPossessed = true;
 
+        if (isMoving) return;
         // 获取玩家的移动输入
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -52,6 +48,7 @@ public class PossessedMove : MonoBehaviour
             direction = Vector2.right; // 向右
             StartMove();
         }
+
     }
 
     void FixedUpdate()
@@ -73,53 +70,84 @@ public class PossessedMove : MonoBehaviour
 
     private void StartMove()
     {
+        if (isRecovering) return;
+        examHinder();
+        if (isHit) return;
         // 计算目标位置（玩家要到达的格子中心，即 (n + 0.5, m + 0.5)）
         targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize + direction.x * gridSize,
                                      Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize + direction.y * gridSize);
         isMoving = true; // 标记为正在移动
     }
 
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void examHinder()
     {
-        int layer = collision.collider.gameObject.layer;
-        if (layer == LayerMask.NameToLayer("Hinder"))
+        Vector3 origin = transform.position;
+        Vector3 dir = direction; // direction 已经是世界坐标方向
+        int layerMask = 1 << LayerMask.NameToLayer("Hinder");
+        RaycastHit2D hit = Physics2D.Raycast(origin, dir, distance, layerMask);
+
+
+        if (hit.collider != null)  // 如果射线碰到了物体
         {
-            isMoving = false;
+            // 输出碰撞物体的信息
+            Debug.Log("碰撞到的物体: " + hit.collider.name);
+            Debug.DrawLine(origin, hit.point, Color.red);  // 可视化射线
             isHit = true;
-            calculate();
-            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
+            PM.isMoving = false;
+            isMoving = false;
+            StartCoroutine(recovery());
         }
-    }
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        int layer = collision.collider.gameObject.layer;
-        if (layer == LayerMask.NameToLayer("Hinder"))
-        {
-            calculate();
-            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        int layer = collision.collider.gameObject.layer;
-        if (layer == LayerMask.NameToLayer("Hinder"))
+        else
         {
             isHit = false;
-            calculate();
-            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
+            // 如果没有碰撞，可视化射线
+            Debug.DrawRay(origin, direction * distance, Color.white);
         }
-    }
-
-    private void calculate()
-    {
-        targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize,
-                                     Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize);
     }
     IEnumerator recovery()
     {
+        isRecovering = true;
         yield return new WaitForSeconds(0.2f);
         isHit = false;
+        isRecovering=false;
     }
+
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    int layer = collision.collider.gameObject.layer;
+    //    if (layer == LayerMask.NameToLayer("Hinder"))
+    //    {
+    //        isMoving = false;
+    //        isHit = true;
+    //        calculate();
+    //        transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
+    //    }
+    //}
+    //private void OnCollisionStay2D(Collision2D collision)
+    //{
+    //    int layer = collision.collider.gameObject.layer;
+    //    if (layer == LayerMask.NameToLayer("Hinder"))
+    //    {
+    //        calculate();
+    //        transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
+    //    }
+    //}
+
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    int layer = collision.collider.gameObject.layer;
+    //    if (layer == LayerMask.NameToLayer("Hinder"))
+    //    {
+    //        isHit = false;
+    //        calculate();
+    //        transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
+    //    }
+    //}
+
+    //private void calculate()
+    //{
+    //    targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize,
+    //                                 Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize);
+    //}
+
 }

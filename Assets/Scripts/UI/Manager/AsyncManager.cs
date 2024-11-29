@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class AsyncManager : MonoBehaviour
@@ -16,8 +17,25 @@ public class AsyncManager : MonoBehaviour
         }
         Instance = this;
     }
-    public async void WaitForMouseClick()
+    public async Task WaitForMouseClick()
     {
-
+        while (!Input.GetMouseButtonDown(0))
+        {
+            await Task.Yield(); // 让出主线程，等待下一帧
+        }
+    }
+    public async Task WaitForDreamOver()
+    {
+        while (EnemyFlowController.Instance.isExecuting)
+        {
+            await Task.Yield();
+        }
+    }
+    public async Task WaitForGoalUILoaded()
+    {
+        while (GoalUI.Instance.transform.Find("UI").gameObject.activeSelf)
+        {
+            await Task.Yield();
+        }
     }
 }

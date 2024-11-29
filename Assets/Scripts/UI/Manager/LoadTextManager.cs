@@ -47,6 +47,9 @@ public class LoadTextManager : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// 传入指定文本框textBox，文本名name，继续按钮continueButton
+    /// </summary>
     public void LoadText(TextMeshProUGUI textBox, string name, Button continueButton)
     {
         this.textBox = textBox;
@@ -57,6 +60,10 @@ public class LoadTextManager : MonoBehaviour
         text.index = 0;
         StartCoroutine(LoadOneByOne());
     }
+    /// <summary>
+    /// IsMouseButton is true when the text is loaded by clicking the mouse button.
+    /// But in fact it is realized by clicking the continue button that is full-screen.
+    /// </summary>
     public void LoadText(TextMeshProUGUI textBox, string name, Button continueButton, bool isMouseButton)
     {
         this.textBox = textBox;

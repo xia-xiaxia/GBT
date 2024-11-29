@@ -38,7 +38,7 @@ public class Fail : MonoBehaviour
     }
     private async void OnRestartButtonClicked()
     {
-        StartCoroutine(TransitionManager.Instance.Transition(1f));//逻辑要改
+        StartCoroutine(TransitionManager_1.Instance.Transition(1f));//逻辑要改
         await SceneManager.LoadSceneAsync("Level");
     }
     private void OnLevelButtonClicked()

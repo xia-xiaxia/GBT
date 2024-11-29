@@ -25,6 +25,7 @@ public class GoalUI : MonoBehaviour
     {
         text = transform.Find("UI/Text").GetComponent<TextMeshProUGUI>();
         continueButton = transform.Find("UI/Continue").GetComponent<Button>();
+        continueButton.GetComponent<RectTransform>().sizeDelta = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta;
         transform.Find("UI").gameObject.SetActive(false);
     }
     public void ShowGoal(string level)

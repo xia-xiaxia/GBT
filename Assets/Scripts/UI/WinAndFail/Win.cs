@@ -38,7 +38,7 @@ public class Win : MonoBehaviour
     }
     private async void OnNextLevelButtonClicked()
     {
-        StartCoroutine(TransitionManager.Instance.Transition(1f));//逻辑要改
+        StartCoroutine(TransitionManager_1.Instance.Transition(1f));//逻辑要改
         await SceneManager.LoadSceneAsync("Level");
     }
     private void OnLevelButtonClicked()
@@ -52,8 +52,8 @@ public class Win : MonoBehaviour
 }
 //private async void OnNextLevelButtonClicked()
 //{
-//    var waitor = TransitionManager.Instance.DefaultWaitor();
-//    var transitionTask = TransitionManager.Instance.Transition(1f, waitor);
+//    var waitor = TransitionManager_1.Instance.DefaultWaitor();
+//    var transitionTask = TransitionManager_1.Instance.Transition(1f, waitor);
 //    var loadSceneTask = SceneManager.LoadSceneAsync("Level");
 
 //    await transitionTask;

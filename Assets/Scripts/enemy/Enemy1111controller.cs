@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EnemyFlowController : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
     [System.Serializable]
     public class FlowPath
@@ -14,7 +14,7 @@ public class EnemyFlowController : MonoBehaviour
 
     public FlowPath[] flows; // 流程数组
     public float moveSpeed = 0.5f; // 敌人移动速度
-   //public turnSpeed = 5f; // 转向平滑速度
+                                   //public turnSpeed = 5f; // 转向平滑速度
 
     private Queue<FlowPath> taskQueue = new Queue<FlowPath>(); // 任务队列
     public bool isExecuting = false;
@@ -30,12 +30,12 @@ public class EnemyFlowController : MonoBehaviour
     public LayerMask playerLayer;   // 玩家所在的层
     public LayerMask obstacleLayer; // 障碍物（可交互）所在的层
     private Vector2 moveDirection; // 当前移动方向
-   //ublic bool Isstart = false;
-    private EnemyAnimationController animationController;
+                                   //ublic bool Isstart = false;
+    private Enemy1111AnimationController animationController;
     // 存储多个 Box 的位置
     private Dictionary<int, Vector2> detectedBoxes = new Dictionary<int, Vector2>();
 
-    public static EnemyFlowController Instance { get; private set; }
+    public static EnemyController Instance { get; private set; }
 
     private void Awake()
     {
@@ -44,11 +44,11 @@ public class EnemyFlowController : MonoBehaviour
             Destroy(gameObject);
         }
         Instance = this;
-      
+
     }
     void Start()
     {
-        animationController = GetComponent<EnemyAnimationController>();
+        animationController = GetComponent<Enemy1111AnimationController>();
         foreach (FlowPath flow in flows)
         {
             taskQueue.Enqueue(flow);
@@ -61,7 +61,7 @@ public class EnemyFlowController : MonoBehaviour
     {
         // 如果游戏失败，停止敌人移动
         if (isGameFailed)
-        return; 
+            return;
         // 移动到下一个路径点并更新方向
         MoveToNextWaypoint();
         float currentAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;  // 计算当前角度
@@ -88,11 +88,11 @@ public class EnemyFlowController : MonoBehaviour
             yield return new WaitForSeconds(flow.waitTimeAtPoint);
 
             // 如果到了指定的点，切换动画（例如：第6个点）
-           /*f (i == 5) // 可以通过public变量来控制
-            {
-                // 在第6个点执行特殊动画，比如蹲下
-                animationController.SetCrouchAnimation();
-            }*/
+            /*f (i == 5) // 可以通过public变量来控制
+             {
+                 // 在第6个点执行特殊动画，比如蹲下
+                 animationController.SetCrouchAnimation();
+             }*/
         }
 
         isExecuting = false;
@@ -138,7 +138,7 @@ public class EnemyFlowController : MonoBehaviour
 
         if (currentWaypointIndex >= flows[0].waypoints.Length)
         {
-        
+
             return;
         }
 

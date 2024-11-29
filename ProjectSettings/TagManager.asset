@@ -11,6 +11,7 @@ TagManager:
   - Wall
   - dreamer
   - killer
+  - Folder
   layers:
   - Default
   - TransparentFX

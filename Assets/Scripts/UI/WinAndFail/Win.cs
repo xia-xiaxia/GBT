@@ -39,11 +39,11 @@ public class Win : MonoBehaviour
     private async void OnNextLevelButtonClicked()
     {
         StartCoroutine(TransitionManager_1.Instance.Transition(1f));//Âß¼­Òª¸Ä
-        await SceneManager.LoadSceneAsync("Level");
+        await SceneManager.LoadSceneAsync("ElderLevel");
     }
     private void OnLevelButtonClicked()
     {
-        SceneManager.LoadScene("Level");
+        SceneManager.LoadScene("ElderLevel");
     }
     private void OnMenuButtonClicked()
     {
@@ -54,7 +54,7 @@ public class Win : MonoBehaviour
 //{
 //    var waitor = TransitionManager_1.Instance.DefaultWaitor();
 //    var transitionTask = TransitionManager_1.Instance.Transition(1f, waitor);
-//    var loadSceneTask = SceneManager.LoadSceneAsync("Level");
+//    var loadSceneTask = SceneManager.LoadSceneAsync("ElderLevel");
 
 //    await transitionTask;
 //    await loadSceneTask;

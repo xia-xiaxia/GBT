@@ -45,12 +45,6 @@ public class TransitionManager_2 : MonoBehaviour
     /// 传入透明度和等待方法，透明度为1时全黑，等待方法默认为等待1秒
     /// </summary>
     /// <returns></returns>
-    //public IEnumerator Transition(float transparency)
-    //{
-    //    yield return StartCoroutine(TransitionIn(transparency));
-    //    yield return DefaultWaitor();
-    //    yield return StartCoroutine(TransitionOut());
-    //}
     public async Task TransitionIn(float transparency)
     {
         while (up.GetComponent<RectTransform>().sizeDelta.y < maxY - 7.2f)

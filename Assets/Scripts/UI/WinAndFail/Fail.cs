@@ -39,11 +39,11 @@ public class Fail : MonoBehaviour
     private async void OnRestartButtonClicked()
     {
         StartCoroutine(TransitionManager_1.Instance.Transition(1f));//Âß¼­Òª¸Ä
-        await SceneManager.LoadSceneAsync("Level");
+        await SceneManager.LoadSceneAsync("ElderLevel");
     }
     private void OnLevelButtonClicked()
     {
-        SceneManager.LoadScene("Level");
+        SceneManager.LoadScene("ElderLevel");
     }
     private void OnMenuButtonClicked()
     {

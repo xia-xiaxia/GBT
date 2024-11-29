@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float gridSize = 1f; // 每格的大小
     public bool isMoving = false; // 是否正在移动
     public Vector2 direction; // 玩家当前的移动方向
-
+    public bool isWalk;
     private Vector3 lastPosition;
     private bool isTrans;
 
@@ -30,9 +30,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isPossessed)
         {
-            Debug.Log("cnmlgb");
             return;
         }
+        else { isWalk = isMoving; }
         // 如果玩家正在移动，就不接受新的输入
         if (isMoving)
             return;

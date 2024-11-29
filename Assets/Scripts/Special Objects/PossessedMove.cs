@@ -25,7 +25,8 @@ public class PossessedMove : MonoBehaviour
     void Update()
     {
         PM.isPossessed = true;
-
+        PM.isWalk = isMoving;
+        PM.direction = direction;
         if (isMoving) return;
         // 获取玩家的移动输入
         if (Input.GetKeyDown(KeyCode.W))

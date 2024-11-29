@@ -4,69 +4,71 @@ public class Enemy1111AnimationController : MonoBehaviour
 {
     private Animator animator;
 
-    // 定义动画机中5个布尔参数
+    // Define animation parameters (same as before)
     private static readonly int IsWalking = Animator.StringToHash("IsWalking");
     private static readonly int IsForwardWalking = Animator.StringToHash("IsForwardWalking");
     private static readonly int IsBackWalking = Animator.StringToHash("IsBackWalking");
     private static readonly int IsRightWalking = Animator.StringToHash("IsRightWalking");
     private static readonly int IsLeftWalking = Animator.StringToHash("IsLeftWalking");
 
+    private static readonly int IsCrouchPickUpRight = Animator.StringToHash("IsCrouchPickUpRight");
+    private static readonly int IsCrouchPickUpLeft = Animator.StringToHash("IsCrouchPickUpLeft");
+    private static readonly int IsCrouchPickUpUp = Animator.StringToHash("IsCrouchPickUpUp");
+    private static readonly int IsCrouchPickUpDown = Animator.StringToHash("IsCrouchPickUpDown");
 
-
-    void Awake()
+    void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-    // 更新动画状态的方法
-    public void UpdateAnimation(Vector2 moveDirection, float currentAngle)
+    // Update animation based on movement direction
+    public void UpdateAnimation(Vector2 moveDirection, float angle)
     {
-        // 先把所有的行走状态标记为 false
-        animator.SetBool(IsWalking, false);
-        animator.SetBool(IsForwardWalking, false);
-        animator.SetBool(IsBackWalking, false);
-        animator.SetBool(IsRightWalking, false);
-        animator.SetBool(IsLeftWalking, false);
-
-
-        // 如果当前敌人有移动方向
-        if (moveDirection != Vector2.zero)
+        if (moveDirection.magnitude > 0)
         {
-            animator.SetBool(IsWalking, true); // 设置为行走状态
-
-            // 计算与水平 X 轴之间的角度
-            float angle = currentAngle;
-            //Debug.Log($"MoveDirection: {moveDirection}, Angle: {angle}");
-
-            // 角度判断逻辑
-            if (angle >= -45f && angle <= 45f) // 向右
-            {
-                animator.SetBool(IsRightWalking, true);
-            }
-            else if (angle >= 135f || angle <= -135f) // 向左
-            {
-                animator.SetBool(IsLeftWalking, true);
-            }
-            else if (angle > 45f && angle < 135f) // 向上，背对着走
-            {
-                animator.SetBool(IsBackWalking, true);
-            }
-            else if (angle < -45f && angle > -135f) // 向下，正对着走
-            {
-                animator.SetBool(IsForwardWalking, true);
-            }
+            animator.SetBool(IsWalking, true);
+            animator.SetBool(IsForwardWalking, angle >= -45f && angle <= 45f);
+            animator.SetBool(IsBackWalking, angle >= 135f || angle <= -135f);
+            animator.SetBool(IsRightWalking, angle > 45f && angle < 135f);
+            animator.SetBool(IsLeftWalking, angle < -45f && angle > -135f);
+        }
+        else
+        {
+            animator.SetBool(IsWalking, false);
         }
     }
+    public void SetCrouchPickUpRightAnimation()
+    {
+        animator.SetTrigger("crouchPickUpRight");
+    }
+
+    public void SetCrouchPickUpLeftAnimation()
+    {
+        animator.SetTrigger("crouchPickUpLeft");
+    }
+
+    public void SetCrouchPickUpUpAnimation()
+    {
+        animator.SetTrigger("crouchPickUpUp");
+    }
+
+    public void SetCrouchPickUpDownAnimation()
+    {
+        animator.SetTrigger("crouchPickUpDown");
+    }
+    // Set crouch pick-up animation based on direction
+
     public void SetIdleAnimation()
     {
-        // 停止所有行走动画，确保敌人处于静止状态
+        animator.SetBool(IsCrouchPickUpRight, false);
+        animator.SetBool(IsCrouchPickUpLeft, false);
+        animator.SetBool(IsCrouchPickUpUp, false);
+        animator.SetBool(IsCrouchPickUpDown, false);
         animator.SetBool(IsWalking, false);
-        animator.SetBool(IsForwardWalking, false);
-        animator.SetBool(IsBackWalking, false);
-        animator.SetBool(IsRightWalking, false);
+        animator.SetBool(IsBackWalking, false); 
+        animator.SetBool(IsForwardWalking, false);  
+        animator.SetBool(IsRightWalking, false); 
         animator.SetBool(IsLeftWalking, false);
 
-        // 强制切换到 Idle 动画状态
-        //animator.Play("Idle"); 
     }
 }

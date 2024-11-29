@@ -127,6 +127,7 @@ public class EnemyFlowController : MonoBehaviour
         else
         {
             Debug.Log("所有流程完成，游戏结束！");
+            animationController.SetIdleAnimation();
             GameFailed(); // 触发游戏结束
         }
     }
@@ -225,6 +226,7 @@ public class EnemyFlowController : MonoBehaviour
                     if (!IsTargetObstructed(hitCollider.transform))
                     {
                         Debug.Log("玩家被发现，游戏失败！");
+                        animationController.SetIdleAnimation();
                         GameFailed(); // 触发游戏失败
                         return;
                     }
@@ -256,6 +258,7 @@ public class EnemyFlowController : MonoBehaviour
         if (collision.collider.CompareTag("Box"))
         {
             Debug.Log("成功阻止了bekilled的结局，游戏胜利");
+            animationController.SetIdleAnimation();
             GameVictory(); // 游戏胜利
         }
     }
@@ -264,6 +267,7 @@ public class EnemyFlowController : MonoBehaviour
     {
         isGameFailed = false;
         Debug.Log("阻止了坏结局，游戏胜利！");
+        animationController.SetIdleAnimation();
         // 停止敌人的运动
         StopAllCoroutines();
     }
@@ -278,6 +282,7 @@ public class EnemyFlowController : MonoBehaviour
             if (hitCollider.CompareTag("Wall") && isHit)
             {
                 Debug.Log("听觉范围内有墙壁并发生撞击，游戏失败！");
+                animationController.SetIdleAnimation();
                 GameFailed();
             }
         }
@@ -287,10 +292,10 @@ public class EnemyFlowController : MonoBehaviour
     {
         isGameFailed = true;
         Debug.Log("Game Over!");
-        if (animationController != null)
+       /* if (animationController != null)
         {
             animationController.SetIdleAnimation(); // 让动画转为静止状态
-        }
+        }*/
         StopAllCoroutines();
     }
 

@@ -2,33 +2,37 @@ using UnityEngine;
 
 public class TriggerDetector : MonoBehaviour
 {
-    public GameObject usbDrive;  
-    public Transform spawnPoint; 
-    void Start()
-    {
-        // 初始时隐藏U盘物体
-        if (usbDrive != null)
-        {
-            usbDrive.SetActive(false);
-        }
-    }
 
-    // 当物体进入触发器时
-    private void OnTriggerEnter2D(Collider2D other)
+    public float detectionRadius = 0.2f;  // 圆形检测范围的半径
+    public LayerMask spyLayer;      
+    public bool isspyInRange = false;
+    //间谍与真正u盘发生碰撞，u盘就会消失（实际效果是被捡起）
+
+    private void Start()
     {
-        // 检查物体是否具有Sky标签
-        if (other.CompareTag("Spy"))
-        {
-            // 设置 U盘物体的位置为指定的 spawnPoint
-            if (usbDrive != null && spawnPoint != null)
-            {
-                usbDrive.transform.position = spawnPoint.position; // 将 U盘物体放置到指定位置
-                usbDrive.SetActive(true);  // 显示 U盘物体
-            }
-        }
+        gameObject.SetActive(false);
+    }
+    private void Update()
+    {
+
+        CheckKeyInRange();
+
     }
 
 
-    
-   
+    void CheckKeyInRange()
+    {
+        // 使用 Physics2D.OverlapCircle 检测圆形范围内的物体
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, spyLayer);
+
+        if (colliders.Length > 0)
+        {
+            gameObject.SetActive(true);
+
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }

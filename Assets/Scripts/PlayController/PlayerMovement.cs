@@ -14,7 +14,6 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 lastPosition;
     private bool isTrans;
 
-    public bool isPush = false;
 
     public bool isPossessed ;
 
@@ -68,10 +67,10 @@ public class PlayerMovement : MonoBehaviour
             transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
 
             // 判断是否到达目标位置，若到达，停止移动
-            if (Vector2.Distance(transform.position, targetPosition) < 0.05f)
+            if (Vector2.Distance(transform.position, targetPosition) < 0.001f)
             {
                 transform.position = targetPosition; // 精确到目标位置
-                isMoving = false; // 停止移动
+                StartCoroutine(Timer());
             }
         }
     }
@@ -80,8 +79,8 @@ public class PlayerMovement : MonoBehaviour
     private void StartMove()
     {
         // 计算目标位置（玩家要到达的格子中心，即 (n + 0.5, m + 0.5)）
-        targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize + direction.x * gridSize,
-                                     Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize + direction.y * gridSize);
+        targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize + direction.x * gridSize ,
+                                    Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize + direction.y * gridSize );
         isMoving = true; // 标记为正在移动
     }
 
@@ -104,5 +103,9 @@ public class PlayerMovement : MonoBehaviour
         lastPosition = transform.position;
     }
 
-    
+    IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(0.4f); 
+        isMoving = false ;
+    }
 }

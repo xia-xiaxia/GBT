@@ -6,20 +6,25 @@ using UnityEngine;
 public class PossessedMove : MonoBehaviour
 {
     private Vector2 targetPosition; // 目标位置
-    public float moveSpeed = 4f; // 移动速度
+    private float moveSpeed; // 移动速度
     public float gridSize = 1f; // 每格的大小
     public bool isMoving = false; // 是否正在移动
     public Vector2 direction; // 玩家当前的移动方向
-    public bool isHit = false;
+    public bool isHit;
     public PlayerMovement PM;
     public LayerMask layer;
     public float distance;
     private bool isRecovering = false;
-
+    public bool isPush;
+    public float normalSpeed;
+    public float slowSpeed;
 
     void Start()
     {
+        isPush = false;
+        isHit = false;
         targetPosition = transform.position; // 初始目标位置就是玩家当前位置
+        moveSpeed = normalSpeed;
     }
 
     void Update()
@@ -29,6 +34,10 @@ public class PossessedMove : MonoBehaviour
         PM.direction = direction;
         if (isMoving) return;
         // 获取玩家的移动输入
+        if (isPush)
+            moveSpeed = slowSpeed;
+        else
+            moveSpeed = normalSpeed;
         if (Input.GetKeyDown(KeyCode.W))
         {
             direction = Vector2.up; // 向上
@@ -61,7 +70,7 @@ public class PossessedMove : MonoBehaviour
             transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
 
             // 判断是否到达目标位置，若到达，停止移动
-            if (Vector2.Distance(transform.position, targetPosition) < 0.05f)
+            if (Vector2.Distance(transform.position, targetPosition) < 0.01f)
             {
                 transform.position = targetPosition; // 精确到目标位置
                 isMoving = false; // 停止移动
@@ -74,9 +83,13 @@ public class PossessedMove : MonoBehaviour
         if (isRecovering) return;
         examHinder();
         if (isHit) return;
+        if(isPush) 
         // 计算目标位置（玩家要到达的格子中心，即 (n + 0.5, m + 0.5)）
-        targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize + direction.x * gridSize,
-                                     Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize + direction.y * gridSize);
+        targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize + direction.x * gridSize + direction.x * 0.05f,
+                                    Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize + direction.y * gridSize + direction.y * 0.05f);
+        else
+            targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize + direction.x * gridSize,
+                                    Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize + direction.y * gridSize);
         isMoving = true; // 标记为正在移动
     }
 
@@ -110,7 +123,7 @@ public class PossessedMove : MonoBehaviour
         isRecovering = true;
         yield return new WaitForSeconds(0.2f);
         isHit = false;
-        isRecovering=false;
+        isRecovering = false;
     }
 
     //private void OnCollisionEnter2D(Collision2D collision)

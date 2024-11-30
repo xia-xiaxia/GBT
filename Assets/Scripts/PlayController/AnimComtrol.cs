@@ -5,12 +5,14 @@ using UnityEngine;
 public class AnimController : MonoBehaviour
 {
     private PlayerMovement playerMovement;
+    private PossessedMove POM;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
     private string animation;
     bool isFlip;
     bool isBack;
     bool isFront;
+    
 
     void Start()
     {
@@ -24,6 +26,10 @@ public class AnimController : MonoBehaviour
     void Update()
     {
         DIR();
+        if (transform.parent != null)
+        {
+            POM = gameObject.GetComponentInParent<PossessedMove>();
+        }
         AnimChange();
     }
 
@@ -58,6 +64,11 @@ public class AnimController : MonoBehaviour
         animator.SetBool("isFlip", isFlip);
         animator.SetBool("isBack", isBack);
         animator.SetBool("isFront", isFront);
+        if (transform.parent != null)
+        {
+            animator.SetBool("isHit", POM.isHit);
+            animator.SetBool("isPush", POM.isPush);
+        }
     }
 }
 

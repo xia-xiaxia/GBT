@@ -13,6 +13,8 @@ TagManager:
   - killer
   - Folder
   - Key
+  - Spy
+  - u
   layers:
   - Default
   - TransparentFX

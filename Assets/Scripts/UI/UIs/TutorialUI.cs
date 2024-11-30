@@ -29,7 +29,6 @@ public class TutorialUI : MonoBehaviour
         exampleImage = transform.Find("UI/ExampleImage").GetComponent<Image>();
         trickName = transform.Find("UI/TrickName").GetComponent<TextMeshProUGUI>();
         tutorialContent = transform.Find("UI/TutorialContent").GetComponent<TextMeshProUGUI>();
-        ShowTutorial("∏Ω…Ì");
     }
     public void ShowTutorial(string name)
     {

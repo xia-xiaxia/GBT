@@ -1,34 +1,47 @@
-﻿Jack:
-Hello!
-How are you?
-中文
-I'm Li Hua from China.
-Where are you from?
-Could you please introdece your hometown?
-Tell me some details about the convention of your hometown and choose one that you like best and explain why.
-Give all your answers in English within 100 words.
-Now, you have 25 minutes to prepare for your answers.
+﻿1.0新增玩法:
+移动
+【附身】
+物品栏
+阻拦
+【标记与换位】
+躲避视野
+争分夺秒
+帮助
 
-Sam:
-Hi!
-Bro!
-AbaAbaAbaAbaAbaAbaAbaAba
-中文
+移动:
+按下W、S、A、D键可以上、下、左、右移动，未在【附身】状态下时，你不会被物体阻拦。
 
-艾米的沙发:
-艾米休息的好地方
-上面似乎有些血迹
+【附身】:
+在物体一定范围内，按下 Q 键，可以附身到可附身物体上，此时你可以移动该物体。按下 E 键，可以解除【附身】状态。
 
-附身:
-你可以附身到可附身物体上，并移动该物体。当心，不要被梦主发现！
+物品栏:
+按下 Tab 键打开、关闭物品栏，在这里能够查看可交互物品
 
-换位:
-将一个物品标记，之后再次使用该技能，你可以将自己和标记的物品交换位置。
+阻拦:
+未在【附身】状态下时，你不受物体阻拦，可以任意穿过它们。但在【附身】状态下时，与被【附身】物体一起移动时会被其他物体阻拦。
 
-关卡1:
-附身
-换位
+【标记与换位】:
+按下 F 键，可以将物体【标记】；再次按下 F 键，可以与你上一个【标记】的物体互换位置。【附身】状态下，你无法【标记】物体，也无法【换位】。
 
-关卡1目标:
+躲避视野:
+梦境主人（梦主）的具有一定的视野范围，你不会被梦主发现！但你通过某些方法操纵的物体可能会被梦主发现...一旦梦主发现异常，你就会失败！
+
+争分夺秒:
+你只有有限的时间，要在规定时间内完成任务！
+
+帮助:
+如果有任何问题，按下 H 键，可以查看帮助。
+
+1.0目标:
 拯救梦主！
 别让他死！
+
+Key:
+一把钥匙，说不定能打开某扇门
+
+2.0目标:
+抓到罪犯，
+拿回机密文件！
+
+Folder:
+机密文件，禁止泄露！

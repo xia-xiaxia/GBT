@@ -47,7 +47,7 @@ public class Win : MonoBehaviour
         {
             transform.Find("UI").gameObject.SetActive(false);
             await TransitionManager_2.Instance.TransitionIn(1f, 5);
-            await SceneManager.UnloadSceneAsync("1.0"/*GameManager.Instance.level*/);
+            await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
             BgUI.Instance.ShowBg();
             LevelUI.Instance.transform.Find("UI").gameObject.SetActive(true);
             LevelUI.Instance.curLevelIndex++;
@@ -60,7 +60,7 @@ public class Win : MonoBehaviour
     {
         transform.Find("UI").gameObject.SetActive(false);
         await TransitionManager_2.Instance.TransitionIn(1f, 5);
-        await SceneManager.UnloadSceneAsync("1.0"/*GameManager.Instance.level*/);
+        await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
         BgUI.Instance.ShowBg();
         LevelUI.Instance.transform.Find("UI").gameObject.SetActive(true);
         await Task.Delay(1000);
@@ -70,7 +70,7 @@ public class Win : MonoBehaviour
     {
         transform.Find("UI").gameObject.SetActive(false);
         await TransitionManager_2.Instance.TransitionIn(1f, 5);
-        await SceneManager.UnloadSceneAsync("1.0"/*GameManager.Instance.level*/);
+        await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
         BgUI.Instance.ShowBg();
         StartUI.Instance.transform.Find("UI").gameObject.SetActive(true);
         await Task.Delay(1000);

@@ -28,14 +28,10 @@ public class DialogueUI : MonoBehaviour
         dialogueBox = transform.Find("UI/DialogueBox").gameObject;
         continueButton = transform.Find("UI/ContinueButton").gameObject;
     }
-    private void Start()
-    {
-        //DialogueUI.Instance.ShowDialogue("Jack", true);
-    }
     /// <summary>
-    /// 传入对话者名字，如果对话者是人物，则true，否则为false，用以控制是否显示对话者名字
+    /// 传入对话者名字，如果对话者是人物，则true，否则为false，用以控制是否显示对话者名字,isAuto控制是否自动播放
     /// </summary>
-    public void ShowDialogue(string name, bool isCharacter)
+    public void ShowDialogue(string name, bool isCharacter, bool isAuto)
     {
         transform.Find("UI").gameObject.SetActive(true);
         if (isCharacter)
@@ -49,7 +45,16 @@ public class DialogueUI : MonoBehaviour
         }
         dialogueBox.SetActive(true);
         LoadTextManager.Instance.OnTextLoaded.AddListener(OnTextLoaded);
-        LoadTextManager.Instance.LoadText(dialogueBox.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>(), name, continueButton.GetComponent<Button>());
+        if (isAuto)
+        {
+            continueButton.SetActive(false);
+            LoadTextManager.Instance.LoadText(dialogueBox.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>(), name);
+        }
+        else
+        {
+            continueButton.SetActive(true);
+            LoadTextManager.Instance.LoadText(dialogueBox.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>(), name, continueButton.GetComponent<Button>());
+        }
     }
     private void OnTextLoaded()
     {

@@ -9,11 +9,12 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public bool isStart = false;
     public static GameManager Instance { get; private set; }
 
     private Queue<string> tricksQueue;
     public string level;
+    public List<bool> completionRecord;
+    public bool isStart = false;
 
 
 
@@ -21,18 +22,26 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            print("aaaaa");
             Destroy(gameObject);
         }
         Instance = this;
     }
-
+    private void Start()
+    {
+        int levelCount = LevelUI.Instance.levelDatabase.levels.Count;
+        completionRecord = new List<bool>(levelCount);
+        for (int i = 0; i < levelCount; i++)
+        {
+            completionRecord.Add(false);
+        }
+    }
     public async void GameStream(string level)
     {
         isStart = false;
         this.level = level;
 
-        await SceneManager.LoadSceneAsync("1.0", LoadSceneMode.Additive);
+        await SceneManager.LoadSceneAsync(level, LoadSceneMode.Additive);
+        BgUI.Instance.HideBg();
 
         await ShowTutorial();
 
@@ -40,25 +49,32 @@ public class GameManager : MonoBehaviour
 
         await ShowGoal();
 
+        GameObject.Find("Canvas").transform.Find("PanelUI").gameObject.SetActive(true);
+
         //await SceneManager.LoadSceneAsync("XHY", LoadSceneMode.Additive);
+
+        //GameObject.Find("Canvas").transform.Find("PanelUI").gameObject.SetActive(false);
 
         await ShowGameOver(true);
     }
 
     private async Task ShowTutorial()
     {
-        string[] tricks = LoadTextManager.Instance.Texts.Find(t => t.name == level).content;
-        tricksQueue = new Queue<string>(tricks);
-        TutorialUI.Instance.transform.Find("UI").gameObject.SetActive(true);
-        while (tricksQueue.Count > 0)
+        var tutorialText = LoadTextManager.Instance.Texts.Find(t => t.name == level + "ÐÂÔöÍæ·¨");
+        if (tutorialText != null)
         {
-            string trick = tricksQueue.Dequeue();
-            TutorialUI.Instance.ShowTutorial(trick);
-            await AsyncManager.Instance.WaitForMouseClick();
-            await Task.Delay(100);
+            string[] tricks = tutorialText.content;
+            tricksQueue = new Queue<string>(tricks);
+            TutorialUI.Instance.transform.Find("UI").gameObject.SetActive(true);
+            while (tricksQueue.Count > 0)
+            {
+                string trick = tricksQueue.Dequeue();
+                TutorialUI.Instance.ShowTutorial(trick);
+                await AsyncManager.Instance.WaitForMouseClick();
+                await Task.Delay(100);
+            }
+            TutorialUI.Instance.transform.Find("UI").gameObject.SetActive(false);
         }
-        TutorialUI.Instance.transform.Find("UI").gameObject.SetActive(false);
-
         isStart = true;
     }
     private async Task ShowGoal()
@@ -73,7 +89,22 @@ public class GameManager : MonoBehaviour
     {
         if (isWin)
         {
-            Win.Instance.OnGameWin();
+            bool isAllCompleted = false;
+            foreach (bool b in completionRecord)
+            {
+                if (!b)
+                {
+                    isAllCompleted = false;
+                    break;
+                }
+            }
+            if (!isAllCompleted)
+            {
+                completionRecord[LevelUI.Instance.curLevelIndex] = true;
+                Win.Instance.OnGameWin();
+            }
+            else
+                CompletionUI.Instance.transform.Find("UI").gameObject.SetActive(true);
         }
         else
         {

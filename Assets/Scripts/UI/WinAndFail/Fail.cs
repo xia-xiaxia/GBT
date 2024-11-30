@@ -40,14 +40,14 @@ public class Fail : MonoBehaviour
     private async void OnRestartButtonClicked()
     {
         transform.Find("UI").gameObject.SetActive(false);
-        await SceneManager.UnloadSceneAsync("1.0"/*GameManager.Instance.level*/);
-        GameManager.Instance.GameStream("¹Ø¿¨" + (LevelUI.Instance.curLevelIndex + 1));
+        await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
+        GameManager.Instance.GameStream((LevelUI.Instance.curLevelIndex + 1)+".0");
     }
     private async void OnLevelButtonClicked()
     {
         transform.Find("UI").gameObject.SetActive(false);
         await TransitionManager_2.Instance.TransitionIn(1f, 5);
-        await SceneManager.UnloadSceneAsync("1.0"/*GameManager.Instance.level*/);
+        await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
         BgUI.Instance.ShowBg();
         LevelUI.Instance.transform.Find("UI").gameObject.SetActive(true);
         await Task.Delay(1000);
@@ -57,7 +57,7 @@ public class Fail : MonoBehaviour
     {
         transform.Find("UI").gameObject.SetActive(false);
         await TransitionManager_2.Instance.TransitionIn(1f, 5);
-        await SceneManager.UnloadSceneAsync("1.0"/*GameManager.Instance.level*/);
+        await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
         BgUI.Instance.ShowBg();
         StartUI.Instance.transform.Find("UI").gameObject.SetActive(true);
         await Task.Delay(1000);

@@ -8,6 +8,7 @@ public class InteractableObject : MonoBehaviour
     public new string name;
     private AText text;
     private Button selectButton;
+    public GameObject correspondingObj;
 
 
 

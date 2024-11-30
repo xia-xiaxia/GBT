@@ -55,14 +55,14 @@ public class LoadTextManager : MonoBehaviour
         this.textBox = textBox;
         this.continueButton = continueButton;
         this.continueButton.onClick.AddListener(OnContinueBottonClicked);
-        this.continueButton.transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = "Continue";
+        this.continueButton.transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = "继续";
         text = Texts.Find(t => t.name == name.Trim());
         text.index = 0;
+
         StartCoroutine(LoadOneByOne());
     }
     /// <summary>
-    /// IsMouseButton is true when the text is loaded by clicking the mouse button.
-    /// But in fact it is realized by clicking the continue button that is full-screen.
+    /// isMouseButton为true时，点击鼠标左键继续，事实上的逻辑是一个布满整个屏幕的按钮
     /// </summary>
     public void LoadText(TextMeshProUGUI textBox, string name, Button continueButton, bool isMouseButton)
     {
@@ -76,6 +76,17 @@ public class LoadTextManager : MonoBehaviour
         
         StartCoroutine(LoadOneByOne());
     }
+    /// <summary>
+    /// 自动加载文本
+    /// </summary>
+    public void LoadText(TextMeshProUGUI textBox, string name)
+    {
+        this.textBox = textBox;
+        text = Texts.Find(t => t.name == name.Trim());
+        text.index = 0;
+
+        StartCoroutine(AutoLoadOneByOne());
+    }
     private IEnumerator LoadOneByOne()
     {
         int i = 0;
@@ -86,10 +97,21 @@ public class LoadTextManager : MonoBehaviour
             else
             {
                 textBox.text = text.content[text.index].Substring(0, i);
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(0.03f);
             }
         }
         textLoad = TextLoad.Loaded;
+    }
+    private IEnumerator AutoLoadOneByOne()
+    {
+        while (text.index < text.content.Length)
+        {
+            textLoad = TextLoad.Loading;
+            StartCoroutine(LoadOneByOne());
+            yield return new WaitUntil(() => textLoad == TextLoad.Loaded);
+            yield return new WaitForSeconds(CalculateWaitTime());
+            text.index++;
+        }
     }
     private void OnMouseButtonClicked()
     {
@@ -121,7 +143,7 @@ public class LoadTextManager : MonoBehaviour
                 if (text.index < text.content.Length - 1)
                 {
                     if (text.index == text.content.Length - 2)
-                        continueButton.transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = "End";
+                        continueButton.transform.Find("ContinueText").GetComponent<TextMeshProUGUI>().text = "结束";
                     text.index++;
                     StartCoroutine(LoadOneByOne());
                 }
@@ -133,6 +155,15 @@ public class LoadTextManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    private float CalculateWaitTime()
+    {
+        int len = text.content[text.index].Length;
+        if (len < 33)
+            return 0.5f + 0.03f * len;
+        else
+            return 1.5f;
     }
 }
 public class AText

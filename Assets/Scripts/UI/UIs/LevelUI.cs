@@ -17,7 +17,9 @@ public class LevelUI : MonoBehaviour
     private Button leftButton;
     private Button rightButton;
     private Button chooseButton;
+    [HideInInspector]
     public TextMeshProUGUI levelName;
+    private GameObject complete;
 
     private List<Vector3> positions = new List<Vector3>();
     private List<float> alphas = new List<float>();
@@ -40,13 +42,13 @@ public class LevelUI : MonoBehaviour
         rightButton = transform.Find("UI/RightButton").GetComponent<Button>();
         chooseButton = transform.Find("UI/ChooseButton").GetComponent<Button>();
         levelName = transform.Find("UI/LevelName").GetComponent<TextMeshProUGUI>();
+        complete = transform.Find("UI/Complete").gameObject;
         leftButton.onClick.AddListener(async () => await OnLeftClicked());
         rightButton.onClick.AddListener(async () => await OnRightClicked());
         chooseButton.onClick.AddListener(() =>
         {
-            BgUI.Instance.HideBg();
             transform.Find("UI").gameObject.SetActive(false);
-            GameManager.Instance.GameStream("¹Ø¿¨"+(curLevelIndex+1));
+            GameManager.Instance.GameStream((curLevelIndex+1)+".0");
         });
         for (int i = 0; i < levelList.Count; i++)
         {
@@ -60,6 +62,7 @@ public class LevelUI : MonoBehaviour
     {
         curLevelIndex = levelIndex;
         levelName.text = levelDatabase.levels[curLevelIndex].name;
+        complete.SetActive(GameManager.Instance.completionRecord[curLevelIndex]);
         if (levelDatabase.levels.Count <= 2)
         {
             levelList[1].GetComponent<Image>().sprite = levelDatabase.levels[1].sprite;
@@ -83,6 +86,7 @@ public class LevelUI : MonoBehaviour
         else
             curLevelIndex = levelDatabase.levels.Count - 1;
         levelName.text = levelDatabase.levels[curLevelIndex].name;
+        complete.SetActive(GameManager.Instance.completionRecord[curLevelIndex]);
     }
     private async Task MoveTowardsLeft()
     {
@@ -152,6 +156,7 @@ public class LevelUI : MonoBehaviour
         else
             curLevelIndex = 0;
         levelName.text = levelDatabase.levels[curLevelIndex].name;
+        complete.SetActive(GameManager.Instance.completionRecord[curLevelIndex]);
     }
     private async Task MoveTowardsRight()
     {

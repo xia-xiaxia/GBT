@@ -14,10 +14,16 @@ public class InteractableObjectManager : MonoBehaviour
     private GraphicRaycaster graphicRaycaster;
     private EventSystem eventSystem;
 
-    private List<InteractableObject> interactableObjects = new List<InteractableObject>();
-    private GameObject selectedObject = null;
+    private List<InteractableObject> interactableObjects;
+    private GameObject selectedObject;
     [HideInInspector]
-    public Select select = Select.Unselected;
+    public Select select;
+    private string[] tags =
+    {
+        "Interactable",
+        "Key",
+        "Folder"
+    };
 
 
 
@@ -29,11 +35,16 @@ public class InteractableObjectManager : MonoBehaviour
         }
         Instance = this;
     }
+    private void OnEnable()
+    {
+        selectedObject = null;
+        interactableObjects = new List<InteractableObject>();
+        select = Select.Unselected;
+    }
     private void Start()
     {
         graphicRaycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster>();
         eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
-        LoadInteractableObjects();
     }
     private void Update()
     {
@@ -50,6 +61,7 @@ public class InteractableObjectManager : MonoBehaviour
                 if (selectedObject != null)
                 {
                     selectedObject.transform.Find("Halo").gameObject.SetActive(false);
+                    selectedObject.GetComponent<InteractableObject>().correspondingObj.SetActive(false);
                     selectedObject = null;
                 }
                 DetailsUI.Instance.transform.Find("UI").gameObject.SetActive(false);
@@ -66,12 +78,17 @@ public class InteractableObjectManager : MonoBehaviour
     }
     public void LoadInteractableObjects()
     {
-        List<GameObject> allInteractableObjects = new List<GameObject>(GameObject.FindGameObjectsWithTag(Tag.INTERACTABLE));
+        List<GameObject> allInteractableObjects = new List<GameObject>();
+        foreach (string tag in tags)
+        {
+            allInteractableObjects.AddRange(GameObject.FindGameObjectsWithTag(tag));
+        }
         foreach (GameObject obj in allInteractableObjects)
         {
             GameObject interactableObject = Instantiate(ioPrefab, transform.Find("Viewport/Content"));
             interactableObject.name = obj.name;
             interactableObject.tag = Tag.INTERACTABLE;
+            interactableObject.GetComponent<InteractableObject>().correspondingObj = obj;
             interactableObject.transform.Find("Index").GetComponent<TextMeshProUGUI>().text = (interactableObjects.Count + 1).ToString();
             interactableObject.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = obj.name;
             interactableObject.transform.Find("Sprite").GetComponent<Image>().sprite = obj.GetComponent<SpriteRenderer>().sprite;
@@ -89,10 +106,12 @@ public class InteractableObjectManager : MonoBehaviour
         if (selectedObject != null)
         {
             selectedObject.transform.Find("Halo").gameObject.SetActive(false);
+            selectedObject.GetComponent<InteractableObject>().correspondingObj.SetActive(false);
         }
         select = s;
         selectedObject = selectedObj;
         selectedObject.transform.Find("Halo").gameObject.SetActive(true);
+        selectedObject.GetComponent<InteractableObject>().correspondingObj.SetActive(true);
         selectedObject.GetComponent<InteractableObject>().OnSelected();
     }
     private GameObject IsMouseOverUIObjectWithTag(string tag)

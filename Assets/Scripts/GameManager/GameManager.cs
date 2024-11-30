@@ -2,24 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Key : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    public float detectionRadius ;  // 圆形检测范围的半径
+    public bool isWin;
+    public bool isFaild;
+    public EnemyFlowController enemyFlowController;
+    public Transform enemyTransform;
+    public float detectionRadius;  // 圆形检测范围的半径
     public LayerMask dreamerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
     public bool isdreamerInRange = false; // 玩家是否在检测范围内
-    public bool getKey;
 
     void Start()
     {
-        getKey = false;
-        gameObject.SetActive(true);
+        isFaild = false;
+        isWin = false;
     }
 
     void Update()
     {
+        isFaild = enemyFlowController.isGameFailed;
         CheckKeyInRange();
-        GetKey();
+        if(isWin) isFaild = false;
     }
+
     void CheckKeyInRange()
     {
         // 使用 Physics2D.OverlapCircle 检测圆形范围内的物体
@@ -27,18 +32,12 @@ public class Key : MonoBehaviour
 
         if (colliders.Length > 0)
         {
-            isdreamerInRange = true;
-            getKey = true;
+            isWin = true;
         }
         else
         {
-            isdreamerInRange = false;
+            if (!isFaild)
+                isFaild = true;
         }
-    }
-
-    void GetKey()
-    {
-        if (getKey)
-            gameObject.SetActive(false);
     }
 }

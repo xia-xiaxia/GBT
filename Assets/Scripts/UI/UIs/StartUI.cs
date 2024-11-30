@@ -32,6 +32,7 @@ public class StartUI : MonoBehaviour
         startButton.onClick.AddListener(OnStartButtonClicked);
         bgButton.onClick.AddListener(OnBgButtonClicked);
         exitButton.onClick.AddListener(OnExitButtonClicked);
+        transform.Find("UI").gameObject.SetActive(true);
     }
 
     private void OnStartButtonClicked()

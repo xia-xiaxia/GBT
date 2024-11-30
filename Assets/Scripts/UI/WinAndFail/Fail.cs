@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -38,15 +39,28 @@ public class Fail : MonoBehaviour
     }
     private async void OnRestartButtonClicked()
     {
-        StartCoroutine(TransitionManager_1.Instance.Transition(1f));//Âß¼­Òª¸Ä
-        await SceneManager.LoadSceneAsync("ElderLevel");
+        transform.Find("UI").gameObject.SetActive(false);
+        await SceneManager.UnloadSceneAsync("1.0"/*GameManager.Instance.level*/);
+        GameManager.Instance.GameStream("¹Ø¿¨" + (LevelUI.Instance.curLevelIndex + 1));
     }
-    private void OnLevelButtonClicked()
+    private async void OnLevelButtonClicked()
     {
-        SceneManager.LoadScene("ElderLevel");
+        transform.Find("UI").gameObject.SetActive(false);
+        await TransitionManager_2.Instance.TransitionIn(1f, 5);
+        await SceneManager.UnloadSceneAsync("1.0"/*GameManager.Instance.level*/);
+        BgUI.Instance.ShowBg();
+        LevelUI.Instance.transform.Find("UI").gameObject.SetActive(true);
+        await Task.Delay(1000);
+        await TransitionManager_2.Instance.TransitionOut(5);
     }
-    private void OnMenuButtonClicked()
+    private async void OnMenuButtonClicked()
     {
-        SceneManager.LoadScene("Start");
+        transform.Find("UI").gameObject.SetActive(false);
+        await TransitionManager_2.Instance.TransitionIn(1f, 5);
+        await SceneManager.UnloadSceneAsync("1.0"/*GameManager.Instance.level*/);
+        BgUI.Instance.ShowBg();
+        StartUI.Instance.transform.Find("UI").gameObject.SetActive(true);
+        await Task.Delay(1000);
+        await TransitionManager_2.Instance.TransitionOut(5);
     }
 }

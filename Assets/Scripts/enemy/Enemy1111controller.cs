@@ -69,32 +69,81 @@ public class EnemyController : MonoBehaviour
         MoveToNextWaypoint();
         float currentAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;  // 计算当前角度
         animationController.UpdateAnimation(moveDirection, currentAngle);
-
-        // 检查文件夹、箱子、玩家和墙壁
-        CheckForFolderInView();
         CheckForBoxInView();
         CheckForPlayerInSightRange();
         CheckForWallInHearingRange();
     }
+    private IEnumerator ExecuteFlow(FlowPath flow)
+    {
+        isExecuting = true;
+        Debug.Log($"开始流程：{flow.flowName}");
+
+        // 执行流程中的所有路径点
+        for (int i = 0; i < flow.waypoints.Length; i++)
+        {
+            Transform waypoint = flow.waypoints[i];
+
+            // 移动到当前路径点
+            yield return MoveToWaypoint(waypoint.position);
+
+            // 等待指定时间
+            yield return new WaitForSeconds(flow.waitTimeAtPoint);
+
+            // 如果到了指定的点，切换动画（例如：第6个点）
+            /*f (i == 5) // 可以通过public变量来控制
+             {
+                 // 在第6个点执行特殊动画，比如蹲下
+                 animationController.SetCrouchAnimation();
+             }*/
+        }
+
+        isExecuting = false;
+        Debug.Log($"完成流程：{flow.flowName}");
+
+        // 游戏失败或任务完成后，切换到下一个流程
+        StartNextTask();
+    }
+    private IEnumerator MoveToWaypoint(Vector3 target)
+    {
+        moveDirection = (target - transform.position).normalized;
+
+        // 逐步移动到目标点
+        while (Vector3.Distance(transform.position, target) > 0.1f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        // 到达目标点
+        transform.position = target;
+    }
+
     private void StartNextTask()
     {
+        // 如果任务队列中有流程，执行下一个流程
         if (taskQueue.Count > 0)
         {
-            FlowPath nextFlow = taskQueue.Dequeue();
-            currentWaypointIndex = 0;
-            // 处理该流程的路径和等待时间等
+            FlowPath currentFlow = taskQueue.Dequeue(); // 获取队列中的第一个流程
+            StartCoroutine(ExecuteFlow(currentFlow)); // 启动当前流程
         }
         else
         {
-            Debug.Log("No more tasks in queue.");
+            Debug.Log("所有流程完成，游戏结束！");
+            animationController.SetIdleAnimation();
+            GameFailed(); // 触发游戏结束
         }
     }
+
+
     private void MoveToNextWaypoint()
     {
         if (isExecuting) return;
 
         if (currentWaypointIndex >= flows[0].waypoints.Length)
+        {
+
             return;
+        }
 
         // 获取当前目标路径点
         Transform targetWaypoint = flows[0].waypoints[currentWaypointIndex];
@@ -109,131 +158,10 @@ public class EnemyController : MonoBehaviour
         if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
         {
             currentWaypointIndex++;
+            Debug.Log(currentWaypointIndex);
         }
     }
 
-    private void StartPickUpFileAnimation(string direction)
-    {
-        if (isPickingUpFile) return; // 如果已经在捡文件，则不再执行
-
-        isPickingUpFile = true;  // 设置为正在捡文件状态
-      // 暂停路径行走
-
-        // 执行蹲下捡文件动画
-      
-        // 假设捡文件动画需要4秒钟
-        StartCoroutine(WaitForPickUpAnimationToEnd());
-    }
-
-    private IEnumerator WaitForPickUpAnimationToEnd()
-    {
-        // 捡文件动画播放完成后恢复行走
-        yield return new WaitForSeconds(4f);
-
-        isPickingUpFile = false;  // 重置为未捡文件状态
-    }
-
-   
-
-   
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Folder"))
-        {
-            currentFileCollider = other;  // 记录当前碰撞的文件物体
-
-            // 获取与文件夹的碰撞方向
-            Vector2 directionToFolder = (other.transform.position - transform.position).normalized;
-            float angleToFolder = Vector2.Angle(Vector2.right, directionToFolder); // 计算夹角
-
-            // 触发蹲下捡起文件的动画
-            if (angleToFolder >= -45f && angleToFolder <= 45f)
-            {
-                StartPickUpFileAnimation("Right");
-            }
-            else if (angleToFolder >= 135f || angleToFolder <= -135f)
-            {
-                StartPickUpFileAnimation("Left");
-            }
-            else if (angleToFolder > 45f && angleToFolder < 135f)
-            {
-                StartPickUpFileAnimation("Up");
-            }
-            else if (angleToFolder < -45f && angleToFolder > -135f)
-            {
-                StartPickUpFileAnimation("Down");
-            }
-        }
-    }
-    public void OnFilePickedUp()
-    {
-        Debug.Log("文件捡起完毕，恢复移动。");
-        isPaused = false;  // 恢复敌人移动
-        StartNextTask();  // 恢复流程，继续执行下一个任务
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Folder"))
-        {
-            // 当离开文件碰撞体时，恢复路径行走并触发行走动画
-            if (isPickingUpFile)
-            {
-                isPickingUpFile = false; // 恢复正常状态
-             // 恢复路径行走
-                float currentAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
-                animationController.UpdateAnimation(moveDirection, currentAngle);// 停止捡文件动画，恢复空闲或行走状态
-            }
-        }
-    }
-
-    private void CheckForFolderInView()
-    {
-        if (isGameFailed) return;
-
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, fieldOfViewDistance, folderLayer);
-
-        foreach (Collider2D hitCollider in hitColliders)
-        {
-            if (hitCollider.CompareTag("Folder"))
-            {
-                Vector2 folderPosition = hitCollider.transform.position;
-                Vector2 toFolder = (folderPosition - (Vector2)transform.position).normalized;
-
-                // 计算敌人与文件夹的夹角
-                float angleToFolder = Vector2.Angle(moveDirection, toFolder);
-
-                // 检查是否在视野角度内
-                if (angleToFolder < fieldOfViewAngle / 2f)
-                {
-                    int folderID = hitCollider.GetInstanceID();
-
-                    if (!detectedFolders.ContainsKey(folderID))
-                    {
-                        detectedFolders[folderID] = folderPosition;
-
-                        // 根据夹角选择相应的蹲下捡起动画
-                        if (angleToFolder >= -45f && angleToFolder <= 45f)
-                        {
-                            animationController.SetCrouchPickUpRightAnimation();
-                        }
-                        else if (angleToFolder >= 135f || angleToFolder <= -135f)
-                        {
-                            animationController.SetCrouchPickUpLeftAnimation();
-                        }
-                        else if (angleToFolder > 45f && angleToFolder < 135f)
-                        {
-                            animationController.SetCrouchPickUpUpAnimation();
-                        }
-                        else if (angleToFolder < -45f && angleToFolder > -135f)
-                        {
-                            animationController.SetCrouchPickUpDownAnimation();
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     private void CheckForBoxInView()
     {
@@ -308,7 +236,7 @@ public class EnemyController : MonoBehaviour
             return false; // 没有被遮挡
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
         {
             // 如果敌人与障碍物发生碰撞
             if (collision.collider.CompareTag("Box"))
@@ -316,9 +244,28 @@ public class EnemyController : MonoBehaviour
                 Debug.Log("成功阻止了bekilled的结局，游戏胜利");
                 GameVictory(); // 游戏胜利
             }
-        }
+      
 
-        private void GameVictory()
+        }
+   /* public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Folder"))
+        {
+            StopAllCoroutines();
+            animationController.StopAllCoroutines();
+            animationController.SetCrouchPickUpRightAnimation();
+        }
+    }
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Folder"))
+        {
+            animationController.SetIdleAnimation();
+            StartNextTask();
+        }
+    }*/
+
+    private void GameVictory()
         {
             isGameFailed = false;
             Debug.Log("阻止了坏结局，游戏胜利！");

@@ -5,48 +5,70 @@ using UnityEngine;
 public class AnimController : MonoBehaviour
 {
     private PlayerMovement playerMovement;
+    private PossessedMove POM;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
     private string animation;
+    bool isFlip;
+    bool isBack;
+    bool isFront;
+
 
     void Start()
     {
-        playerMovement = GetComponent<PlayerMovement>(); 
-        spriteRenderer = GetComponent<SpriteRenderer>();  
+        playerMovement = GetComponent<PlayerMovement>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        isFlip = false;
+        isBack = false;
     }
 
     void Update()
     {
-        Flip();
+        DIR();
+        if (transform.parent != null)
+        {
+            POM = gameObject.GetComponentInParent<PossessedMove>();
+        }
         AnimChange();
     }
 
-    private void Flip()
+    private void DIR()
     {
         // 判断玩家的移动方向
-        if (playerMovement.direction.x > 0)
+        if (playerMovement.direction == Vector2.left)
         {
-            // 向右移动，确保玩家朝右
-            spriteRenderer.flipX = false;
+            isFront = false;
+            isFlip = true;
         }
-        else if (playerMovement.direction.x < 0)
+        else if (playerMovement.direction == Vector2.right)
         {
-            // 向左移动，翻转玩家精灵
-            spriteRenderer.flipX = true;
+            isFront = false;
+            isFlip = false;
+        }
+        else if (playerMovement.direction == Vector2.up)
+        {
+            isFront = true;
+            isBack = true;
+        }
+        else if (playerMovement.direction == Vector2.down)
+        {
+            isFront = true;
+            isBack = false;
         }
     }
 
     private void AnimChange()
     {
-        animator.SetBool("isMoving", playerMovement.isMoving);
-        if (playerMovement.isHit)
+        animator.SetBool("isMoving", playerMovement.isWalk);
+        animator.SetBool("isFlip", isFlip);
+        animator.SetBool("isBack", isBack);
+        animator.SetBool("isFront", isFront);
+        if (transform.parent != null)
         {
-            if(spriteRenderer.flipX == false)
-            animator.Play("FallRight");
-            else
-                animator.Play("FallLeft");
+            animator.SetBool("isHit", POM.isHit);
+            animator.SetBool("isPush", POM.isPush);
         }
     }
-}
 
+}

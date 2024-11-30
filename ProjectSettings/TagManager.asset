@@ -12,6 +12,7 @@ TagManager:
   - dreamer
   - killer
   - Folder
+  - Key
   layers:
   - Default
   - TransparentFX
@@ -23,8 +24,8 @@ TagManager:
   - Player
   - obstacle
   - FolderLayer
-  - 
-  - 
+  - dreamer
+  - floor
   - 
   - 
   - 

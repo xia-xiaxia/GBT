@@ -39,7 +39,9 @@ public class Enemy1111AnimationController : MonoBehaviour
     }
     public void SetCrouchPickUpRightAnimation()
     {
-        animator.SetTrigger("crouchPickUpRight");
+        
+        animator.Play("CrouchPickUpRight");
+
     }
 
     public void SetCrouchPickUpLeftAnimation()
@@ -65,10 +67,22 @@ public class Enemy1111AnimationController : MonoBehaviour
         animator.SetBool(IsCrouchPickUpUp, false);
         animator.SetBool(IsCrouchPickUpDown, false);
         animator.SetBool(IsWalking, false);
-        animator.SetBool(IsBackWalking, false); 
-        animator.SetBool(IsForwardWalking, false);  
-        animator.SetBool(IsRightWalking, false); 
+        animator.SetBool(IsBackWalking, false);
+        animator.SetBool(IsForwardWalking, false);
+        animator.SetBool(IsRightWalking, false);
         animator.SetBool(IsLeftWalking, false);
 
     }
+    /*public void SetPickUpAnimation()
+    {
+
+        animator.Play("CrouchPickUpRight");
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        while (stateInfo.normalizedTime >1.0f) {
+
+            yield return null;
+            stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        }
+    }*/
 }

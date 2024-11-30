@@ -11,23 +11,30 @@ public class PlayerMovement : MonoBehaviour
     public float gridSize = 1f; // 每格的大小
     public bool isMoving = false; // 是否正在移动
     public Vector2 direction; // 玩家当前的移动方向
-
+    public bool isWalk;
     private Vector3 lastPosition;
     private bool isTrans;
 
-    public bool isPush = false;
-    public bool isHit = false;
+
+    public bool isPossessed;
+
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         targetPosition = transform.position; // 初始目标位置就是玩家当前位置
+        isPossessed = false;
     }
 
     void Update()
     {
+        if (isPossessed)
+        {
+            return;
+        }
+        else { isWalk = isMoving; }
         // 如果玩家正在移动，就不接受新的输入
-        if (isMoving || isHit)
+        if (isMoving)
             return;
 
         // 获取玩家的移动输入
@@ -62,10 +69,10 @@ public class PlayerMovement : MonoBehaviour
             transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
 
             // 判断是否到达目标位置，若到达，停止移动
-            if (Vector2.Distance(transform.position, targetPosition) < 0.05f)
+            if (Vector2.Distance(transform.position, targetPosition) < 0.001f)
             {
                 transform.position = targetPosition; // 精确到目标位置
-                isMoving = false; // 停止移动
+                StartCoroutine(Timer());
             }
         }
     }
@@ -75,15 +82,11 @@ public class PlayerMovement : MonoBehaviour
     {
         // 计算目标位置（玩家要到达的格子中心，即 (n + 0.5, m + 0.5)）
         targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize + direction.x * gridSize,
-                                     Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize + direction.y * gridSize);
+                                    Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize + direction.y * gridSize);
         isMoving = true; // 标记为正在移动
     }
 
-    private void calculate()
-    {
-        targetPosition = new Vector2(Mathf.Floor(transform.position.x / gridSize) * gridSize + 0.5f * gridSize,
-                                     Mathf.Floor(transform.position.y / gridSize) * gridSize + 0.5f * gridSize);
-    }
+
 
 
     void isMovingorNot()
@@ -102,33 +105,9 @@ public class PlayerMovement : MonoBehaviour
         lastPosition = transform.position;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    IEnumerator Timer()
     {
-        if (collision.collider.tag == "Wall")
-        {
-            isMoving = false;
-            isHit = true;
-            calculate();
-            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
-        }
-    }
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.collider.tag == "Wall")
-        {
-            calculate();
-            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
-        }
-    }
-
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.collider.tag == "Wall")
-        {
-            isHit = false;
-            calculate();
-            transform.position = Vector2.Lerp(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
-        }
+        yield return new WaitForSeconds(0.1f);
+        isMoving = false;
     }
 }

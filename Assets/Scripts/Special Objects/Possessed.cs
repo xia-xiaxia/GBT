@@ -5,22 +5,39 @@ using UnityEngine;
 public class Possessed : MonoBehaviour
 {
     public PlayerMovement PM;
-    private PossessedMove PossessedMove;
+    private PossessedMove possessedMove;
     public float detectionRadius = 5f;  // 圆形检测范围的半径
     public LayerMask playerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
-    private bool isPlayerInRange = false; // 玩家是否在检测范围内
+    public bool isPlayerInRange = false; // 玩家是否在检测范围内
     public GameObject Player;
+    public float targetAlpha = 0.5f; // 目标透明度
+    private Renderer characterRenderer;
+    private Collider2D characterCollider;
+    public Transform transform;
+
+    private bool IsPossessed;
+
+
 
     void Start()
     {
-        PossessedMove = GetComponent<PossessedMove>();
-        PossessedMove.enabled = false;
+        IsPossessed = false;
+        possessedMove = GetComponent<PossessedMove>();
+        possessedMove.enabled = false;
+        characterRenderer = Player.GetComponent<Renderer>();
+        characterCollider = Player.GetComponent<Collider2D>();
     }
 
     void Update()
     {
         CheckPlayerInRange();
-        posssessed();
+        if (!PM.isMoving)
+            posssessed();
+        canThroughtheWall();
+        if (Player.transform.parent == null) ;
+
+        else
+            Debug.Log(Player.transform.parent.name);
     }
 
     void CheckPlayerInRange()
@@ -52,20 +69,57 @@ public class Possessed : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                PossessedMove.enabled = true;
-                PM.enabled = false;
-               Player.SetActive(false);
+                possessedMove.enabled = true;
+                IsPossessed = true;
+                PM.isPossessed = true;
+                SetTransparency(characterRenderer, targetAlpha);
+                Player.transform.position = transform.position;
+                Player.transform.SetParent(transform);
             }
         }
-        if (PM.enabled == false)
+        if (IsPossessed)
         {
-            if (Input.GetKeyDown(KeyCode.Tab))
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                PossessedMove.enabled = false;
+                possessedMove.enabled = false;
+                IsPossessed = false;
                 PM.enabled = true;
-                Player.SetActive(true);
+                PM.isPossessed = false;
+                SetTransparency(characterRenderer, 1f);
+                Player.transform.SetParent(null);
             }
         }
     }
 
+    void SetTransparency(Renderer renderer, float alpha)
+    {
+        // 获取当前材质的颜色
+        Color currentColor = renderer.material.color;
+
+        // 修改Alpha通道（透明度）
+        currentColor.a = alpha;
+
+        // 应用新的颜色到材质
+        renderer.material.color = currentColor;
+
+        // 设置材质为透明模式
+        renderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        renderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        renderer.material.SetInt("_ZWrite", 0);
+        renderer.material.DisableKeyword("_ALPHATEST_ON");
+        renderer.material.EnableKeyword("_ALPHABLEND_ON");
+        renderer.material.renderQueue = 3000;
+    }
+
+    void canThroughtheWall()
+    {
+        if (IsPossessed)
+        {
+            if (characterCollider != null)
+            {
+                characterCollider.isTrigger = false;
+            }
+        }
+        else characterCollider.isTrigger = true;
+    }
 }

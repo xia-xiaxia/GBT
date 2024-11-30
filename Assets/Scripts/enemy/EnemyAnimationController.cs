@@ -67,6 +67,6 @@ public class EnemyAnimationController : MonoBehaviour
         animator.SetBool(IsLeftWalking, false);
 
         // 强制切换到 Idle 动画状态
-        //animator.Play("Idle"); 
+        animator.Play("Idle"); 
     }
 }

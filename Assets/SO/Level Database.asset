@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 00519ba828b3e8e4bbdf77b8a6a44c37, type: 3}
   m_Name: Level Database
   m_EditorClassIdentifier: Assembly-CSharp::LevelDatabase
   levels:
-  - name: "1.\u4E00\u95E8\u4E4B\u9694"
-    image: {fileID: -9081775809268432826, guid: 8f4c75ef7dd506f48a4ac8e384d42f59, type: 3}
+  - name: "\u5173\u53611.\u4E00\u95E8\u4E4B\u9694"
+    sprite: {fileID: -9081775809268432826, guid: 8f4c75ef7dd506f48a4ac8e384d42f59, type: 3}
+  - name: "\u5173\u53612.\u789F\u4E2D\u7239"
+    sprite: {fileID: -9081775809268432826, guid: 8f4c75ef7dd506f48a4ac8e384d42f59, type: 3}

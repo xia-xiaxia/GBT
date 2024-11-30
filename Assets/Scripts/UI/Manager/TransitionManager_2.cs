@@ -41,11 +41,7 @@ public class TransitionManager_2 : MonoBehaviour
         x = up.GetComponent<RectTransform>().sizeDelta.x;
         a = up.GetComponent<Image>().color.a;
     }
-    /// <summary>
-    /// 传入透明度和等待方法，透明度为1时全黑，等待方法默认为等待1秒
-    /// </summary>
-    /// <returns></returns>
-    public async Task TransitionIn(float transparency)
+    public async Task TransitionIn(float transparency, int speed)
     {
         while (up.GetComponent<RectTransform>().sizeDelta.y < maxY - 7.2f)
         {
@@ -57,12 +53,12 @@ public class TransitionManager_2 : MonoBehaviour
             down.GetComponent<RectTransform>().sizeDelta = new Vector2(x, newY);
             up.GetComponent<Image>().color = new Color(0, 0, 0, newA);
             down.GetComponent<Image>().color = new Color(0, 0, 0, newA);
-            await Task.Yield();
+            await Task.Delay(speed);
         }
         up.GetComponent<Image>().color = new Color(0, 0, 0, transparency);
         down.GetComponent<Image>().color = new Color(0, 0, 0, transparency);
     }
-    public async Task TransitionOut()
+    public async Task TransitionOut(int speed)
     {
         while (up.GetComponent<RectTransform>().sizeDelta.y > minY + 7.2f)
         {
@@ -74,15 +70,11 @@ public class TransitionManager_2 : MonoBehaviour
             down.GetComponent<RectTransform>().sizeDelta = new Vector2(x, newY);
             up.GetComponent<Image>().color = new Color(0, 0, 0, newA);
             down.GetComponent<Image>().color = new Color(0, 0, 0, newA);
-            await Task.Yield();
+            await Task.Delay(speed);
         }
         up.GetComponent<RectTransform>().sizeDelta = new Vector2(x, minY);
         down.GetComponent<RectTransform>().sizeDelta = new Vector2(x, minY);
         up.GetComponent<Image>().color = new Color(0, 0, 0, a);
         down.GetComponent<Image>().color = new Color(0, 0, 0, a);
-    }
-    private IEnumerator DefaultWaitor()
-    {
-        yield return new WaitForSeconds(1f);
     }
 }

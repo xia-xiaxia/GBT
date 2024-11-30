@@ -13,5 +13,5 @@ public class LevelDatabase : ScriptableObject
 public class LevelData
 {
     public string name;
-    public Sprite image;
+    public Sprite sprite;
 }

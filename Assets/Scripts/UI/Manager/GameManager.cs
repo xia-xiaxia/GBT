@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     private Queue<string> tricksQueue;
-    private string level;
+    public string level;
 
 
 
@@ -21,43 +21,29 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
+            print("aaaaa");
             Destroy(gameObject);
         }
         Instance = this;
     }
 
-    public async void IntrodutionBeforeGame(string level)
+    public async void GameStream(string level)
     {
-        try
-        {
-            isStart = false;
-            this.level = level;
+        isStart = false;
+        this.level = level;
 
-            await SceneManager.LoadSceneAsync("1.0", LoadSceneMode.Additive);
+        await SceneManager.LoadSceneAsync("1.0", LoadSceneMode.Additive);
 
-            await ShowTutorial();
+        await ShowTutorial();
 
-            await AsyncManager.Instance.WaitForDreamOver();
+        await AsyncManager.Instance.WaitForDreamOver();
 
-            await ShowGoal();
+        await ShowGoal();
 
-            //await SceneManager.LoadSceneAsync("XHY", LoadSceneMode.Additive);
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Error in IntrodutionBeforeGame: {ex.Message}");
-        }
+        //await SceneManager.LoadSceneAsync("XHY", LoadSceneMode.Additive);
+
+        await ShowGameOver(true);
     }
-
-    private async Task ShowGoal()
-    {
-        await TransitionManager_2.Instance.TransitionIn(0.8f);
-        await Task.Delay(500);
-        GoalUI.Instance.ShowGoal(level);
-        await AsyncManager.Instance.WaitForGoalUILoaded();
-        await TransitionManager_2.Instance.TransitionOut();
-    }
-
 
     private async Task ShowTutorial()
     {
@@ -74,5 +60,24 @@ public class GameManager : MonoBehaviour
         TutorialUI.Instance.transform.Find("UI").gameObject.SetActive(false);
 
         isStart = true;
+    }
+    private async Task ShowGoal()
+    {
+        await TransitionManager_2.Instance.TransitionIn(0.8f, 5);
+        await Task.Delay(500);
+        GoalUI.Instance.ShowGoal(level);
+        await AsyncManager.Instance.WaitForGoalUILoaded();
+        await TransitionManager_2.Instance.TransitionOut(5);
+    }
+    private async Task ShowGameOver(bool isWin)
+    {
+        if (isWin)
+        {
+            Win.Instance.OnGameWin();
+        }
+        else
+        {
+            Fail.Instance.OnGameFail();
+        }
     }
 }

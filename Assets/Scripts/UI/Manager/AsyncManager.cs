@@ -55,6 +55,10 @@ public class AsyncManager : MonoBehaviour
                 {
                     await Task.Yield();
                 }
+                if (GameFirst.Instance.isWin)
+                    GameManager.Instance.isWin = true;
+                else
+                    GameManager.Instance.isWin = false;
                 break;
             case "2.0":
                 while (!(GameSecond.Instance.isWin || GameSecond.Instance.isFailed))

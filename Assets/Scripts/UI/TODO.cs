@@ -14,6 +14,4 @@ public class TODO : MonoBehaviour
 
     //幕中：剧情播放间的转场
     //剧情与睁闭眼
-
-    //关卡前背景介绍
 }

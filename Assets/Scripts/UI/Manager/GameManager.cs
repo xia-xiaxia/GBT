@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     private Queue<string> tricksQueue;
     public string level;
     public List<bool> completionRecord;
+    public bool isWin;
 
 
 
@@ -59,7 +60,7 @@ public class GameManager : MonoBehaviour
         GameObject.Find("Canvas").transform.Find("PanelUI").gameObject.SetActive(false);
         GameObject.Find("Canvas").transform.Find("HelpUI").gameObject.SetActive(false);
 
-        await ShowGameOver(true);
+        await ShowGameOver(isWin);
     }
 
     private async Task ShowIntroduction()

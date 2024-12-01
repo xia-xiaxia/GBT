@@ -75,6 +75,7 @@ public class Possessed : MonoBehaviour
                 SetTransparency(characterRenderer, targetAlpha);
                 Player.transform.position = transform.position;
                 Player.transform.SetParent(transform);
+                Player.GetComponent<Collider2D>().enabled = false;
             }
         }
         if (IsPossessed)
@@ -87,6 +88,7 @@ public class Possessed : MonoBehaviour
                 PM.isPossessed = false;
                 SetTransparency(characterRenderer, 1f);
                 Player.transform.SetParent(null);
+                Player.GetComponent<Collider2D>().enabled = true;
             }
         }
     }

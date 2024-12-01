@@ -63,7 +63,7 @@ public class Box : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D collision)
     {
-        if (isCollision && collision.collider.name == "Player")
+        if (isCollision && collision.collider.tag == "possessed")
         {
             PM.isPush = true;
         }
@@ -72,7 +72,7 @@ public class Box : MonoBehaviour
     // Åö×²ÍË³ö
     void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.collider.name == "Player")
+        if (collision.collider.tag == "possessed")
         {
             PM.isPush = false;
             // Çå³ýÅö×²×´Ì¬
@@ -112,7 +112,7 @@ public class Box : MonoBehaviour
     {
         Vector3 origin = transform.position;
         Vector3 direction = transform.TransformDirection(boxDir);
-        int layerMask = 1 << LayerMask.NameToLayer("Hinder");
+        int layerMask = 1 << LayerMask.NameToLayer("obstacle");
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, layerMask);
 
 

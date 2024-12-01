@@ -3,27 +3,50 @@ using UnityEngine;
 public class TriggerToSpawnKiller : MonoBehaviour
 {
     public GameObject killerPrefab; // 引用Killer物体的Prefab
-    public Transform spawnLocation; // 生成位置（可设置为空，则在触发器处生成）
+    public Transform spawnLocation; // 
+    public float detectionRadius;  // 圆形检测范围的半径
+    public LayerMask dreamerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
+    public bool isdreamerInRange ; // 玩家是否在检测范围内
 
-    private bool hasTriggered = false; // 防止重复触发
+    private bool hasTriggered; // 防止重复触发
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void Start()
     {
-        // 检查触发对象是否是玩家
-        if (collision.CompareTag("dreamer") && !hasTriggered)
+        hasTriggered = false;
+        isdreamerInRange = false;
+
+    }
+
+    private void Update()
+    {
+        CheckDreamerInRange();
+    }
+   
+
+    void CheckDreamerInRange()
+    {
+        // 使用 Physics2D.OverlapCircle 检测圆形范围内的物体
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, dreamerLayer);
+
+        if (colliders.Length > 0)
         {
-            hasTriggered = true; // 确保只触发一次
+            if (!hasTriggered)
+            {
+                hasTriggered = true; // 确保只触发一次
 
-            // 如果有指定生成位置，则在该位置生成物体，否则在触发器位置生成
-            Vector3 spawnPosition = spawnLocation != null ? spawnLocation.position : transform.position;
 
-            // 生成Killer物体
-            GameObject killer = Instantiate(killerPrefab, spawnPosition, Quaternion.identity);
+                Vector3 spawnPosition = spawnLocation != null ? spawnLocation.position : transform.position;
 
-            // 确保生成物体的Tag为"Killer"
-            killer.tag = "killer";
+                // 生成Killer物体
+                GameObject killer = Instantiate(killerPrefab, spawnPosition, Quaternion.identity);
 
-            Debug.Log("Killer已生成！");
+                // 确保生成物体的Tag为"Killer"
+                killer.tag = "killer";
+
+                Debug.Log("Killer已生成！");
+                Debug.Log("Gameover");
+            }
         }
+
     }
 }

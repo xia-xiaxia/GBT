@@ -97,7 +97,7 @@ public class PossessedMove : MonoBehaviour
     {
         Vector3 origin = transform.position;
         Vector3 dir = direction; // direction 已经是世界坐标方向
-        int layerMask = 1 << LayerMask.NameToLayer("Hinder");
+        int layerMask = 1 << LayerMask.NameToLayer("obstacle");
         RaycastHit2D hit = Physics2D.Raycast(origin, dir, distance, layerMask);
 
 

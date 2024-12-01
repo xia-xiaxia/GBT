@@ -15,6 +15,7 @@ TagManager:
   - Key
   - Spy
   - u
+  - possessed
   layers:
   - Default
   - TransparentFX

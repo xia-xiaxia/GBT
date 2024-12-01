@@ -24,17 +24,34 @@ public class Enemy1111AnimationController : MonoBehaviour
     // Update animation based on movement direction
     public void UpdateAnimation(Vector2 moveDirection, float angle)
     {
-        if (moveDirection.magnitude > 0)
+        animator.SetBool(IsWalking, false);
+        animator.SetBool(IsForwardWalking, false);
+        animator.SetBool(IsBackWalking, false);
+        animator.SetBool(IsRightWalking, false);
+        animator.SetBool(IsLeftWalking, false);
+
+
+        // 如果当前敌人有移动方向
+        if (moveDirection != Vector2.zero)
         {
-            animator.SetBool(IsWalking, true);
-            animator.SetBool(IsForwardWalking, angle >= -45f && angle <= 45f);
-            animator.SetBool(IsBackWalking, angle >= 135f || angle <= -135f);
-            animator.SetBool(IsRightWalking, angle > 45f && angle < 135f);
-            animator.SetBool(IsLeftWalking, angle < -45f && angle > -135f);
-        }
-        else
-        {
-            animator.SetBool(IsWalking, false);
+            animator.SetBool(IsWalking, true); 
+            // 角度判断逻辑
+            if (angle >= -45f && angle <= 45f) // 向右
+            {
+                animator.SetBool(IsRightWalking, true);
+            }
+            else if (angle >= 135f || angle <= -135f) // 向左
+            {
+                animator.SetBool(IsLeftWalking, true);
+            }
+            else if (angle > 45f && angle < 135f) // 向上，背对着走
+            {
+                animator.SetBool(IsBackWalking, true);
+            }
+            else if (angle < -45f && angle > -135f) // 向下，正对着走
+            {
+                animator.SetBool(IsForwardWalking, true);
+            }
         }
     }
     public void SetCrouchPickUpRightAnimation()

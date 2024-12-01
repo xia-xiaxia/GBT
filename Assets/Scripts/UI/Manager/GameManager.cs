@@ -40,24 +40,25 @@ public class GameManager : MonoBehaviour
 
         await ShowIntroduction();
 
-        await SceneManager.LoadSceneAsync(level, LoadSceneMode.Additive);
+        await SceneManager.LoadSceneAsync(level + "demo", LoadSceneMode.Additive);
         await AsyncManager.Instance.WaitForDreamOver();
 
         await ShowGoal();
 
         await ShowTutorial();
 
-        //await SceneManager.LoadSceneAsync("XHY", LoadSceneMode.Additive);
+        await SceneManager.UnloadSceneAsync(level + "demo");
+        await SceneManager.LoadSceneAsync(level, LoadSceneMode.Additive);
 
         GameObject.Find("Canvas").transform.Find("PanelUI").gameObject.SetActive(true);
         GameObject.Find("Canvas").transform.Find("HelpUI").gameObject.SetActive(true);
 
-        //await AsyncManager.Instance.WaitForGameEnd();
+        await AsyncManager.Instance.WaitForGameEnd();
 
-        //GameObject.Find("Canvas").transform.Find("PanelUI").gameObject.SetActive(false);
-        //GameObject.Find("Canvas").transform.Find("HelpUI").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("PanelUI").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("HelpUI").gameObject.SetActive(false);
 
-        //await ShowGameOver(true);
+        await ShowGameOver(true);
     }
 
     private async Task ShowIntroduction()
@@ -65,8 +66,8 @@ public class GameManager : MonoBehaviour
         await TransitionManager_2.Instance.TransitionIn(1f, 10);
         BgUI.Instance.HideBg();
         await Task.Delay(500);
-        //GoalUI.Instance.ShowGoal(level);
-        //await AsyncManager.Instance.WaitForGoalUILoaded();
+        IntrouctionUI.Instance.ShowIntroduction(level);
+        await AsyncManager.Instance.WaitForIntroductionUILoaded();
         await TransitionManager_2.Instance.TransitionOut(5);
     }
     private async Task ShowGoal()

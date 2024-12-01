@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -37,5 +38,16 @@ public class AsyncManager : MonoBehaviour
         {
             await Task.Yield();
         }
+    }
+    public async Task WaitForIntroductionUILoaded()
+    {
+        while (GoalUI.Instance.transform.Find("UI").gameObject.activeSelf)
+        {
+            await Task.Yield();
+        }
+    }
+    internal async Task WaitForGameEnd()
+    {
+        throw new NotImplementedException();
     }
 }

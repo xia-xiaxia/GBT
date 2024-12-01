@@ -297,6 +297,7 @@ public class EnemyFlowController : MonoBehaviour
         {
             animationController.SetIdleAnimation(); // ÈÃ¶¯»­×ªÎª¾²Ö¹×´Ì¬
         }*/
+       gameObject.SetActive(false); 
         StopAllCoroutines();
     }
 

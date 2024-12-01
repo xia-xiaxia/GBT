@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class GameThird : MonoBehaviour
 {
-    public bool isWin;
+    public bool isWin; 
     public bool isFaild;
-    public EnemyFlowController enemyFlowController;
+    public EnemyController enemyController;
     public GameObject gameObject;
     public float detectionRadius;  // 圆形检测范围的半径
     public LayerMask dreamerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
@@ -29,15 +29,14 @@ public class GameThird : MonoBehaviour
 
     void Update()
     {
-        isFaild = enemyFlowController.isGameFailed;
+        isFaild = enemyController.isGameFailed;
         StartCoroutine(nm());
-        if (isWin) isFaild = false;
-        else if (isFaild)
+        if (isFaild)
         {
             gameObject.SetActive(false);
         }
     }
-
+    
     void CheckKeyInRange()
     {
         // 使用 Physics2D.OverlapCircle 检测圆形范围内的物体
@@ -45,18 +44,16 @@ public class GameThird : MonoBehaviour
 
         if (colliders.Length > 0)
         {
-            isWin = true;
+            isFaild = true;
 
         }
-        else
-        {
-            isFaild = true;
-        }
+        else isWin = true;
+
     }
 
     IEnumerator nm()
     {
-        yield return new WaitForSeconds(30f);
+        yield return new WaitForSeconds(40f);
         CheckKeyInRange();
     }
 }

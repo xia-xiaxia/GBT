@@ -11,7 +11,6 @@ public class GameSecond : MonoBehaviour
     public float detectionRadius;  // 圆形检测范围的半径
     public LayerMask dreamerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
     public bool isdreamerInRange = false; // 玩家是否在检测范围内
-    public Transform U;
     public PickupUUU Pickupuuu;
 
     void Start()

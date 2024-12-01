@@ -14,6 +14,11 @@ public class PickupUUU : MonoBehaviour
 
     private void Start()
     {
+        if (U == null)
+        {
+            Debug.LogError("U 未赋值，请在 Inspector 中指定一个有效的 GameObject！");
+            return; // 如果 U 为空，就不执行下面的代码
+        }
         arenderer = U.GetComponent<Renderer>();
         isspyInRange = false;
         arenderer.enabled = false;

@@ -11,6 +11,7 @@ public class PickupUUU : MonoBehaviour
     public GameObject U;
     private Renderer arenderer;
 
+
     private void Start()
     {
         arenderer = U.GetComponent<Renderer>();
@@ -47,12 +48,7 @@ public class PickupUUU : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             U.SetActive(false);
         }
-        else
-        {
-            yield return new WaitForSeconds(0.1f);
-            U.SetActive(true);
-        }
-
+     
     }
 
 }

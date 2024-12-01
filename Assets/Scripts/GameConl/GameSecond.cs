@@ -36,6 +36,7 @@ public class GameSecond : MonoBehaviour
         {
             if (Pickupuuu.getU)
                 isWin = true;
+            else isWin = false;
         }
     }
 

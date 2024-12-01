@@ -27,7 +27,7 @@ public class AsyncManager : MonoBehaviour
     }
     public async Task WaitForDreamOver()
     {
-        while (EnemyFlowController.Instance.isExecuting)
+        while (EnemyFlowController.Instance.isGameFailed)
         {
             await Task.Yield();
         }
@@ -48,6 +48,26 @@ public class AsyncManager : MonoBehaviour
     }
     internal async Task WaitForGameEnd()
     {
-        throw new NotImplementedException();
+        switch (GameManager.Instance.level)
+        {
+            case "1.0":
+                while (!(GameFirst.Instance.isWin || GameFirst.Instance.isFaild))
+                {
+                    await Task.Yield();
+                }
+                break;
+            case "2.0":
+                while (!(GameSecond.Instance.isWin || GameSecond.Instance.isFailed))
+                {
+                    await Task.Yield();
+                }
+                break;
+            case "3.0":
+                while (!(GameThird.Instance.isWin || GameThird.Instance.isFaild))
+                {
+                    await Task.Yield();
+                }
+                break;
+        }
     }
 }

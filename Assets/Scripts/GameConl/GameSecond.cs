@@ -14,6 +14,15 @@ public class GameSecond : MonoBehaviour
     public Transform U;
     public PickupUUU Pickupuuu;
 
+    public static GameSecond Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        Instance = this;
+    }
     void Start()
     {
         isWin = false;

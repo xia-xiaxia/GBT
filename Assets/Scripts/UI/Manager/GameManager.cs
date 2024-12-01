@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
         await ShowIntroduction();
 
         await SceneManager.LoadSceneAsync(level + "demo", LoadSceneMode.Additive);
+        await TransitionManager_2.Instance.TransitionOut(5);
         await AsyncManager.Instance.WaitForDreamOver();
 
         await ShowGoal();
@@ -68,7 +69,6 @@ public class GameManager : MonoBehaviour
         await Task.Delay(500);
         IntrouctionUI.Instance.ShowIntroduction(level);
         await AsyncManager.Instance.WaitForIntroductionUILoaded();
-        await TransitionManager_2.Instance.TransitionOut(5);
     }
     private async Task ShowGoal()
     {

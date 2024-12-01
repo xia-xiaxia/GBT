@@ -12,6 +12,15 @@ public class GameThird : MonoBehaviour
     public LayerMask dreamerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
     public bool isdreamerInRange = false; // 玩家是否在检测范围内
 
+    public static GameThird Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        Instance = this;
+    }
     void Start()
     {
         isFaild = false;

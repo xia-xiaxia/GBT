@@ -36,6 +36,10 @@ public class TransitionManager_2 : MonoBehaviour
         down = transform.Find("Down").gameObject;
         up.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, up.GetComponent<RectTransform>().sizeDelta.y / 2 + 20, 0);
         down.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -down.GetComponent<RectTransform>().sizeDelta.y / 2 - 20, 0);
+        up.GetComponent<RectTransform>().sizeDelta = new Vector2(up.GetComponent<RectTransform>().sizeDelta.x, 150);
+        down.GetComponent<RectTransform>().sizeDelta = new Vector2(down.GetComponent<RectTransform>().sizeDelta.x, 150);
+        up.GetComponent<Image>().color = new Color(0,0,0,0);
+        down.GetComponent<Image>().color = new Color (0,0,0,0);
         maxY = (up.GetComponent<RectTransform>().position.y - transform.position.y) * 2 + 7.1375f;
         minY = up.GetComponent<RectTransform>().sizeDelta.y;
         x = up.GetComponent<RectTransform>().sizeDelta.x;

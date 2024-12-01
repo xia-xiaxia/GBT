@@ -13,6 +13,7 @@ public class InteractableObjectManager : MonoBehaviour
     public GameObject ioPrefab;
     private GraphicRaycaster graphicRaycaster;
     private EventSystem eventSystem;
+    public Material material;
 
     private List<InteractableObject> interactableObjects;
     private GameObject selectedObject;
@@ -24,6 +25,8 @@ public class InteractableObjectManager : MonoBehaviour
         "Key",
         "Folder"
     };
+    public Color emissionColor;
+    public float emissionIntensity;
 
 
 
@@ -61,7 +64,9 @@ public class InteractableObjectManager : MonoBehaviour
                 if (selectedObject != null)
                 {
                     selectedObject.transform.Find("Halo").gameObject.SetActive(false);
-                    selectedObject.GetComponent<InteractableObject>().correspondingObj.SetActive(false);
+                    Material mat = selectedObject.GetComponent<InteractableObject>().correspondingObj.GetComponent<SpriteRenderer>().material;
+                    mat.DisableKeyword("_EMISSION");
+                    mat.SetColor("_EmissionColor", Color.black);
                     selectedObject = null;
                 }
                 DetailsUI.Instance.transform.Find("UI").gameObject.SetActive(false);
@@ -92,6 +97,7 @@ public class InteractableObjectManager : MonoBehaviour
             interactableObject.transform.Find("Index").GetComponent<TextMeshProUGUI>().text = (interactableObjects.Count + 1).ToString();
             interactableObject.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = obj.name;
             interactableObject.transform.Find("Sprite").GetComponent<Image>().sprite = obj.GetComponent<SpriteRenderer>().sprite;
+            interactableObject.GetComponent<InteractableObject>().correspondingObj.GetComponent<SpriteRenderer>().material = material;
             interactableObjects.Add(interactableObject.GetComponent<InteractableObject>());
         }
     }
@@ -103,15 +109,20 @@ public class InteractableObjectManager : MonoBehaviour
     /// <param name="selectedObj">被选择的物体</param >
     public void OnSelect(GameObject selectedObj, Select s)
     {
+        Material mat;
         if (selectedObject != null)
         {
             selectedObject.transform.Find("Halo").gameObject.SetActive(false);
-            selectedObject.GetComponent<InteractableObject>().correspondingObj.SetActive(false);
+            mat = selectedObject.GetComponent<InteractableObject>().correspondingObj.GetComponent<SpriteRenderer>().material;
+            mat.DisableKeyword("_EMISSION");
+            mat.SetColor("_EmissionColor", Color.black);
         }
         select = s;
         selectedObject = selectedObj;
         selectedObject.transform.Find("Halo").gameObject.SetActive(true);
-        selectedObject.GetComponent<InteractableObject>().correspondingObj.SetActive(true);
+        mat = selectedObject.GetComponent<InteractableObject>().correspondingObj.GetComponent<SpriteRenderer>().material;
+        mat.EnableKeyword("_EMISSION");
+        mat.SetColor("_EmissionColor", emissionColor * emissionIntensity);
         selectedObject.GetComponent<InteractableObject>().OnSelected();
     }
     private GameObject IsMouseOverUIObjectWithTag(string tag)

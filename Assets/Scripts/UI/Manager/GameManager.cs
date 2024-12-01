@@ -50,12 +50,14 @@ public class GameManager : MonoBehaviour
         await ShowGoal();
 
         GameObject.Find("Canvas").transform.Find("PanelUI").gameObject.SetActive(true);
+        GameObject.Find("Canvas").transform.Find("HelpUI").gameObject.SetActive(true);
 
         //await SceneManager.LoadSceneAsync("XHY", LoadSceneMode.Additive);
 
         //GameObject.Find("Canvas").transform.Find("PanelUI").gameObject.SetActive(false);
+        //GameObject.Find("Canvas").transform.Find("HelpUI").gameObject.SetActive(false);
 
-        await ShowGameOver(true);
+        //await ShowGameOver(true);
     }
 
     private async Task ShowTutorial()

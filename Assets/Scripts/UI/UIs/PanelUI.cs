@@ -24,11 +24,18 @@ public class PanelUI : MonoBehaviour
         await Task.Delay(300);
         InteractableObjectManager.Instance.LoadInteractableObjects();
     }
+    private void Start()
+    {
+        RectTransform canvas = GameObject.Find("Canvas").GetComponent<RectTransform>();
+        transform.Find("UI").GetComponent<RectTransform>().sizeDelta = canvas.sizeDelta;
+        transform.Find("UI").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            transform.Find("UI").gameObject.SetActive(transform.Find("UI").gameObject.activeSelf ? false : true);
+            transform.Find("UI").gameObject.SetActive(!transform.Find("UI").gameObject.activeSelf);
         }
     }
 }

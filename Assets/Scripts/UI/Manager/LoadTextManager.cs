@@ -66,10 +66,13 @@ public class LoadTextManager : MonoBehaviour
     /// </summary>
     public void LoadText(TextMeshProUGUI textBox, string name, Button continueButton, bool isMouseButton)
     {
+        print(name);
         this.textBox = textBox;
         this.continueButton = continueButton;
         this.continueButton.onClick.AddListener(OnMouseButtonClicked);
-        AText temp = Texts.Find(t => t.name == name.Trim());
+        AText temp = Texts.Find(t => t.name == name);
+        if (temp != null)
+            print(temp.content[1]);
         temp.index = 0;
         string tempContent = string.Join("\n", temp.content);
         text = new AText { name = temp.name, content = new string[] { tempContent }, index = temp.index };
@@ -96,6 +99,7 @@ public class LoadTextManager : MonoBehaviour
                 i++;
             else
             {
+                print(text.content[text.index]);
                 textBox.text = text.content[text.index].Substring(0, i);
                 yield return new WaitForSeconds(0.03f);
             }

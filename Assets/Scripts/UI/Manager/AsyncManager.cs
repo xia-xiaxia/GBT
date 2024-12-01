@@ -27,9 +27,26 @@ public class AsyncManager : MonoBehaviour
     }
     public async Task WaitForDreamOver()
     {
-        while (EnemyFlowController.Instance.isGameFailed)
+        switch (GameManager.Instance.level)
         {
-            await Task.Yield();
+            case "1.0":
+                while (!EnemyFlowController.Instance.isGameFailed)
+                {
+                    await Task.Yield();
+                }
+                break;
+            case "2.0":
+                while (!EnemyController.Instance.isGameFailed)
+                {
+                    await Task.Yield();
+                }
+                break;
+            case "3.0":
+                while (!EnemyFlowController.Instance.isGameFailed)
+                {
+                    await Task.Yield();
+                }
+                break;
         }
     }
     public async Task WaitForGoalUILoaded()
@@ -41,7 +58,7 @@ public class AsyncManager : MonoBehaviour
     }
     public async Task WaitForIntroductionUILoaded()
     {
-        while (GoalUI.Instance.transform.Find("UI").gameObject.activeSelf)
+        while (IntroductionUI.Instance.transform.Find("UI").gameObject.activeSelf)
         {
             await Task.Yield();
         }
@@ -61,13 +78,13 @@ public class AsyncManager : MonoBehaviour
                     GameManager.Instance.isWin = false;
                 break;
             case "2.0":
-                while (!(GameSecond.Instance.isWin || GameSecond.Instance.isFailed))
+                while (!(GameThird.Instance.isWin || GameThird.Instance.isFailed))
                 {
                     await Task.Yield();
                 }
                 break;
             case "3.0":
-                while (!(GameThird.Instance.isWin || GameThird.Instance.isFaild))
+                while (!(GameSecond.Instance.isWin || GameSecond.Instance.isFaild))
                 {
                     await Task.Yield();
                 }

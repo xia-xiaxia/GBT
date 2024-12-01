@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class GameThird : MonoBehaviour
 {
-    public bool isWin; 
-    public bool isFaild;
-    public EnemyController enemyController;
-    public GameObject gameObject;
+    public bool isWin;
+    public bool isFailed;
+    public Transform SpyTransform;
+    public EnemyFlowController enemyFlowController;
     public float detectionRadius;  // 圆形检测范围的半径
     public LayerMask dreamerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
     public bool isdreamerInRange = false; // 玩家是否在检测范围内
+    public Transform U;
+    public PickupUUU Pickupuuu;
 
     public static GameThird Instance { get; private set; }
     private void Awake()
@@ -23,20 +25,17 @@ public class GameThird : MonoBehaviour
     }
     void Start()
     {
-        isFaild = false;
         isWin = false;
+        isFailed = false;
     }
 
     void Update()
     {
-        isFaild = enemyController.isGameFailed;
-        StartCoroutine(nm());
-        if (isFaild)
-        {
-            gameObject.SetActive(false);
-        }
+        isFailed = enemyFlowController.isGameFailed;
+        CheckKeyInRange();
+        if (isWin) isFailed = false;
     }
-    
+
     void CheckKeyInRange()
     {
         // 使用 Physics2D.OverlapCircle 检测圆形范围内的物体
@@ -44,16 +43,10 @@ public class GameThird : MonoBehaviour
 
         if (colliders.Length > 0)
         {
-            isFaild = true;
-
+            if (Pickupuuu.getU)
+                isWin = true;
+            else isWin = false;
         }
-        else isWin = true;
-
     }
 
-    IEnumerator nm()
-    {
-        yield return new WaitForSeconds(40f);
-        CheckKeyInRange();
-    }
 }

@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class GameSecond : MonoBehaviour
 {
-    public bool isWin;
-    public bool isFailed;
-    public Transform SpyTransform;
-    public EnemyFlowController enemyFlowController;
+    public bool isWin; 
+    public bool isFaild;
+    public EnemyController enemyController;
+    public GameObject gameObject;
     public float detectionRadius;  // 圆形检测范围的半径
     public LayerMask dreamerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
     public bool isdreamerInRange = false; // 玩家是否在检测范围内
-    public Transform U;
-    public PickupUUU Pickupuuu;
 
     public static GameSecond Instance { get; private set; }
     private void Awake()
@@ -25,17 +23,20 @@ public class GameSecond : MonoBehaviour
     }
     void Start()
     {
+        isFaild = false;
         isWin = false;
-        isFailed = false;
     }
 
     void Update()
     {
-        isFailed = enemyFlowController.isGameFailed;
-        CheckKeyInRange();
-        if (isWin) isFailed = false;
+        isFaild = enemyController.isGameFailed;
+        StartCoroutine(nm());
+        if (isFaild)
+        {
+            gameObject.SetActive(false);
+        }
     }
-
+    
     void CheckKeyInRange()
     {
         // 使用 Physics2D.OverlapCircle 检测圆形范围内的物体
@@ -43,10 +44,16 @@ public class GameSecond : MonoBehaviour
 
         if (colliders.Length > 0)
         {
-            if (Pickupuuu.getU)
-                isWin = true;
-            else isWin = false;
+            isFaild = true;
+
         }
+        else isWin = true;
+
     }
 
+    IEnumerator nm()
+    {
+        yield return new WaitForSeconds(40f);
+        CheckKeyInRange();
+    }
 }

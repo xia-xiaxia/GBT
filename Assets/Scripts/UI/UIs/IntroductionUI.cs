@@ -4,9 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class IntrouctionUI : MonoBehaviour
+public class IntroductionUI : MonoBehaviour
 {
-    public static IntrouctionUI Instance { get; private set; }
+    public static IntroductionUI Instance { get; private set; }
 
     private TextMeshProUGUI text;
     private Button continueButton;

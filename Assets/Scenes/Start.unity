@@ -971,11 +971,11 @@ RectTransform:
   - {fileID: 1402983143}
   - {fileID: 81747664}
   - {fileID: 848797329}
-  - {fileID: 1816215151}
   - {fileID: 34137606}
   - {fileID: 321647815}
   - {fileID: 357629007}
   - {fileID: 951318070}
+  - {fileID: 1816215151}
   - {fileID: 1465980193}
   - {fileID: 2088547002}
   m_Father: {fileID: 0}
@@ -7292,7 +7292,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1457605982
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8778,6 +8778,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   level: 
   completionRecord: 
+  isWin: 0
 --- !u!114 &1783630812
 MonoBehaviour:
   m_ObjectHideFlags: 0

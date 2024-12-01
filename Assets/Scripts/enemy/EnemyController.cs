@@ -12,7 +12,7 @@ public class EnemyController : MonoBehaviour
         public float waitTimeAtPoint = 0f; // 每个点的等待时间
     }
 
-    public GameThird GameThird;
+    public GameSecond GameThird;
 
     public FlowPath[] flows; // 流程数组
     public float moveSpeed = 0.5f; // 敌人移动速度

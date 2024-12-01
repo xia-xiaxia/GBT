@@ -21,6 +21,10 @@ public class GoalUI : MonoBehaviour
         }
         Instance = this;
     }
+    private void OnEnable()
+    {
+        print("aaaa");
+    }
     private void Start()
     {
         text = transform.Find("UI/Text").GetComponent<TextMeshProUGUI>();
@@ -32,7 +36,7 @@ public class GoalUI : MonoBehaviour
     {
         transform.Find("UI").gameObject.SetActive(true);
         LoadTextManager.Instance.OnTextLoaded.AddListener(OnTextLoaded);
-        LoadTextManager.Instance.LoadText(text, level + "目标", continueButton, true);
+        LoadTextManager.Instance.LoadText(text, level + "的目标", continueButton, true);
     }
     private void OnTextLoaded()
     {

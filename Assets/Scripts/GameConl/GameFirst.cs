@@ -7,7 +7,7 @@ public class GameFirst : MonoBehaviour
     public bool isWin;
     public bool isFaild;
     public EnemyFlowController enemyFlowController;
-    public GameObject gameObject;
+    public GameObject agameObject;
     public float detectionRadius;  // 圆形检测范围的半径
     public LayerMask dreamerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
     public bool isdreamerInRange = false; // 玩家是否在检测范围内
@@ -15,10 +15,6 @@ public class GameFirst : MonoBehaviour
     public static GameFirst Instance { get; private set; }
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
         Instance = this;
     }
     void Start()
@@ -34,7 +30,7 @@ public class GameFirst : MonoBehaviour
         if (isWin) isFaild = false;
         else if(isFaild) 
         {
-            gameObject.SetActive(false);
+            agameObject.SetActive(false);
         }
     }
 

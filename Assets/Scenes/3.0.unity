@@ -8062,13 +8062,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501167dc4441b2547a9e9a0da004b902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRadius: 1
-  dreamerLayer:
-    serializedVersion: 2
-    m_Bits: 4096
-  isspyInRange: 0
-  getU: 0
-  U: {fileID: 1282503958}
 --- !u!4 &945178862 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3135266866264034341, guid: 299030914d1165e4c8667eb4fa9d4128, type: 3}
@@ -8606,6 +8599,7 @@ MonoBehaviour:
   isMark: 0
   maxCount: 1
   n: 1
+  correspondingUIObj: {fileID: 0}
 --- !u!212 &1049486538
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10795,6 +10789,7 @@ MonoBehaviour:
   Player: {fileID: 421527887}
   targetAlpha: 0.5
   transform: {fileID: 1282503962}
+  correspondingUIObj: {fileID: 0}
 --- !u!1 &1289947350 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6232093115814930022, guid: a8fd7f8e5b48ee040808b1b8e4398b5d, type: 3}
@@ -12354,12 +12349,13 @@ MonoBehaviour:
   isWin: 0
   isFailed: 0
   SpyTransform: {fileID: 945178862}
-  enemyFlowController: {fileID: 0}
+  enemyFlowController: {fileID: 945178859}
   detectionRadius: 1
   dreamerLayer:
     serializedVersion: 2
     m_Bits: 1024
   isdreamerInRange: 0
+  U: {fileID: 0}
   Pickupuuu: {fileID: 945178861}
 --- !u!1 &1550207796
 GameObject:

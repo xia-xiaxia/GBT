@@ -48,7 +48,7 @@ public class Win : MonoBehaviour
             transform.Find("UI").gameObject.SetActive(false);
             await TransitionManager_2.Instance.TransitionIn(1f, 5);
             await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
-            BgUI.Instance.ShowBg();
+            BackgroundUI.Instance.ShowBg();
             LevelUI.Instance.transform.Find("UI").gameObject.SetActive(true);
             LevelUI.Instance.curLevelIndex++;
             LevelUI.Instance.levelName.text = LevelUI.Instance.levelDatabase.levels[LevelUI.Instance.curLevelIndex].name;
@@ -61,7 +61,7 @@ public class Win : MonoBehaviour
         transform.Find("UI").gameObject.SetActive(false);
         await TransitionManager_2.Instance.TransitionIn(1f, 5);
         await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
-        BgUI.Instance.ShowBg();
+        BackgroundUI.Instance.ShowBg();
         LevelUI.Instance.transform.Find("UI").gameObject.SetActive(true);
         await Task.Delay(1000);
         await TransitionManager_2.Instance.TransitionOut(5);
@@ -71,7 +71,7 @@ public class Win : MonoBehaviour
         transform.Find("UI").gameObject.SetActive(false);
         await TransitionManager_2.Instance.TransitionIn(1f, 5);
         await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
-        BgUI.Instance.ShowBg();
+        BackgroundUI.Instance.ShowBg();
         StartUI.Instance.transform.Find("UI").gameObject.SetActive(true);
         await Task.Delay(1000);
         await TransitionManager_2.Instance.TransitionOut(5);

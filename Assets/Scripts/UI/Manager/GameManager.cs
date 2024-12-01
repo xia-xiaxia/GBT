@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
     private async Task ShowIntroduction()
     {
         await TransitionManager_2.Instance.TransitionIn(1f, 10);
-        BgUI.Instance.HideBg();
+        BackgroundUI.Instance.HideBg();
         await Task.Delay(500);
         IntroductionUI.Instance.ShowIntroduction(level);
         await AsyncManager.Instance.WaitForIntroductionUILoaded();

@@ -2919,7 +2919,7 @@ MonoBehaviour:
   isWin: 0
   isFaild: 0
   enemyFlowController: {fileID: 1983097758}
-  gameObject: {fileID: 1983097756}
+  agameObject: {fileID: 1983097756}
   detectionRadius: 0.3
   dreamerLayer:
     serializedVersion: 2
@@ -6748,6 +6748,7 @@ MonoBehaviour:
   isMark: 0
   maxCount: 1
   n: 0
+  correspondingUIObj: {fileID: 0}
 --- !u!212 &1940172950
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7180,6 +7181,7 @@ MonoBehaviour:
   Player: {fileID: 0}
   targetAlpha: 0.5
   transform: {fileID: 1998231156}
+  correspondingUIObj: {fileID: 0}
 --- !u!4 &1998231156
 Transform:
   m_ObjectHideFlags: 0

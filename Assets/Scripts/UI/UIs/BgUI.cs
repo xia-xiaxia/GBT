@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BgUI : MonoBehaviour
 {
     public static BgUI Instance { get; private set; }
+    public Button bgButton;
+    private Button backButton;
 
 
 
@@ -18,15 +21,12 @@ public class BgUI : MonoBehaviour
     }
     private void Start()
     {
-        GetComponent<RectTransform>().sizeDelta = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta;
-        GetComponent<RectTransform>().position = GameObject.Find("Canvas").GetComponent<RectTransform>().position;
-    }
-    public void ShowBg()
-    {
-        GetComponent<CanvasGroup>().alpha = 1;
-    }
-    public void HideBg()
-    {
-        GetComponent<CanvasGroup>().alpha = 0;
+        RectTransform canvas = GameObject.Find("Canvas").GetComponent<RectTransform>();
+        transform.Find("UI/Image").GetComponent<RectTransform>().sizeDelta = canvas.sizeDelta;
+        transform.Find("UI/Image").GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+
+        backButton = transform.Find("UI/BackButton").GetComponent<Button>();
+        backButton.onClick.AddListener(() => { transform.Find("UI").gameObject.SetActive(false); });
+        bgButton.onClick.AddListener(() => { transform.Find("UI").gameObject.SetActive(true); });
     }
 }

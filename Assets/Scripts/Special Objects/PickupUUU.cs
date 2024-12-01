@@ -1,25 +1,27 @@
 using System.Collections;
 using UnityEngine;
 
-public class PickupU : MonoBehaviour
+public class PickupUUU : MonoBehaviour
 {
     public float detectionRadius;  // 圆形检测范围的半径
     public LayerMask dreamerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
     public bool isspyInRange;
     //间谍与真正u盘发生碰撞，u盘就会消失（实际效果是被捡起）
-    Renderer arenderer;
+    public bool getU;
+    public GameObject U;
+    private Renderer arenderer;
 
     private void Start()
     {
-        arenderer = GetComponent<Renderer>();
-        arenderer.enabled = false;
+        arenderer = U.GetComponent<Renderer>();
         isspyInRange = false;
-        gameObject.SetActive(true);
+        arenderer.enabled = false;
     }
     private void Update()
     {
         CheckKeyInRange();
         StartCoroutine(Timer());
+
     }
     void CheckKeyInRange()
     {
@@ -28,26 +30,29 @@ public class PickupU : MonoBehaviour
 
         if (colliders.Length > 0)
         {
+            getU = true;
             arenderer.enabled = true;
         }
         else
         {
             arenderer.enabled = false;
         }
+
     }
 
     IEnumerator Timer()
     {
         if (arenderer.enabled)
         {
-            yield return new WaitForSeconds(1f);
-            gameObject.SetActive(false);
+            yield return new WaitForSeconds(0.1f);
+            U.SetActive(false);
         }
         else
         {
-            yield return new WaitForSeconds(1f);
-            gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.1f);
+            U.SetActive(true);
         }
 
     }
+
 }

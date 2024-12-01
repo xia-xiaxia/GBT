@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 38e8a2f52e5935445a2ac24822912a76
+guid: ca51343ab509fe6489b7d28bcca0878d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7340242062382380436
-    second: "\u74F6\u5B50_0"
-  - first:
-      213: 692006780198774446
-    second: "\u74F6\u5B50_1"
+      213: -7058357038071634715
+    second: 8b98fd11e1d591b05cfdd0161383ee55_0
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
@@ -101,43 +98,22 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u74F6\u5B50_0"
+      name: 8b98fd11e1d591b05cfdd0161383ee55_0
       rect:
         serializedVersion: 2
-        x: 189
-        y: 132
-        width: 121
-        height: 235
+        x: 603
+        y: 374
+        width: 250
+        height: 210
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 2}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c6a415a0cb8322a90800000000000000
-      internalID: -7340242062382380436
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "\u74F6\u5B50_1"
-      rect:
-        serializedVersion: 2
-        x: 299
-        y: 148
-        width: 6
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ea6e8eb00808a9900800000000000000
-      internalID: 692006780198774446
+      spriteID: 5e4acdfabadab0e90800000000000000
+      internalID: -7058357038071634715
       vertices: []
       indices: 
       edges: []
@@ -145,16 +121,14 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: aa318067ce13bd64493182c8fc1f5b30
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      "\u74F6\u5B50_0": -7340242062382380436
-      "\u74F6\u5B50_1": 692006780198774446
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

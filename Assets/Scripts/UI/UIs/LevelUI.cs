@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
@@ -48,7 +49,7 @@ public class LevelUI : MonoBehaviour
         chooseButton.onClick.AddListener(() =>
         {
             transform.Find("UI").gameObject.SetActive(false);
-            GameManager.Instance.GameStream((curLevelIndex+1)+".0");
+            GameManager.Instance.GameStream((curLevelIndex + 1) + ".0");
         });
         for (int i = 0; i < levelList.Count; i++)
         {
@@ -90,7 +91,7 @@ public class LevelUI : MonoBehaviour
     }
     private async Task MoveTowardsLeft()
     {
-        levelList[0].GetComponent<Image>().sprite = levelDatabase.levels[SetImageForLeftMove()].sprite;
+        levelList[0].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex - 2)].sprite;
         while (levelList[1].transform.position.x < positions[2].x)
         {
             levelList[0].transform.Translate(Vector3.right * 1.5f);
@@ -123,28 +124,9 @@ public class LevelUI : MonoBehaviour
         levelList[1].GetComponent<CanvasGroup>().alpha = alphas[1];
         levelList[2].GetComponent<CanvasGroup>().alpha = alphas[2];
         levelList[3].GetComponent<CanvasGroup>().alpha = alphas[3];
-        levelList[3].GetComponent<Image>().sprite = levelList[2].GetComponent<Image>().sprite;
-        levelList[2].GetComponent<Image>().sprite = levelList[1].GetComponent<Image>().sprite;
-        levelList[1].GetComponent<Image>().sprite = levelList[0].GetComponent<Image>().sprite;
-    }
-    private int SetImageForLeftMove()
-    {
-        if (levelDatabase.levels.Count <= 2)
-        {
-            if (curLevelIndex == 0)
-                return 0;
-            else
-                return 1;
-        }
-        else
-        {
-            if (curLevelIndex > 1)
-                return curLevelIndex - 2;
-            else if (curLevelIndex == 1)
-                return levelDatabase.levels.Count - 1;
-            else
-                return levelDatabase.levels.Count - 2;
-        }
+        levelList[3].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex)].sprite;
+        levelList[2].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex - 1)].sprite;
+        levelList[1].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex - 2)].sprite;
     }
 
     private async Task OnRightClicked()
@@ -160,7 +142,7 @@ public class LevelUI : MonoBehaviour
     }
     private async Task MoveTowardsRight()
     {
-        levelList[4].GetComponent<Image>().sprite = levelDatabase.levels[SetImageForRightMove()].sprite;
+        levelList[4].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex + 2)].sprite;
         while (levelList[3].transform.position.x > positions[2].x)
         {
             levelList[1].transform.Translate(Vector3.left * 1.5f);
@@ -193,27 +175,18 @@ public class LevelUI : MonoBehaviour
         levelList[2].GetComponent<CanvasGroup>().alpha = alphas[2];
         levelList[3].GetComponent<CanvasGroup>().alpha = alphas[3];
         levelList[4].GetComponent<CanvasGroup>().alpha = alphas[4];
-        levelList[1].GetComponent<Image>().sprite = levelList[2].GetComponent<Image>().sprite;
-        levelList[2].GetComponent<Image>().sprite = levelList[3].GetComponent<Image>().sprite;
-        levelList[3].GetComponent<Image>().sprite = levelList[4].GetComponent<Image>().sprite;
+        levelList[1].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex)].sprite;
+        levelList[2].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex + 1)].sprite;
+        levelList[3].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex + 2)].sprite;
     }
-    private int SetImageForRightMove()
+
+    private int SetImage(int index)
     {
-        if (levelDatabase.levels.Count <= 2)
-        {
-            if (curLevelIndex == 0)
-                return 0;
-            else
-                return 1;
-        }
+        if (index < 0)
+            return levelDatabase.levels.Count + index;
+        else if (index >= levelDatabase.levels.Count)
+            return index - levelDatabase.levels.Count;
         else
-        {
-            if (curLevelIndex < levelDatabase.levels.Count - 2)
-                return curLevelIndex + 2;
-            else if (curLevelIndex == levelDatabase.levels.Count - 2)
-                return 0;
-            else
-                return 1;
-        }
+            return index;
     }
 }

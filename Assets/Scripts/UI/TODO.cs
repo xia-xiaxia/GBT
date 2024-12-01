@@ -16,5 +16,4 @@ public class TODO : MonoBehaviour
     //剧情与睁闭眼
 
     //关卡前背景介绍
-    //截各种图
 }

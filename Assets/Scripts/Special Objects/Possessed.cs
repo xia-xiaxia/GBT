@@ -14,6 +14,7 @@ public class Possessed : MonoBehaviour
     private Renderer characterRenderer;
     private Collider2D characterCollider;
     public Transform transform;
+    public GameObject correspondingUIObj;
 
     private bool IsPossessed;
 
@@ -71,6 +72,7 @@ public class Possessed : MonoBehaviour
             {
                 possessedMove.enabled = true;
                 IsPossessed = true;
+                correspondingUIObj.GetComponent<InteractableObject>().OnTaged(InterObjState.Possessed);
                 PM.isPossessed = true;
                 SetTransparency(characterRenderer, targetAlpha);
                 Player.transform.position = transform.position;
@@ -83,6 +85,7 @@ public class Possessed : MonoBehaviour
             {
                 possessedMove.enabled = false;
                 IsPossessed = false;
+                correspondingUIObj.GetComponent<InteractableObject>().OnTaged(InterObjState.None);
                 PM.enabled = true;
                 PM.isPossessed = false;
                 SetTransparency(characterRenderer, 1f);

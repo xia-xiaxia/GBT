@@ -10,7 +10,8 @@ public class DetailsUI : MonoBehaviour
 
     private Button closeButton;
     private new TextMeshProUGUI name;
-    private TextMeshProUGUI description;
+    [HideInInspector]
+    public TextMeshProUGUI description;
 
 
 

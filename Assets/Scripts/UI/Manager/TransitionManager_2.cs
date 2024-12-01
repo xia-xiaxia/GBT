@@ -10,8 +10,10 @@ public class TransitionManager_2 : MonoBehaviour
 {
     public static TransitionManager_2 Instance { get; private set; }
 
-    private GameObject up;
-    private GameObject down;
+    [HideInInspector]
+    public GameObject up;
+    [HideInInspector]
+    public GameObject down;
 
     private float transparency;
     private float maxY;

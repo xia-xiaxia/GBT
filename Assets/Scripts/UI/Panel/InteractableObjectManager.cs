@@ -93,6 +93,10 @@ public class InteractableObjectManager : MonoBehaviour
             GameObject interactableObject = Instantiate(ioPrefab, transform.Find("Viewport/Content"));
             interactableObject.name = obj.name;
             interactableObject.tag = Tag.INTERACTABLE;
+            if (obj.GetComponent<Possessed>() != null)
+                obj.GetComponent<Possessed>().correspondingUIObj = interactableObject;
+            else if (obj.GetComponent<Metamorphosm>() != null)
+                obj.GetComponent<Metamorphosm>().correspondingUIObj = interactableObject;
             interactableObject.GetComponent<InteractableObject>().correspondingObj = obj;
             interactableObject.transform.Find("Index").GetComponent<TextMeshProUGUI>().text = (interactableObjects.Count + 1).ToString();
             interactableObject.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = obj.name;

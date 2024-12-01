@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8118e0860849bcb40b131dada781a983, type: 3}
   m_Name: Trick Example Image
   m_EditorClassIdentifier: 
-  sprites: []
+  sprites:
+  - {fileID: -3790619536396078767, guid: 23a0ca4731facef45b3c58517332cbf2, type: 3}
+  - {fileID: 8901468376194502474, guid: 8c26d3ce44459714bb77851607e7dff1, type: 3}
+  - {fileID: -4771314647360832249, guid: 66c6a39dcb99cee46bd5cb4a7f484d13, type: 3}
+  - {fileID: -7708778232026613370, guid: ea67cc9635030fa4eb54c5268edf6716, type: 3}

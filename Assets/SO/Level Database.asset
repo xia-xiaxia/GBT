@@ -15,5 +15,5 @@ MonoBehaviour:
   levels:
   - name: "\u5173\u53611.\u4E00\u95E8\u4E4B\u9694"
     sprite: {fileID: -9081775809268432826, guid: 8f4c75ef7dd506f48a4ac8e384d42f59, type: 3}
-  - name: "\u5173\u53612.\u789F\u4E2D\u7239"
-    sprite: {fileID: -9081775809268432826, guid: 8f4c75ef7dd506f48a4ac8e384d42f59, type: 3}
+  - name: "\u5173\u53612.\u789F\u4E2D\u8C0D"
+    sprite: {fileID: 2603819432082522840, guid: 0a76b41bf3ae0994996f0c0dc0609bd7, type: 3}

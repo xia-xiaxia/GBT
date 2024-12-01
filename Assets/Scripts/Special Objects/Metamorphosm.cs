@@ -13,6 +13,7 @@ public class Metamorphosm : MonoBehaviour
     private int count;
     public int maxCount;
     public int n;
+    public GameObject correspondingUIObj;
 
 
     void Start()
@@ -64,6 +65,7 @@ public class Metamorphosm : MonoBehaviour
             if (Input.GetKeyUp(KeyCode.F))
             {
                 isMark = true;
+                correspondingUIObj.GetComponent<InteractableObject>().OnTaged(InterObjState.Marked);
             }
         }
 
@@ -75,6 +77,7 @@ public class Metamorphosm : MonoBehaviour
                 PM.transform.position = transform.position;
                 transform.position = temp;
                 isMark = false;
+                correspondingUIObj.GetComponent<InteractableObject>().OnTaged(InterObjState.None);
                 count++;
             }
         }

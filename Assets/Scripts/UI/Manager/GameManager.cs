@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     private Queue<string> tricksQueue;
     public string level;
     public List<bool> completionRecord;
-    public bool isStart = false;
 
 
 
@@ -37,22 +36,23 @@ public class GameManager : MonoBehaviour
     }
     public async void GameStream(string level)
     {
-        isStart = false;
         this.level = level;
 
+        await ShowIntroduction();
+
         await SceneManager.LoadSceneAsync(level, LoadSceneMode.Additive);
-        BgUI.Instance.HideBg();
-
-        await ShowTutorial();
-
         await AsyncManager.Instance.WaitForDreamOver();
 
         await ShowGoal();
 
+        await ShowTutorial();
+
+        //await SceneManager.LoadSceneAsync("XHY", LoadSceneMode.Additive);
+
         GameObject.Find("Canvas").transform.Find("PanelUI").gameObject.SetActive(true);
         GameObject.Find("Canvas").transform.Find("HelpUI").gameObject.SetActive(true);
 
-        //await SceneManager.LoadSceneAsync("XHY", LoadSceneMode.Additive);
+        //await AsyncManager.Instance.WaitForGameEnd();
 
         //GameObject.Find("Canvas").transform.Find("PanelUI").gameObject.SetActive(false);
         //GameObject.Find("Canvas").transform.Find("HelpUI").gameObject.SetActive(false);
@@ -60,8 +60,26 @@ public class GameManager : MonoBehaviour
         //await ShowGameOver(true);
     }
 
+    private async Task ShowIntroduction()
+    {
+        await TransitionManager_2.Instance.TransitionIn(1f, 10);
+        BgUI.Instance.HideBg();
+        await Task.Delay(500);
+        //GoalUI.Instance.ShowGoal(level);
+        //await AsyncManager.Instance.WaitForGoalUILoaded();
+        await TransitionManager_2.Instance.TransitionOut(5);
+    }
+    private async Task ShowGoal()
+    {
+        await TransitionManager_2.Instance.TransitionIn(0.8f, 10);
+        await Task.Delay(500);
+        GoalUI.Instance.ShowGoal(level);
+        await AsyncManager.Instance.WaitForGoalUILoaded();
+    }
     private async Task ShowTutorial()
     {
+        TransitionManager_2.Instance.up.GetComponent<Image>().color = new Color(0, 0, 0, 1);
+        TransitionManager_2.Instance.down.GetComponent<Image>().color = new Color(0, 0, 0, 1);
         var tutorialText = LoadTextManager.Instance.Texts.Find(t => t.name == level + "ÐÂÔöÍæ·¨");
         if (tutorialText != null)
         {
@@ -77,14 +95,6 @@ public class GameManager : MonoBehaviour
             }
             TutorialUI.Instance.transform.Find("UI").gameObject.SetActive(false);
         }
-        isStart = true;
-    }
-    private async Task ShowGoal()
-    {
-        await TransitionManager_2.Instance.TransitionIn(0.8f, 5);
-        await Task.Delay(500);
-        GoalUI.Instance.ShowGoal(level);
-        await AsyncManager.Instance.WaitForGoalUILoaded();
         await TransitionManager_2.Instance.TransitionOut(5);
     }
     private async Task ShowGameOver(bool isWin)

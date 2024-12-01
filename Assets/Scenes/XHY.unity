@@ -212,8 +212,8 @@ MonoBehaviour:
   gridSize: 1
   isMoving: 0
   direction: {x: 0, y: 0}
-  isPush: 0
-  isHit: 0
+  isWalk: 0
+  isPossessed: 0
 --- !u!95 &224448231
 Animator:
   serializedVersion: 7
@@ -508,6 +508,10 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  isPlayerInRange: 0
+  isMark: 0
+  maxCount: 0
+  n: 0
 --- !u!1 &773563488
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,7 +672,7 @@ GameObject:
   - component: {fileID: 1329566757}
   m_Layer: 0
   m_Name: Speacial object(possessed)
-  m_TagString: Untagged
+  m_TagString: special
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -798,10 +802,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6fc97ac4085f634ba23555685aa4915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
   gridSize: 1
   isMoving: 0
   direction: {x: 0, y: 0}
+  isHit: 0
+  PM: {fileID: 0}
+  layer:
+    serializedVersion: 2
+    m_Bits: 0
+  distance: 0
+  isPush: 0
+  normalSpeed: 0
+  slowSpeed: 0
 --- !u!114 &1329566758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -819,7 +831,10 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  isPlayerInRange: 0
   Player: {fileID: 224448229}
+  targetAlpha: 0.5
+  transform: {fileID: 0}
 --- !u!114 &1794438987 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7159486368307138787, guid: 54e7482dadf03eb4abb91aba3b7f88c8, type: 3}

@@ -9,7 +9,7 @@ public class Wall : MonoBehaviour
     GameObject[] Walls;
     public Box box;
     public PlayerMovement PM;
-    public bool canTrans;  
+    public bool canTrans;
 
     void Start()
     {
@@ -34,11 +34,11 @@ public class Wall : MonoBehaviour
     {
         foreach (GameObject wall in Walls)
         {
-            if(boxPosition == wall.transform.position)
+            if (boxPosition == wall.transform.position)
             {
                 canTrans = false;
             }
         }
     }
-    
+
 }

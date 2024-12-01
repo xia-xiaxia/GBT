@@ -28,12 +28,10 @@ public class DoorTrigger : MonoBehaviour
         {
             targetRotation = 90f;
             doorCollider.enabled = false;
+            Rotation();
+
         }
-        else
-        {
-            targetRotation = 0f;
-        }
-        Rotation();
+
     }
     void Rotation()
     {
@@ -52,19 +50,6 @@ public class DoorTrigger : MonoBehaviour
 
             }
         }
-        if (currentRotation < targetRotation)
-        {
-            // 每帧绕 Y 轴旋转一定角度
-            float step = rotationSpeed * Time.deltaTime;
-            transform.Rotate(0, step, 0); // 绕 Y 轴旋转
-            currentRotation -= step; // 累加已旋转的角度
-
-            // 确保当前旋转角度不会超过目标角度
-            if (currentRotation <= targetRotation)
-            {
-                currentRotation = targetRotation; // 设置为目标角度
-            }
-        }
     }
 
     void CheckKeyInRange()
@@ -74,7 +59,7 @@ public class DoorTrigger : MonoBehaviour
 
         if (colliders.Length > 0)
         {
-            if(Key.getKey)
+            if (Key.getKey)
             {
                 isOpen = true;
             }

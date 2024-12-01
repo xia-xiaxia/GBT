@@ -24,7 +24,7 @@ public class EnemyFlowController : MonoBehaviour
     public float hearingRange = 5f;
     private Vector2 lastBoxPosition = Vector2.zero; // 记录上次检测到的 Box 位置
     private bool hasDetectedBox = false; // 标记是否已经检测到 Box
-    public bool isGameFailed = false; // 游戏是否失败
+    public bool isGameFailed; // 游戏是否失败
     public bool isHit = false;   // 是否撞击墙壁发出声音
     private int currentWaypointIndex = 0; // 当前路径点索引
     public LayerMask playerLayer;   // 玩家所在的层
@@ -48,6 +48,7 @@ public class EnemyFlowController : MonoBehaviour
     }
     void Start()
     {
+        isGameFailed = false;
         animationController = GetComponent<EnemyAnimationController>();
         foreach (FlowPath flow in flows)
         {

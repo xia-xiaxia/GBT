@@ -128,7 +128,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      "\u7535\u8111\u80CC\u9762_0": 8388626743575766429
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

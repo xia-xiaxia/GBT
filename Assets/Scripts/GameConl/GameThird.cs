@@ -9,7 +9,7 @@ public class GameThird : MonoBehaviour
     public EnemyController enemyController;
     public GameObject gameObject;
     public float detectionRadius;  // 圆形检测范围的半径
-    public LayerMask dreamerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
+    public LayerMask dreamerLayer;       // 玩家所在的层
     public bool isdreamerInRange = false; // 玩家是否在检测范围内
 
     void Start()

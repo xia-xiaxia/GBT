@@ -19,12 +19,12 @@ public class Sky1controller : MonoBehaviour
     public LayerMask playerLayer;   // 玩家所在的层
     public LayerMask obstacleLayer; // 障碍物（可交互）所在的层
     private Vector2 moveDirection; // 当前移动方向                        
-    private SkyAnimationController animationController;
+    private SpyAnimationController animationController;
     // 存储多个 Box 的位置
     private Dictionary<int, Vector2> detectedBoxes = new Dictionary<int, Vector2>();
     void Start()
     {
-        animationController = GetComponent<SkyAnimationController>();
+        animationController = GetComponent<SpyAnimationController>();
         
             if (waypoints.Length > 0)
             {

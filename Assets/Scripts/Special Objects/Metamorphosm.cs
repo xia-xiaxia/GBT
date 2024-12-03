@@ -7,7 +7,7 @@ public class Metamorphosm : MonoBehaviour
     private Vector3 temp;
     public PlayerMovement PM;
     public float detectionRadius = 5f;  // 圆形检测范围的半径
-    public LayerMask playerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
+    public LayerMask playerLayer;       // 玩家所在的层
     public bool isPlayerInRange = false; // 玩家是否在检测范围内
     public bool isMark;
     private int count;

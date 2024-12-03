@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SkyAnimationController : MonoBehaviour
+public class SpyAnimationController : MonoBehaviour
 {
     private Animator animator;
 

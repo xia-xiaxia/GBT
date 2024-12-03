@@ -9,27 +9,24 @@ public class EnemyFlowController : MonoBehaviour
     {
         public string flowName; // 流程名称
         public Transform[] waypoints; // 路径点数组
-        public float waitTimeAtPoint = 0f; // 每个点的等待时间
+        public float waitTimeAtPoint = 0f;
     }
 
     public FlowPath[] flows; // 流程数组
     public float moveSpeed = 0.5f; // 敌人移动速度
-   //public turnSpeed = 5f; // 转向平滑速度
-
     private Queue<FlowPath> taskQueue = new Queue<FlowPath>(); // 任务队列
     public bool isExecuting = false;
-
     public float fieldOfViewDistance = 5f; // 视野范围
     public float fieldOfViewAngle = 110f; // 视野角度
     public float hearingRange = 5f;
     private Vector2 lastBoxPosition = Vector2.zero; // 记录上次检测到的 Box 位置
-    private bool hasDetectedBox = false; // 标记是否已经检测到 Box
-    public bool isGameFailed; // 游戏是否失败
+    private bool hasDetectedBox = false;
+    public bool isGameFailed; 
     public bool isHit = false;   // 是否撞击墙壁发出声音
     private int currentWaypointIndex = 0; // 当前路径点索引
     public LayerMask playerLayer;   // 玩家所在的层
     public LayerMask obstacleLayer; // 障碍物（可交互）所在的层
-    private Vector2 moveDirection; // 当前移动方向
+    private Vector2 moveDirection; 
    //ublic bool Isstart = false;
     private EnemyAnimationController animationController;
     // 存储多个 Box 的位置
@@ -63,7 +60,7 @@ public class EnemyFlowController : MonoBehaviour
         // 如果游戏失败，停止敌人移动
         if (isGameFailed)
         return; 
-        // 移动到下一个路径点并更新方向
+     
         MoveToNextWaypoint();
         float currentAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;  // 计算当前角度
         animationController.UpdateAnimation(moveDirection, currentAngle);
@@ -82,24 +79,18 @@ public class EnemyFlowController : MonoBehaviour
         {
             Transform waypoint = flow.waypoints[i];
 
-            // 移动到当前路径点
             yield return MoveToWaypoint(waypoint.position);
 
             // 等待指定时间
             yield return new WaitForSeconds(flow.waitTimeAtPoint);
 
-            // 如果到了指定的点，切换动画（例如：第6个点）
-           /*f (i == 5) // 可以通过public变量来控制
-            {
-                // 在第6个点执行特殊动画，比如蹲下
-                animationController.SetCrouchAnimation();
-            }*/
+            
         }
 
         isExecuting = false;
         Debug.Log($"完成流程：{flow.flowName}");
 
-        // 游戏失败或任务完成后，切换到下一个流程
+ 
         StartNextTask();
     }
     private IEnumerator MoveToWaypoint(Vector3 target)
@@ -113,23 +104,22 @@ public class EnemyFlowController : MonoBehaviour
             yield return null;
         }
 
-        // 到达目标点
         transform.position = target;
     }
 
     private void StartNextTask()
     {
-        // 如果任务队列中有流程，执行下一个流程
+     
         if (taskQueue.Count > 0)
         {
             FlowPath currentFlow = taskQueue.Dequeue(); // 获取队列中的第一个流程
-            StartCoroutine(ExecuteFlow(currentFlow)); // 启动当前流程
+            StartCoroutine(ExecuteFlow(currentFlow));
         }
         else
         {
             Debug.Log("所有流程完成，游戏结束！");
             animationController.SetIdleAnimation();
-            GameFailed(); // 触发游戏结束
+            GameFailed(); 
         }
     }
 
@@ -151,7 +141,6 @@ public class EnemyFlowController : MonoBehaviour
         // 计算移动方向
         moveDirection = (targetPosition - transform.position).normalized;
 
-        // 移动敌人
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
 
         if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
@@ -243,7 +232,6 @@ public class EnemyFlowController : MonoBehaviour
         // 使用射线检测目标是否被障碍物遮挡
         RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToTarget.normalized, fieldOfViewDistance, obstacleLayer);
 
-        // 如果射线命中，并且命中的物体不是目标本身，则目标被遮挡
         if (hit.collider != null && hit.collider.transform != targetTransform)
         {
             Debug.Log($"目标 {targetTransform.name} 被 {hit.collider.name} 遮挡，检测失败。");
@@ -295,7 +283,7 @@ public class EnemyFlowController : MonoBehaviour
         Debug.Log("Game Over!");
        /* if (animationController != null)
         {
-            animationController.SetIdleAnimation(); // 让动画转为静止状态
+            animationController.SetIdleAnimation(); 
         }*/
        gameObject.SetActive(false); 
         StopAllCoroutines();

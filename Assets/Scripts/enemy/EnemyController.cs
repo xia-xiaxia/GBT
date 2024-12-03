@@ -7,9 +7,9 @@ public class EnemyController : MonoBehaviour
     [System.Serializable]
     public class FlowPath
     {
-        public string flowName; // 流程名称
+        public string flowName; 
         public Transform[] waypoints; // 路径点数组
-        public float waitTimeAtPoint = 0f; // 每个点的等待时间
+        public float waitTimeAtPoint = 0f;
     }
 
     public GameThird GameThird;
@@ -18,21 +18,21 @@ public class EnemyController : MonoBehaviour
     public float moveSpeed = 0.5f; // 敌人移动速度
     private Queue<FlowPath> taskQueue = new Queue<FlowPath>(); // 任务队列
     public bool isExecuting = false;
-    public float fieldOfViewDistance = 5f; // 视野范围
+    public float fieldOfViewDistance = 5f; 
     public float fieldOfViewAngle = 110f;
-    public float hearingRange = 5f;// 视野角度
+    public float hearingRange = 5f;
     private Vector2 lastBoxPosition = Vector2.zero; // 记录上次检测到的 Box 位置
     private bool hasDetectedBox = false; // 标记是否已经检测到 Box
     public bool isGameFailed = false;
     public bool isHit = false;// 游戏是否失败
-    private int currentWaypointIndex = 0; // 当前路径点索引
-    public LayerMask playerLayer;   // 玩家所在的层
+    private int currentWaypointIndex = 0; 
+    public LayerMask playerLayer;   
     public LayerMask obstacleLayer;
     public LayerMask folderLayer;
     private Vector2 moveDirection;
     private Collider2D currentFileCollider = null;
-    private Enemy1111AnimationController animationController; // 动画控制器
-    private bool isPaused = false;  // 标志，是否暂停敌人移动
+    private Enemy1111AnimationController animationController; 
+    private bool isPaused = false;  
     private Transform fileTransform; // 文件的位置
     private bool isPickingUpFile = false; // 是否正在捡起文件
     // 存储多个 Box 和 Folder 的位置
@@ -67,9 +67,9 @@ public class EnemyController : MonoBehaviour
         if (isGameFailed || isPickingUpFile)
             return;
 
-        // 移动到下一个路径点并更新方向
+        // 移动到下一个WAYPOINT
         MoveToNextWaypoint();
-        float currentAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;  // 计算当前角度
+        float currentAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;  
         animationController.UpdateAnimation(moveDirection, currentAngle);
         CheckForBoxInView();
         CheckForPlayerInSightRange();
@@ -91,12 +91,7 @@ public class EnemyController : MonoBehaviour
             // 等待指定时间
             yield return new WaitForSeconds(flow.waitTimeAtPoint);
 
-            // 如果到了指定的点，切换动画（例如：第6个点）
-            /*f (i == 5) // 可以通过public变量来控制
-             {
-                 // 在第6个点执行特殊动画，比如蹲下
-                 animationController.SetCrouchAnimation();
-             }*/
+         
         }
 
         isExecuting = false;
@@ -116,17 +111,17 @@ public class EnemyController : MonoBehaviour
             yield return null;
         }
 
-        // 到达目标点
+   
         transform.position = target;
     }
 
     private void StartNextTask()
     {
-        // 如果任务队列中有流程，执行下一个流程
+  
         if (taskQueue.Count > 0)
         {
             FlowPath currentFlow = taskQueue.Dequeue(); // 获取队列中的第一个流程
-            StartCoroutine(ExecuteFlow(currentFlow)); // 启动当前流程
+            StartCoroutine(ExecuteFlow(currentFlow));
         }
         else
         {
@@ -151,10 +146,8 @@ public class EnemyController : MonoBehaviour
         Transform targetWaypoint = flows[0].waypoints[currentWaypointIndex];
         Vector3 targetPosition = targetWaypoint.position;
 
-        // 计算移动方向
         moveDirection = (targetPosition - transform.position).normalized;
 
-        // 移动敌人
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
 
         if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
@@ -205,8 +198,6 @@ public class EnemyController : MonoBehaviour
 
                 // 计算玩家与敌人之间的夹角
                 float angleToPlayer = Vector3.Angle(moveDirection, directionToPlayer);
-
-                // 如果玩家在视野角度范围内
                 if (angleToPlayer < fieldOfViewAngle / 2f)
                 {
                     // 检查是否被遮挡
@@ -225,10 +216,7 @@ public class EnemyController : MonoBehaviour
     {
         Vector3 directionToTarget = targetTransform.position - transform.position;
 
-        // 使用射线检测目标是否被障碍物遮挡
         RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToTarget.normalized, fieldOfViewDistance, obstacleLayer);
-
-        // 如果射线命中，并且命中的物体不是目标本身，则目标被遮挡
         if (hit.collider != null && hit.collider.transform != targetTransform)
         {
             Debug.Log($"目标 {targetTransform.name} 被 {hit.collider.name} 遮挡，检测失败。");
@@ -240,7 +228,7 @@ public class EnemyController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // 如果敌人与障碍物发生碰撞
+
         if (collision.collider.CompareTag("Box"))
         {
             Debug.Log("成功阻止了bekilled的结局，游戏胜利");
@@ -271,7 +259,7 @@ public class EnemyController : MonoBehaviour
     {
         isGameFailed = false;
         Debug.Log("阻止了坏结局，游戏胜利！");
-        GameThird.isWin = true;
+      //  GameThird.isWin = true;
         // 停止敌人的运动
         StopAllCoroutines();
     }

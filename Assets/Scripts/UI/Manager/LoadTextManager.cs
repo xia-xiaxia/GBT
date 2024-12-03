@@ -48,7 +48,7 @@ public class LoadTextManager : MonoBehaviour
         }
     }
     /// <summary>
-    /// 传入指定文本框textBox，文本名name，继续按钮continueButton
+    /// 点击继续按钮以继续
     /// </summary>
     public void LoadText(TextMeshProUGUI textBox, string name, Button continueButton)
     {
@@ -59,14 +59,14 @@ public class LoadTextManager : MonoBehaviour
         text = Texts.Find(t => t.name == name.Trim());
         text.index = 0;
 
+        textLoad = TextLoad.Loading;
         StartCoroutine(LoadOneByOne());
     }
     /// <summary>
-    /// isMouseButton为true时，点击鼠标左键继续，事实上的逻辑是一个布满整个屏幕的按钮
+    /// 点击屏幕以继续
     /// </summary>
     public void LoadText(TextMeshProUGUI textBox, string name, Button continueButton, bool isMouseButton)
     {
-        print(name+name.Length);
         this.textBox = textBox;
         this.continueButton = continueButton;
         this.continueButton.onClick.AddListener(OnMouseButtonClicked);
@@ -98,7 +98,6 @@ public class LoadTextManager : MonoBehaviour
                 i++;
             else
             {
-                print(text.content[text.index]);
                 textBox.text = text.content[text.index].Substring(0, i);
                 yield return new WaitForSeconds(0.03f);
             }
@@ -126,6 +125,7 @@ public class LoadTextManager : MonoBehaviour
                 textBox.text = text.content[text.index];
                 break;
             case TextLoad.Loaded:
+                continueButton.onClick.RemoveAllListeners();
                 OnTextLoaded.Invoke();
                 break;
             default:
@@ -152,6 +152,7 @@ public class LoadTextManager : MonoBehaviour
                 }
                 else
                 {
+                    continueButton.onClick.RemoveAllListeners();
                     OnTextLoaded.Invoke();
                 }
                 break;

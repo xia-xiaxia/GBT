@@ -1184,6 +1184,7 @@ MonoBehaviour:
   isMark: 0
   maxCount: 1
   n: 1
+  correspondingUIObj: {fileID: 0}
 --- !u!212 &162304947
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1768,6 +1769,7 @@ MonoBehaviour:
   fieldOfViewDistance: 3.5
   fieldOfViewAngle: 50
   hearingRange: 1.2
+  isGameFailed: 0
   isHit: 0
   playerLayer:
     serializedVersion: 2
@@ -4775,13 +4777,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501167dc4441b2547a9e9a0da004b902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRadius: 1
-  dreamerLayer:
-    serializedVersion: 2
-    m_Bits: 4096
-  isspyInRange: 0
-  getU: 0
-  U: {fileID: 2141160146}
 --- !u!114 &594859566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4845,11 +4840,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474f983709a45504d95d310ba9e714cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &594859571 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3135266866264034341, guid: 299030914d1165e4c8667eb4fa9d4128, type: 3}
-  m_PrefabInstance: {fileID: 1224998731}
+--- !u!114 &594859572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594859564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de7bb36179c5e184f92b20cc0ba71c1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  dreamerLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  isspyInRange: 0
+  U: {fileID: 0}
 --- !u!1 &605018651
 GameObject:
   m_ObjectHideFlags: 0
@@ -7724,6 +7732,7 @@ MonoBehaviour:
   fieldOfViewDistance: 2
   fieldOfViewAngle: 60
   hearingRange: 2
+  isGameFailed: 0
   isHit: 0
   playerLayer:
     serializedVersion: 2
@@ -8849,6 +8858,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7919449676592174495, guid: 299030914d1165e4c8667eb4fa9d4128, type: 3}
       insertIndex: -1
       addedObject: {fileID: 594859565}
+    - targetCorrespondingSourceObject: {fileID: 7919449676592174495, guid: 299030914d1165e4c8667eb4fa9d4128, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 594859572}
   m_SourcePrefab: {fileID: 100100000, guid: 299030914d1165e4c8667eb4fa9d4128, type: 3}
 --- !u!1 &1228912783
 GameObject:
@@ -15911,7 +15923,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2061500093}
-  - component: {fileID: 2061500092}
+  - component: {fileID: 2061500094}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -15919,29 +15931,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2061500092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2061500091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d77803fe6878e4194c63b93e99fa52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isWin: 0
-  isFailed: 0
-  SpyTransform: {fileID: 594859571}
-  enemyFlowController: {fileID: 594859566}
-  detectionRadius: 1
-  dreamerLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  isdreamerInRange: 0
-  U: {fileID: 2141160152}
-  Pickupuuu: {fileID: 594859565}
 --- !u!4 &2061500093
 Transform:
   m_ObjectHideFlags: 0
@@ -15957,6 +15946,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2061500094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061500091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c835f8d074f3f744b1ebf0ccedd9b3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isWin: 0
+  isFailed: 0
+  enemyFlowController: {fileID: 594859566}
+  agameObject: {fileID: 594859564}
+  detectionRadius: 2
+  dreamerLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  isdreamerInRange: 0
+  Pickupuuu: {fileID: 594859572}
 --- !u!1 &2070995161 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6232093115814930022, guid: a8fd7f8e5b48ee040808b1b8e4398b5d, type: 3}
@@ -15990,6 +16001,7 @@ MonoBehaviour:
   fieldOfViewDistance: 2
   fieldOfViewAngle: 60
   hearingRange: 2
+  isGameFailed: 0
   isHit: 0
   playerLayer:
     serializedVersion: 2
@@ -16258,6 +16270,7 @@ MonoBehaviour:
   Player: {fileID: 1108712957}
   targetAlpha: 0.5
   transform: {fileID: 2141160152}
+  correspondingUIObj: {fileID: 0}
 --- !u!4 &2141160152 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4597555298895778473, guid: 1ce118985c2af5d479da92df96828e86, type: 3}

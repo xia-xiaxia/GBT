@@ -26,9 +26,13 @@ public class GameFirst : MonoBehaviour
     void Update()
     {
         isFaild = enemyFlowController.isGameFailed;
-        StartCoroutine(nm());
-        if (isWin) isFaild = false;
-        else if(isFaild) 
+        StartCoroutine(Nm());
+        if (isWin)
+        {
+            agameObject.SetActive(false);
+            isFaild = false;
+        }
+        else if (isFaild)
         {
             agameObject.SetActive(false);
         }
@@ -50,7 +54,7 @@ public class GameFirst : MonoBehaviour
         }
     }
 
-    IEnumerator nm()
+    IEnumerator Nm()
     {
         yield return new WaitForSeconds(30f);
         CheckKeyInRange();

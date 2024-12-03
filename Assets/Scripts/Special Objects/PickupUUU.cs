@@ -6,8 +6,7 @@ public class PickupUUU : MonoBehaviour
     public float detectionRadius;  // 圆形检测范围的半径
     public LayerMask dreamerLayer;       // 玩家所在的层（可以通过 Inspector 设置）
     public bool isspyInRange;
-    //间谍与真正u盘发生碰撞，u盘就会消失（实际效果是被捡起）
-    public bool getU;
+
     public GameObject U;
     private Renderer arenderer;
 
@@ -16,7 +15,7 @@ public class PickupUUU : MonoBehaviour
     {
         if (U == null)
         {
-            Debug.LogError("U 未赋值，请在 Inspector 中指定一个有效的 GameObject！");
+           //Debug.LogError("U 未赋值，请在 Inspector 中指定一个有效的 GameObject！");
             return; // 如果 U 为空，就不执行下面的代码
         }
         arenderer = U.GetComponent<Renderer>();
@@ -25,7 +24,13 @@ public class PickupUUU : MonoBehaviour
     }
     private void Update()
     {
-        CheckKeyInRange();
+        
+            if (U == null)
+            {
+                //Debug.LogError("U 未赋值，请在 Inspector 中指定一个有效的 GameObject！");
+                return; // 如果 U 为空，就不执行下面的代码
+            }
+            CheckKeyInRange();
         StartCoroutine(Timer());
 
     }
@@ -36,7 +41,7 @@ public class PickupUUU : MonoBehaviour
 
         if (colliders.Length > 0)
         {
-            getU = true;
+           
             arenderer.enabled = true;
         }
         else

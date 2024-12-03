@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -47,33 +48,20 @@ public class Win : MonoBehaviour
         {
             transform.Find("UI").gameObject.SetActive(false);
             await TransitionManager_2.Instance.TransitionIn(1f, 5);
-            await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
+            await AsyncManager.Instance.WaitForUnloadAllScenesButStart();
             BackgroundUI.Instance.ShowBg();
             LevelUI.Instance.transform.Find("UI").gameObject.SetActive(true);
-            LevelUI.Instance.curLevelIndex++;
-            LevelUI.Instance.levelName.text = LevelUI.Instance.levelDatabase.levels[LevelUI.Instance.curLevelIndex].name;
+            await LevelUI.Instance.OnRightClicked();
             await Task.Delay(1000);
             await TransitionManager_2.Instance.TransitionOut(5);
         }
     }
     private async void OnLevelButtonClicked()
     {
-        transform.Find("UI").gameObject.SetActive(false);
-        await TransitionManager_2.Instance.TransitionIn(1f, 5);
-        await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
-        BackgroundUI.Instance.ShowBg();
-        LevelUI.Instance.transform.Find("UI").gameObject.SetActive(true);
-        await Task.Delay(1000);
-        await TransitionManager_2.Instance.TransitionOut(5);
+        await AsyncManager.Instance.WaitForBackToMenu<LevelUI>(this.gameObject);
     }
     private async void OnMenuButtonClicked()
     {
-        transform.Find("UI").gameObject.SetActive(false);
-        await TransitionManager_2.Instance.TransitionIn(1f, 5);
-        await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
-        BackgroundUI.Instance.ShowBg();
-        StartUI.Instance.transform.Find("UI").gameObject.SetActive(true);
-        await Task.Delay(1000);
-        await TransitionManager_2.Instance.TransitionOut(5);
+        await AsyncManager.Instance.WaitForBackToMenu<StartUI>(this.gameObject);
     }
 }

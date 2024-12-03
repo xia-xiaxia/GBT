@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -15,6 +16,13 @@ public class GameManager : MonoBehaviour
     public string level;
     public List<bool> completionRecord;
     public bool isWin;
+    public CancellationTokenSource cancellationTokenSource;
+    private List<string> UIsInGame = new List<string>
+    {
+        "PanelUI",
+        "HelpUI",
+        "ESCUI"
+    };
 
 
 
@@ -37,30 +45,33 @@ public class GameManager : MonoBehaviour
     }
     public async void GameStream(string level)
     {
+        cancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = cancellationTokenSource.Token;
         this.level = level;
 
         await ShowIntroduction();
-
         await SceneManager.LoadSceneAsync(level + "demo", LoadSceneMode.Additive);
         await TransitionManager_2.Instance.TransitionOut(5);
-        await AsyncManager.Instance.WaitForDreamOver();
+        EnableOrDisableAllUIsInGame(true, new List<string> { "PanelUI", "HelpUI" });
 
+        await AsyncManager.Instance.WaitForDemoOver(cancellationToken);
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
+        EnableOrDisableAllUIsInGame(false, null);
         await ShowGoal();
-
         await ShowTutorial();
-
         await SceneManager.UnloadSceneAsync(level + "demo");
         await SceneManager.LoadSceneAsync(level, LoadSceneMode.Additive);
+        EnableOrDisableAllUIsInGame(true, null);
+        await TransitionManager_2.Instance.TransitionOut(5);
 
-        GameObject.Find("Canvas").transform.Find("PanelUI").gameObject.SetActive(true);
-        GameObject.Find("Canvas").transform.Find("HelpUI").gameObject.SetActive(true);
+        await AsyncManager.Instance.WaitForGameEnd(cancellationToken);
+        if (cancellationToken.IsCancellationRequested)
+            return;
 
-        await AsyncManager.Instance.WaitForGameEnd();
-
-        GameObject.Find("Canvas").transform.Find("PanelUI").gameObject.SetActive(false);
-        GameObject.Find("Canvas").transform.Find("HelpUI").gameObject.SetActive(false);
-
-        await ShowGameOver(isWin);
+        EnableOrDisableAllUIsInGame(false, null);
+        ShowGameOver(isWin);
     }
 
     private async Task ShowIntroduction()
@@ -97,9 +108,8 @@ public class GameManager : MonoBehaviour
             }
             TutorialUI.Instance.transform.Find("UI").gameObject.SetActive(false);
         }
-        await TransitionManager_2.Instance.TransitionOut(5);
     }
-    private async Task ShowGameOver(bool isWin)
+    private void ShowGameOver(bool isWin)
     {
         if (isWin)
         {
@@ -123,6 +133,15 @@ public class GameManager : MonoBehaviour
         else
         {
             Fail.Instance.OnGameFail();
+        }
+    }
+    public void EnableOrDisableAllUIsInGame(bool isActive, List<string> overlook)
+    {
+        foreach (string UI in UIsInGame)
+        {
+            if (overlook != null && overlook.Contains(UI))
+                continue;
+            GameObject.Find("Canvas").transform.Find(UI).gameObject.SetActive(isActive);
         }
     }
 }

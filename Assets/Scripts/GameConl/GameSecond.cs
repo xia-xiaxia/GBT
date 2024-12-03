@@ -5,9 +5,9 @@ using UnityEngine;
 public class GameSecond : MonoBehaviour
 {
     public bool isWin; 
-    public bool isFaild;
-    public EnemyController enemyController;
-    public GameObject gameObject;
+    public bool isFailed;
+    public EnemyFlowController enemyFlowController;
+    public GameObject agameObject;
     public float detectionRadius;  // Ô²ÐÎ¼ì²â·¶Î§µÄ°ë¾¶
     public LayerMask dreamerLayer;       
     public bool isdreamerInRange = false; // Íæ¼ÒÊÇ·ñÔÚ¼ì²â·¶Î§ÄÚ
@@ -24,17 +24,17 @@ public class GameSecond : MonoBehaviour
     }
     void Start()
     {
-        isFaild = false;
+        isFailed = false;
         isWin = false;
     }
 
     void Update()
     {
-        isFaild = enemyController.isGameFailed;
-        StartCoroutine(nm());
-        if (isFaild)
+        isFailed = enemyFlowController.isGameFailed;
+        StartCoroutine(Nm());
+        if (isFailed)
         {
-            gameObject.SetActive(false);
+            agameObject.SetActive(false);
         }
     }
     
@@ -45,14 +45,14 @@ public class GameSecond : MonoBehaviour
 
         if (colliders.Length > 0)
         {
-            isFaild = true;
+            isFailed = true;
 
         }
         else isWin = true;
 
     }
 
-    IEnumerator nm()
+    IEnumerator Nm()
     {
         yield return new WaitForSeconds(40f);
         CheckKeyInRange();

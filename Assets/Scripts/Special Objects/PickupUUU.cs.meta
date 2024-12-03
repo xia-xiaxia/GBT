@@ -1,14 +1,10 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Scripts/GameManager/GameFirst.cs.meta
 guid: de7bb36179c5e184f92b20cc0ba71c1c
-========
-guid: 501167dc4441b2547a9e9a0da004b902
->>>>>>>> 2ff0a01f45cb8a8c5bba978e64ae1974e48b5d8a:Assets/Scripts/Special Objects/PickupUUU.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences: []
-  executionOrder: 0
+  executionOrder: -5
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 

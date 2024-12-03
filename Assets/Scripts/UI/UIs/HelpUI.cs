@@ -17,10 +17,13 @@ public class HelpUI : MonoBehaviour
         }
         Instance = this;
     }
+    private void OnEnable()
+    {
+        transform.Find("UI").gameObject.SetActive(false);
+    }
     private void Start()
     {
         transform.Find("UI").GetComponent<RectTransform>().sizeDelta = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta;
-
     }
     private void Update()
     {

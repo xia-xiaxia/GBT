@@ -43,12 +43,6 @@ public class CompletionUI : MonoBehaviour
     }
     public async void OnMenuButtonClicked()
     {
-        transform.Find("UI").gameObject.SetActive(false);
-        await TransitionManager_2.Instance.TransitionIn(1f, 5);
-        await SceneManager.UnloadSceneAsync(GameManager.Instance.level);
-        BackgroundUI.Instance.ShowBg();
-        StartUI.Instance.transform.Find("UI").gameObject.SetActive(true);
-        await Task.Delay(1000);
-        await TransitionManager_2.Instance.TransitionOut(5);
+        await AsyncManager.Instance.WaitForBackToMenu<StartUI>(this.gameObject);
     }
 }

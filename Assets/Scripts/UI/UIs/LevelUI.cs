@@ -20,12 +20,14 @@ public class LevelUI : MonoBehaviour
     private Button chooseButton;
     [HideInInspector]
     public TextMeshProUGUI levelName;
-    private GameObject complete;
+    public GameObject complete;
 
     private List<Vector3> positions = new List<Vector3>();
     private List<float> alphas = new List<float>();
     private List<Vector2> sizeDelta = new List<Vector2>();
     public int curLevelIndex;
+    private ClickState clickState = ClickState.None;
+    private int moveSpeed = 2;
 
 
 
@@ -80,6 +82,9 @@ public class LevelUI : MonoBehaviour
 
     private async Task OnLeftClicked()
     {
+        if (clickState == ClickState.Clicked)
+            return;
+        clickState = ClickState.Clicked;
         await MoveTowardsLeft();
         BackToLeftPosition();
         if (curLevelIndex > 0)
@@ -88,24 +93,25 @@ public class LevelUI : MonoBehaviour
             curLevelIndex = levelDatabase.levels.Count - 1;
         levelName.text = levelDatabase.levels[curLevelIndex].name;
         complete.SetActive(GameManager.Instance.completionRecord[curLevelIndex]);
+        clickState = ClickState.None;
     }
     private async Task MoveTowardsLeft()
     {
-        levelList[0].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex - 2)].sprite;
+        levelList[0].GetComponent<Image>().sprite = levelDatabase.levels[CalculateIndex(curLevelIndex - 2)].sprite;
         while (levelList[1].transform.position.x < positions[2].x)
         {
-            levelList[0].transform.Translate(Vector3.right * 1.5f);
-            levelList[1].transform.Translate(Vector3.right * 3);
-            levelList[2].transform.Translate(Vector3.right * 3);
-            levelList[3].transform.Translate(Vector3.right * 1.5f);
-            levelList[0].GetComponent<CanvasGroup>().alpha += 0.005f;
-            levelList[1].GetComponent<CanvasGroup>().alpha += 0.005f;
-            levelList[2].GetComponent<CanvasGroup>().alpha -= 0.005f;
-            levelList[3].GetComponent<CanvasGroup>().alpha -= 0.005f;
-            levelList[0].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[0].GetComponent<RectTransform>().sizeDelta.x + 1.5f, levelList[0].GetComponent<RectTransform>().sizeDelta.y + 1.5f);
-            levelList[1].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[1].GetComponent<RectTransform>().sizeDelta.x + 1.5f, levelList[1].GetComponent<RectTransform>().sizeDelta.y + 1.5f);
-            levelList[2].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[2].GetComponent<RectTransform>().sizeDelta.x - 1.5f, levelList[2].GetComponent<RectTransform>().sizeDelta.y - 1.5f);
-            levelList[3].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[3].GetComponent<RectTransform>().sizeDelta.x - 1.5f, levelList[3].GetComponent<RectTransform>().sizeDelta.y - 1.5f);
+            levelList[0].transform.Translate(Vector3.right * 1.5f * moveSpeed);
+            levelList[1].transform.Translate(Vector3.right * 3 * moveSpeed);
+            levelList[2].transform.Translate(Vector3.right * 3 * moveSpeed);
+            levelList[3].transform.Translate(Vector3.right * 1.5f * moveSpeed);
+            levelList[0].GetComponent<CanvasGroup>().alpha += 0.005f * moveSpeed;
+            levelList[1].GetComponent<CanvasGroup>().alpha += 0.005f * moveSpeed;
+            levelList[2].GetComponent<CanvasGroup>().alpha -= 0.005f * moveSpeed;
+            levelList[3].GetComponent<CanvasGroup>().alpha -= 0.005f * moveSpeed;
+            levelList[0].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[0].GetComponent<RectTransform>().sizeDelta.x + 1.5f * moveSpeed, levelList[0].GetComponent<RectTransform>().sizeDelta.y + 1.5f * moveSpeed);
+            levelList[1].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[1].GetComponent<RectTransform>().sizeDelta.x + 1.5f * moveSpeed, levelList[1].GetComponent<RectTransform>().sizeDelta.y + 1.5f * moveSpeed);
+            levelList[2].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[2].GetComponent<RectTransform>().sizeDelta.x - 1.5f * moveSpeed, levelList[2].GetComponent<RectTransform>().sizeDelta.y - 1.5f * moveSpeed);
+            levelList[3].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[3].GetComponent<RectTransform>().sizeDelta.x - 1.5f * moveSpeed, levelList[3].GetComponent<RectTransform>().sizeDelta.y - 1.5f * moveSpeed);
             await Task.Yield();
         }
         BackToLeftPosition();
@@ -124,13 +130,16 @@ public class LevelUI : MonoBehaviour
         levelList[1].GetComponent<CanvasGroup>().alpha = alphas[1];
         levelList[2].GetComponent<CanvasGroup>().alpha = alphas[2];
         levelList[3].GetComponent<CanvasGroup>().alpha = alphas[3];
-        levelList[3].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex)].sprite;
-        levelList[2].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex - 1)].sprite;
-        levelList[1].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex - 2)].sprite;
+        levelList[3].GetComponent<Image>().sprite = levelDatabase.levels[CalculateIndex(curLevelIndex)].sprite;
+        levelList[2].GetComponent<Image>().sprite = levelDatabase.levels[CalculateIndex(curLevelIndex - 1)].sprite;
+        levelList[1].GetComponent<Image>().sprite = levelDatabase.levels[CalculateIndex(curLevelIndex - 2)].sprite;
     }
 
-    private async Task OnRightClicked()
+    public async Task OnRightClicked()
     {
+        if (clickState == ClickState.Clicked)
+            return;
+        clickState = ClickState.Clicked;
         await MoveTowardsRight();
         BackToRightPosition();
         if (curLevelIndex < levelDatabase.levels.Count - 1)
@@ -139,24 +148,25 @@ public class LevelUI : MonoBehaviour
             curLevelIndex = 0;
         levelName.text = levelDatabase.levels[curLevelIndex].name;
         complete.SetActive(GameManager.Instance.completionRecord[curLevelIndex]);
+        clickState = ClickState.None;
     }
     private async Task MoveTowardsRight()
     {
-        levelList[4].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex + 2)].sprite;
+        levelList[4].GetComponent<Image>().sprite = levelDatabase.levels[CalculateIndex(curLevelIndex + 2)].sprite;
         while (levelList[3].transform.position.x > positions[2].x)
         {
-            levelList[1].transform.Translate(Vector3.left * 1.5f);
-            levelList[2].transform.Translate(Vector3.left * 3);
-            levelList[3].transform.Translate(Vector3.left * 3);
-            levelList[4].transform.Translate(Vector3.left * 1.5f);
-            levelList[1].GetComponent<CanvasGroup>().alpha -= 0.005f;
-            levelList[2].GetComponent<CanvasGroup>().alpha -= 0.005f;
-            levelList[3].GetComponent<CanvasGroup>().alpha += 0.005f;
-            levelList[4].GetComponent<CanvasGroup>().alpha += 0.005f;
-            levelList[1].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[1].GetComponent<RectTransform>().sizeDelta.x - 1.5f, levelList[1].GetComponent<RectTransform>().sizeDelta.y - 1.5f);
-            levelList[2].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[2].GetComponent<RectTransform>().sizeDelta.x - 1.5f, levelList[2].GetComponent<RectTransform>().sizeDelta.y - 1.5f);
-            levelList[3].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[3].GetComponent<RectTransform>().sizeDelta.x + 1.5f, levelList[3].GetComponent<RectTransform>().sizeDelta.y + 1.5f);
-            levelList[4].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[4].GetComponent<RectTransform>().sizeDelta.x + 1.5f, levelList[4].GetComponent<RectTransform>().sizeDelta.y + 1.5f);
+            levelList[1].transform.Translate(Vector3.left * 1.5f * moveSpeed);
+            levelList[2].transform.Translate(Vector3.left * 3 * moveSpeed);
+            levelList[3].transform.Translate(Vector3.left * 3 * moveSpeed);
+            levelList[4].transform.Translate(Vector3.left * 1.5f * moveSpeed);
+            levelList[1].GetComponent<CanvasGroup>().alpha -= 0.005f * moveSpeed;
+            levelList[2].GetComponent<CanvasGroup>().alpha -= 0.005f * moveSpeed;
+            levelList[3].GetComponent<CanvasGroup>().alpha += 0.005f * moveSpeed;
+            levelList[4].GetComponent<CanvasGroup>().alpha += 0.005f * moveSpeed;
+            levelList[1].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[1].GetComponent<RectTransform>().sizeDelta.x - 1.5f * moveSpeed, levelList[1].GetComponent<RectTransform>().sizeDelta.y - 1.5f * moveSpeed);
+            levelList[2].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[2].GetComponent<RectTransform>().sizeDelta.x - 1.5f * moveSpeed, levelList[2].GetComponent<RectTransform>().sizeDelta.y - 1.5f * moveSpeed);
+            levelList[3].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[3].GetComponent<RectTransform>().sizeDelta.x + 1.5f * moveSpeed, levelList[3].GetComponent<RectTransform>().sizeDelta.y + 1.5f * moveSpeed);
+            levelList[4].GetComponent<RectTransform>().sizeDelta = new Vector2(levelList[4].GetComponent<RectTransform>().sizeDelta.x + 1.5f * moveSpeed, levelList[4].GetComponent<RectTransform>().sizeDelta.y + 1.5f * moveSpeed);
             await Task.Yield();
         }
         BackToRightPosition();
@@ -175,12 +185,12 @@ public class LevelUI : MonoBehaviour
         levelList[2].GetComponent<CanvasGroup>().alpha = alphas[2];
         levelList[3].GetComponent<CanvasGroup>().alpha = alphas[3];
         levelList[4].GetComponent<CanvasGroup>().alpha = alphas[4];
-        levelList[1].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex)].sprite;
-        levelList[2].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex + 1)].sprite;
-        levelList[3].GetComponent<Image>().sprite = levelDatabase.levels[SetImage(curLevelIndex + 2)].sprite;
+        levelList[1].GetComponent<Image>().sprite = levelDatabase.levels[CalculateIndex(curLevelIndex)].sprite;
+        levelList[2].GetComponent<Image>().sprite = levelDatabase.levels[CalculateIndex(curLevelIndex + 1)].sprite;
+        levelList[3].GetComponent<Image>().sprite = levelDatabase.levels[CalculateIndex(curLevelIndex + 2)].sprite;
     }
 
-    private int SetImage(int index)
+    private int CalculateIndex(int index)
     {
         if (index < 0)
             return levelDatabase.levels.Count + index;
@@ -188,5 +198,10 @@ public class LevelUI : MonoBehaviour
             return index - levelDatabase.levels.Count;
         else
             return index;
+    }
+    private enum ClickState
+    {
+        None,
+        Clicked
     }
 }

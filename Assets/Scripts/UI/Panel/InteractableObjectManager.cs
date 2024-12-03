@@ -17,7 +17,7 @@ public class InteractableObjectManager : MonoBehaviour
 
     private List<InteractableObject> interactableObjects;
     private GameObject selectedObject;
-    [HideInInspector]
+    //[HideInInspector]
     public Select select;
     private string[] tags =
     {
@@ -53,7 +53,7 @@ public class InteractableObjectManager : MonoBehaviour
     {
         if (select == Select.Unselected || select == Select.Selected)
         {
-            GameObject go = IsMouseOverUIObjectWithTag(Tag.INTERACTABLE);
+            GameObject go = IsMouseOverUIObjectWithTag(Tag.INTERACTABLEOBJUI);
             if (go != null)
             {
                 OnSelect(go, Select.Selected);
@@ -81,6 +81,14 @@ public class InteractableObjectManager : MonoBehaviour
             }
         }
     }
+    private void OnDisable()
+    {
+        interactableObjects.RemoveAll(io =>
+        {
+            Destroy(io.gameObject);
+            return true;
+        });
+    }
     public void LoadInteractableObjects()
     {
         List<GameObject> allInteractableObjects = new List<GameObject>();
@@ -92,7 +100,7 @@ public class InteractableObjectManager : MonoBehaviour
         {
             GameObject interactableObject = Instantiate(ioPrefab, transform.Find("Viewport/Content"));
             interactableObject.name = obj.name;
-            interactableObject.tag = Tag.INTERACTABLE;
+            interactableObject.tag = Tag.INTERACTABLEOBJUI;
             if (obj.GetComponent<Possessed>() != null)
                 obj.GetComponent<Possessed>().correspondingUIObj = interactableObject;
             else if (obj.GetComponent<Metamorphosm>() != null)
